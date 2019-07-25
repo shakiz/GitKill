@@ -16,9 +16,9 @@ import app.com.gitkill.R;
 public class TrendingRepositories extends Fragment {
 
     private ArrayAdapter<String> arrayAdapter;
-    private Spinner languageSpinner;
+    private Spinner languageSpinner,timeSpinner;
     private Context context;
-    private ArrayList<String> languageList;
+    private ArrayList<String> languageList, timeList;
 
     @Override
     public void onAttach(Context context) {
@@ -37,6 +37,7 @@ public class TrendingRepositories extends Fragment {
         init(view);
         setData();
         setAdapter(languageSpinner,languageList);
+        setAdapter(timeSpinner,timeList);
         return view;
     }
 
@@ -46,6 +47,11 @@ public class TrendingRepositories extends Fragment {
         languageList.add("Python");
         languageList.add("Javascript");
         languageList.add("PHP");
+        //Adding data to time list
+        timeList.add("Daily");
+        timeList.add("Weekly");
+        timeList.add("Monthly");
+        timeList.add("Yearly");
     }
 
     private void setAdapter(Spinner spinner, ArrayList<String> languageList) {
@@ -56,7 +62,9 @@ public class TrendingRepositories extends Fragment {
 
     private void init(View view) {
         languageSpinner = view.findViewById(R.id.LanguageSpinner);
+        timeSpinner = view.findViewById(R.id.TimeSpinner);
         languageList = new ArrayList<>();
+        timeList = new ArrayList<>();
     }
 
 }

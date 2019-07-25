@@ -18,7 +18,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
+import app.com.gitkill.fragments.TrendingLanguages;
 import app.com.gitkill.fragments.TrendingRepositories;
+import app.com.gitkill.fragments.TrendingUsers;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -69,7 +71,6 @@ public class MainActivity extends AppCompatActivity
         return toggle != null && toggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -80,10 +81,10 @@ public class MainActivity extends AppCompatActivity
             fragment = new TrendingRepositories();
         }
         else if (id == R.id.nav_user) {
-
+            fragment = new TrendingUsers();
         }
         else if (id == R.id.nav_language) {
-
+            fragment = new TrendingLanguages();
         }
 
         if (fragment != null){

@@ -2,7 +2,7 @@
     android:id="@android:id/text1"
     style="?android:attr/spinnerDropDownItemStyle"
     android:layout_width="match_parent"
-    android:layout_height="32dp"
+    android:layout_height="28dp"
     android:layout_gravity="center"
     android:gravity="center"
     android:drawableRight="@drawable/ic_action_arrow_drop_down"
