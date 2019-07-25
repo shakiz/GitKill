@@ -3,6 +3,8 @@ package app.com.gitkill.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,8 @@ public class TrendingRepositories extends Fragment {
     private Spinner languageSpinner,timeSpinner;
     private Context context;
     private ArrayList<String> languageList, timeList;
+    private RecyclerView recyclerViewRepo;
+    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     public void onAttach(Context context) {
@@ -60,7 +64,12 @@ public class TrendingRepositories extends Fragment {
         spinner.setAdapter(arrayAdapter);
     }
 
+    private void setRecyclerAdapter(RecyclerView recyclerView,ArrayList<?> arrayList){
+        layoutManager = new LinearLayoutManager(context);
+    }
+
     private void init(View view) {
+        recyclerViewRepo = view.findViewById(R.id.RecyclerRepoList);
         languageSpinner = view.findViewById(R.id.LanguageSpinner);
         timeSpinner = view.findViewById(R.id.TimeSpinner);
         languageList = new ArrayList<>();
