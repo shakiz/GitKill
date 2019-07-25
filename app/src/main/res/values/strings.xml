@@ -8,18 +8,14 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
     <string name="menu_repo">Repositories</string>
     <string name="menu_user">User</string>
     <string name="menu_language">Language</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="select_language">Select Language</string>
     <string name="select_time">Select Time</string>
     <string name="trending_repos">Trending Repositories</string>
+    <string name="trending_users_heading">List of Trending users</string>
+    <string name="trending_repos_heading">List Of Trending Repositories</string>
+    <string name="trending_languages_heading">List of Trending Languages</string>
 </resources>
