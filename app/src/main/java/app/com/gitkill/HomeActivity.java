@@ -22,7 +22,7 @@ import app.com.gitkill.fragments.TrendingLanguages;
 import app.com.gitkill.fragments.TrendingRepositories;
 import app.com.gitkill.fragments.TrendingUsers;
 
-public class MainActivity extends AppCompatActivity
+public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ActionBarDrawerToggle toggle;
