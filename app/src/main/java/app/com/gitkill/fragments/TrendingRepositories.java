@@ -76,4 +76,6 @@ public class TrendingRepositories extends Fragment {
         timeList = new ArrayList<>();
     }
 
+
+
 }

@@ -1,4 +1,4 @@
-package app.com.gitkill;
+package app.com.gitkill.apiutils;
 
 import app.com.gitkill.pojoclasses.languages.TrendingLanguagePojo;
 import app.com.gitkill.pojoclasses.repositories.TrendingRepoPojo;
