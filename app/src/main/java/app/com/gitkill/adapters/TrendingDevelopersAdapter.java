@@ -1,4 +1,6 @@
 package app.com.gitkill.adapters;
 
-public class TrendingDevelopersAdapter {
+
+public class TrendingDevelopersAdapter{
+
 }

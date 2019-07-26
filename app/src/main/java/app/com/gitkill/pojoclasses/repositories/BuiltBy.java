@@ -8,36 +8,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonPropertyOrder({
-    "username",
     "href",
-    "avatar"
+    "avatar",
+    "username"
 })
-public class User {
+public class BuiltBy implements Serializable {
 
-    @JsonProperty("username")
-    private String username;
     @JsonProperty("href")
     private String href;
     @JsonProperty("avatar")
     private String avatar;
+    @JsonProperty("username")
+    private String username;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    @JsonProperty("username")
-    public String getUsername() {
-        return username;
-    }
-
-    @JsonProperty("username")
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     @JsonProperty("href")
     public String getHref() {
@@ -59,6 +49,16 @@ public class User {
         this.avatar = avatar;
     }
 
+    @JsonProperty("username")
+    public String getUsername() {
+        return username;
+    }
+
+    @JsonProperty("username")
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -69,4 +69,13 @@ public class User {
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public String toString() {
+        return "BuiltBy{" +
+                "href='" + href + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", username='" + username + '\'' +
+                ", additionalProperties=" + additionalProperties +
+                '}';
+    }
 }

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,14 +20,14 @@ import java.util.Map;
     "avatar",
     "url",
     "description",
-    "language",
-    "languageColor",
     "stars",
     "forks",
     "currentPeriodStars",
-    "user"
+    "builtBy",
+    "language",
+    "languageColor"
 })
-public class TrendingRepoPojo {
+public class TrendingRepoPojo implements Serializable {
 
     @JsonProperty("author")
     private String author;
@@ -38,20 +39,29 @@ public class TrendingRepoPojo {
     private String url;
     @JsonProperty("description")
     private String description;
-    @JsonProperty("language")
-    private String language;
-    @JsonProperty("languageColor")
-    private String languageColor;
     @JsonProperty("stars")
     private Integer stars;
     @JsonProperty("forks")
     private Integer forks;
     @JsonProperty("currentPeriodStars")
     private Integer currentPeriodStars;
-    @JsonProperty("user")
-    private List<User> user = null;
+    @JsonProperty("builtBy")
+    private List<BuiltBy> builtBy = null;
+    @JsonProperty("language")
+    private String language;
+    @JsonProperty("languageColor")
+    private String languageColor;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    public TrendingRepoPojo(String author, String name, String language, Integer stars, Integer forks, String url) {
+        this.author=author;
+        this.name=name;
+        this.language=language;
+        this.stars=stars;
+        this.forks=forks;
+        this.url=url;
+    }
 
     @JsonProperty("author")
     public String getAuthor() {
@@ -103,26 +113,6 @@ public class TrendingRepoPojo {
         this.description = description;
     }
 
-    @JsonProperty("language")
-    public String getLanguage() {
-        return language;
-    }
-
-    @JsonProperty("language")
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
-    @JsonProperty("languageColor")
-    public String getLanguageColor() {
-        return languageColor;
-    }
-
-    @JsonProperty("languageColor")
-    public void setLanguageColor(String languageColor) {
-        this.languageColor = languageColor;
-    }
-
     @JsonProperty("stars")
     public Integer getStars() {
         return stars;
@@ -153,14 +143,34 @@ public class TrendingRepoPojo {
         this.currentPeriodStars = currentPeriodStars;
     }
 
-    @JsonProperty("user")
-    public List<User> getUser() {
-        return user;
+    @JsonProperty("builtBy")
+    public List<BuiltBy> getBuiltBy() {
+        return builtBy;
     }
 
-    @JsonProperty("user")
-    public void setUser(List<User> user) {
-        this.user = user;
+    @JsonProperty("builtBy")
+    public void setBuiltBy(List<BuiltBy> builtBy) {
+        this.builtBy = builtBy;
+    }
+
+    @JsonProperty("language")
+    public String getLanguage() {
+        return language;
+    }
+
+    @JsonProperty("language")
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    @JsonProperty("languageColor")
+    public String getLanguageColor() {
+        return languageColor;
+    }
+
+    @JsonProperty("languageColor")
+    public void setLanguageColor(String languageColor) {
+        this.languageColor = languageColor;
     }
 
     @JsonAnyGetter
@@ -173,4 +183,21 @@ public class TrendingRepoPojo {
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public String toString() {
+        return "TrendingRepoPojo{" +
+                "author='" + author + '\'' +
+                ", name='" + name + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", url='" + url + '\'' +
+                ", description='" + description + '\'' +
+                ", stars=" + stars +
+                ", forks=" + forks +
+                ", currentPeriodStars=" + currentPeriodStars +
+                ", builtBy=" + builtBy +
+                ", language='" + language + '\'' +
+                ", languageColor='" + languageColor + '\'' +
+                ", additionalProperties=" + additionalProperties +
+                '}';
+    }
 }
