@@ -27,4 +27,5 @@
     <string name="username">Username</string>
     <string name="name">Name</string>
     <string name="profile_link">Profile Link</string>
+    <string name="nodata">No Data</string>
 </resources>

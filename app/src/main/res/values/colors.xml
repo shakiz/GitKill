@@ -327,4 +327,11 @@
     <color name="button_back_color">#274058</color>
     <color name="detailsLayoutColor">#4E93C9</color>
     <color name="textColor">#776D6D</color>
+
+    <color name="placeholder_bg">#dddddd</color>
+    <color name="item_name">#0c0c0c</color>
+    <color name="description">#1a1a1a</color>
+    <color name="chef">#777</color>
+    <color name="timestamp">#777</color>
+
 </resources>

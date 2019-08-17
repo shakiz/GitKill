@@ -11,12 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import java.util.ArrayList;
-
 import app.com.gitkill.R;
 import app.com.gitkill.adapters.TrendingRepositoriesAdapter;
 import app.com.gitkill.apiutils.AllApiService;
@@ -44,8 +42,9 @@ public class TrendingRepositories extends Fragment {
     private Retrofit retrofit;
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
-    private String TAG = " TrendingRepositories ";
+    private String TAG = "TrendingRepositories";
     private OkHttpClient.Builder builder;
+    private ShimmerFrameLayout shimmerFrameLayout;
 
     @Override
     public void onAttach(Context context) {
@@ -61,14 +60,29 @@ public class TrendingRepositories extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trending_repositories, container, false);
+        shimmerFrameLayout=view.findViewById(R.id.shimmerFrameLayout);
+        shimmerFrameLayout.startShimmerAnimation();
         init(view);
         getRepoData();
         setData();
         setAdapter(languageSpinner,languageList);
         setAdapter(timeSpinner,timeList);
         setAdapter(timeSpinner,timeList);
-        setRecyclerAdapter(recyclerViewRepo,trendingRepoList);
+        setRecyclerAdapter(recyclerViewRepo);
+
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        shimmerFrameLayout.stopShimmerAnimation();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        shimmerFrameLayout.startShimmerAnimation();
     }
 
     private void setData() {
@@ -90,17 +104,25 @@ public class TrendingRepositories extends Fragment {
         spinner.setAdapter(arrayAdapter);
     }
 
-    private void setRecyclerAdapter(RecyclerView recyclerView,ArrayList<TrendingRepoPojo> arrayList){
+    private void setRecyclerAdapter(RecyclerView recyclerView){
         layoutManager = new LinearLayoutManager(context);
         trendingRepositoriesAdapter = new TrendingRepositoriesAdapter(trendingRepoList,context);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(trendingRepositoriesAdapter);
+        trendingRepositoriesAdapter.notifyDataSetChanged();
+        shimmerFrameLayout.stopShimmerAnimation();
+
+        if (trendingRepoList.size()>0){
+            shimmerFrameLayout.stopShimmerAnimation();
+            shimmerFrameLayout.setVisibility(View.GONE);
+        }
     }
 
     private void init(View view) {
         recyclerViewRepo = view.findViewById(R.id.RecyclerRepoList);
         languageSpinner = view.findViewById(R.id.LanguageSpinner);
         timeSpinner = view.findViewById(R.id.TimeSpinner);
+        shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout);
         allUrlClass = new AllUrlClass();
         languageList = new ArrayList<>();
         timeList = new ArrayList<>();
@@ -129,7 +151,7 @@ public class TrendingRepositories extends Fragment {
             @Override
             public void onResponse(Call<ArrayList<TrendingRepoPojo>> call, Response<ArrayList<TrendingRepoPojo>> response) {
                 try{
-                    for(int start=0;start<5;start++){
+                    for(int start=0;start<response.body().size();start++){
                         TrendingRepoPojo repoPojo=response.body().get(start);
                         Log.v(TAG,repoPojo.getAuthor());
                         trendingRepoList.add(new TrendingRepoPojo(repoPojo.getAuthor(),repoPojo.getName(),repoPojo.getLanguage(),repoPojo.getStars(),repoPojo.getForks(),repoPojo.getUrl()));
@@ -138,7 +160,7 @@ public class TrendingRepositories extends Fragment {
                 catch (Exception e){
                     Log.v("EXCEPTION : ",""+e.getMessage());
                 }
-                setRecyclerAdapter(recyclerViewRepo,trendingRepoList);
+                setRecyclerAdapter(recyclerViewRepo);
             }
             @Override
             public void onFailure(Call<ArrayList<TrendingRepoPojo>> call, Throwable t) {

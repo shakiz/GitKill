@@ -15,8 +15,8 @@ public interface AllApiService {
     Call<ArrayList<TrendingRepoPojo>> getTrendingRepos(@Url String url);
     //Call for trending languages
     @GET
-    Call<TrendingLanguagePojo> getTrendingLanguages(@Url String url);
+    Call<ArrayList<TrendingLanguagePojo>> getTrendingLanguages(@Url String url);
     //Call for trending users
     @GET
-    Call<TrendingUserPojo> getTrendingUsers(@Url String url);
+    Call<ArrayList<TrendingUserPojo>> getTrendingUsers(@Url String url);
 }
