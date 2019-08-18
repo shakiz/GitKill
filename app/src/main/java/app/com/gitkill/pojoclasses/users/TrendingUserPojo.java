@@ -37,6 +37,16 @@ public class TrendingUserPojo {
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+
+    public TrendingUserPojo(String username, String name, String type, String url, String avatar, Repo repo) {
+        this.username = username;
+        this.name = name;
+        this.type = type;
+        this.url = url;
+        this.avatar = avatar;
+        this.repo = repo;
+    }
+
     @JsonProperty("username")
     public String getUsername() {
         return username;

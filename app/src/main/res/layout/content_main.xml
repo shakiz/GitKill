@@ -12,36 +12,30 @@
     tools:context=".HomeActivity">
 
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/scrollView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="4dp">
+        android:layout_margin="4dp"
+        android:orientation="vertical">
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="4dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:paddingTop="8dp"
             android:orientation="vertical">
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/fragmentScreen">
 
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="16dp"
-                    android:paddingTop="8dp"
-                    android:orientation="vertical">
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/fragmentScreen">
-
-                    </FrameLayout>
-
-                </LinearLayout>
+            </FrameLayout>
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+
+    </LinearLayout>
+
 </RelativeLayout>
 
