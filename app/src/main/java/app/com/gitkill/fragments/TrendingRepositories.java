@@ -1,7 +1,11 @@
 package app.com.gitkill.fragments;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +24,7 @@ import app.com.gitkill.adapters.TrendingRepositoriesAdapter;
 import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
 import app.com.gitkill.pojoclasses.repositories.TrendingRepoPojo;
+import dmax.dialog.SpotsDialog;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -33,10 +38,8 @@ public class TrendingRepositories extends Fragment {
 
     private ArrayAdapter<String> arrayAdapter;
     private Spinner languageSpinner,timeSpinner;
-    private Context context;
     private ArrayList<String> languageList, timeList;
     private RecyclerView recyclerViewRepo;
-    private RecyclerView.LayoutManager layoutManager;
     private TrendingRepositoriesAdapter trendingRepositoriesAdapter;
     private ArrayList<TrendingRepoPojo> trendingRepoList;
     private Retrofit retrofit;
@@ -44,45 +47,39 @@ public class TrendingRepositories extends Fragment {
     private AllApiService apiService;
     private String TAG = "TrendingRepositories";
     private OkHttpClient.Builder builder;
-    private ShimmerFrameLayout shimmerFrameLayout;
+    private AlertDialog progressDialog;
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.context = context;
-    }
 
     public TrendingRepositories() {
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trending_repositories, container, false);
-        shimmerFrameLayout=view.findViewById(R.id.shimmerFrameLayout);
-        shimmerFrameLayout.startShimmerAnimation();
         init(view);
-        getRepoData();
+        bindUiWithComponents(view);
+        return view;
+    }
+
+    private void bindUiWithComponents(View view) {
         setData();
+        new BackgroundDataLoad(view).execute();
         setAdapter(languageSpinner,languageList);
         setAdapter(timeSpinner,timeList);
         setAdapter(timeSpinner,timeList);
-        setRecyclerAdapter(recyclerViewRepo);
-
-        return view;
     }
 
     @Override
     public void onPause() {
-        shimmerFrameLayout.stopShimmerAnimation();
+        //shimmerFrameLayout.stopShimmerAnimation();
         super.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        shimmerFrameLayout.startShimmerAnimation();
+        //shimmerFrameLayout.startShimmerAnimation();
     }
 
     private void setData() {
@@ -99,37 +96,71 @@ public class TrendingRepositories extends Fragment {
     }
 
     private void setAdapter(Spinner spinner, ArrayList<String> languageList) {
-        arrayAdapter = new ArrayAdapter<>(context,R.layout.spinner_drop,languageList);
+        arrayAdapter = new ArrayAdapter<>(getContext(),R.layout.spinner_drop,languageList);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
     }
 
-    private void setRecyclerAdapter(RecyclerView recyclerView){
-        layoutManager = new LinearLayoutManager(context);
-        trendingRepositoriesAdapter = new TrendingRepositoriesAdapter(trendingRepoList,context);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(trendingRepositoriesAdapter);
-        trendingRepositoriesAdapter.notifyDataSetChanged();
-        shimmerFrameLayout.stopShimmerAnimation();
+    private void loadListView(){
+        trendingRepositoriesAdapter = new TrendingRepositoriesAdapter(trendingRepoList, getContext(), new TrendingRepositoriesAdapter.onItemClickListener() {
+            @Override
+            public void respond(TrendingRepoPojo trendingRepoPojo) {
 
-        if (trendingRepoList.size()>0){
-            shimmerFrameLayout.stopShimmerAnimation();
-            shimmerFrameLayout.setVisibility(View.GONE);
-        }
+            }
+        });
+        recyclerViewRepo.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewRepo.setAdapter(trendingRepositoriesAdapter);
+        trendingRepositoriesAdapter.notifyDataSetChanged();
     }
 
     private void init(View view) {
         recyclerViewRepo = view.findViewById(R.id.RecyclerRepoList);
         languageSpinner = view.findViewById(R.id.LanguageSpinner);
         timeSpinner = view.findViewById(R.id.TimeSpinner);
-        shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout);
         allUrlClass = new AllUrlClass();
         languageList = new ArrayList<>();
         timeList = new ArrayList<>();
         trendingRepoList = new ArrayList<>();
+        progressDialog = new SpotsDialog(getContext(),R.style.CustomProgressDialog);
     }
 
-    private void getRepoData() {
+    private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
+
+        View view;
+
+        public BackgroundDataLoad(View view) {
+            this.view = view;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            loadRecord();
+            return "done";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    if (progressDialog.isShowing()) {
+                        if (trendingRepoList.size()>0) {
+                            loadListView();
+                        }
+                        progressDialog.dismiss();
+                    }
+                }
+            }, 4000);
+        }
+
+    }
+
+    private void loadRecord() {
         builder= new OkHttpClient.Builder();
         loggingInterceptorForRetrofit(builder);
         if (retrofit == null){
@@ -153,14 +184,12 @@ public class TrendingRepositories extends Fragment {
                 try{
                     for(int start=0;start<response.body().size();start++){
                         TrendingRepoPojo repoPojo=response.body().get(start);
-                        Log.v(TAG,repoPojo.getAuthor());
                         trendingRepoList.add(new TrendingRepoPojo(repoPojo.getAuthor(),repoPojo.getName(),repoPojo.getLanguage(),repoPojo.getStars(),repoPojo.getForks(),repoPojo.getUrl()));
                     }
                 }
                 catch (Exception e){
                     Log.v("EXCEPTION : ",""+e.getMessage());
                 }
-                setRecyclerAdapter(recyclerViewRepo);
             }
             @Override
             public void onFailure(Call<ArrayList<TrendingRepoPojo>> call, Throwable t) {
