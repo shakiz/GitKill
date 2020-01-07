@@ -35,7 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class TrendingRepositories extends Fragment {
-
+    private static final TrendingRepositories FRAGMENT_TRENDING_REPOSITORIES = null;
     private ArrayAdapter<String> arrayAdapter;
     private Spinner languageSpinner,timeSpinner;
     private ArrayList<String> languageList, timeList;
@@ -48,6 +48,11 @@ public class TrendingRepositories extends Fragment {
     private String TAG = "TrendingRepositories";
     private OkHttpClient.Builder builder;
     private AlertDialog progressDialog;
+
+    public static synchronized TrendingRepositories getInstance(){
+        if (FRAGMENT_TRENDING_REPOSITORIES == null) return new TrendingRepositories();
+        else return FRAGMENT_TRENDING_REPOSITORIES;
+    }
 
 
     public TrendingRepositories() {

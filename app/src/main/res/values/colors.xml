@@ -3,13 +3,13 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-
     <color name="black_transparent_10">#10000000</color>
     <color name="transparent">#00000000</color>
 
     <color name="colorRed">#f44336</color>
     <color name="shadow">#66000000</color>
-    <color name="white_transparent">#97FFFFFF</color>
+    <color name="white_transparent">#E6FFFFFF</color>
+    <color name="white_transparent2">#66FFFFFF</color>
     <color name="common_page_bg">#e7f7fe</color>
 
     <color name="monitoring">#ffc107</color>
@@ -316,22 +316,15 @@
     <color name="md_blue_grey_800">#37474F</color>
     <color name="md_blue_grey_900">#263238</color>
 
-
     <color name="background_color_blue_gray">#212121</color>
     <color name="color_card_2">#A9B6B1</color>
     <color name="card_color_details">#16443A</color>
-
 
     <color name="colorTransparent">#FFffffff</color>
     <color name="layoutPart1Color">#BC3EC5B5</color>
     <color name="button_back_color">#274058</color>
     <color name="detailsLayoutColor">#4E93C9</color>
     <color name="textColor">#776D6D</color>
-
-    <color name="placeholder_bg">#dddddd</color>
-    <color name="item_name">#0c0c0c</color>
-    <color name="description">#1a1a1a</color>
-    <color name="chef">#777</color>
-    <color name="timestamp">#777</color>
-
+    <color name="button_color">#5D5EB2</color>
+    <color name="commonColor">#5C64F7</color>
 </resources>

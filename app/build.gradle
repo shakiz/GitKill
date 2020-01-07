@@ -44,6 +44,9 @@ dependencies {
     //Progress dialog
     implementation 'com.github.d-max:spots-dialog:0.4@aar'
 
+    // android custom menu
+    implementation 'com.yarolegovich:sliding-root-nav:1.1.0'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

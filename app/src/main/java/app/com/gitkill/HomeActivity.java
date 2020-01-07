@@ -1,99 +1,144 @@
 package app.com.gitkill;
 
+import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.view.View;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.view.MenuItem;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-
-import app.com.gitkill.fragments.TrendingLanguages;
+import android.view.MenuItem;
+import com.yarolegovich.slidingrootnav.SlidingRootNav;
+import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
+import java.util.Arrays;
+import app.com.gitkill.drawerextra.DrawerAdapter;
+import app.com.gitkill.drawerextra.DrawerItem;
+import app.com.gitkill.drawerextra.SimpleItem;
 import app.com.gitkill.fragments.TrendingRepositories;
-import app.com.gitkill.fragments.TrendingUsers;
 
-public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
-    private ActionBarDrawerToggle toggle;
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
+public class HomeActivity extends AppCompatActivity {
+    private SlidingRootNav slidingRootNav ;
+    private DrawerAdapter adapter;
+    private String[] screenTitles;
+    private Drawable[] screenIcons;
+    private RecyclerView list;
+    private static final int POS_TRENDING_REPO = 0;
+    private static final int POS_TRENDING_DEVELOPERS = 1;
+    private static final int POS_TRENDING_LANGUAGES = 2;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        init(savedInstanceState);
+        bindUIWithComponents();
+    }
+
+    private void init(Bundle savedInstanceState) {
+        toolbar = findViewById(R.id.tool_bar);
+        slidingRootNav  = new SlidingRootNavBuilder(this)
+                .withToolbarMenuToggle(toolbar)
+                .withMenuOpened(false)
+                .withContentClickableWhenMenuOpened(true)
+                .withSavedState(savedInstanceState)
+                .withMenuLayout(R.layout.menu)
+                .inject();
+
+        screenIcons = loadScreenIcons();
+        screenTitles = loadScreenTitles();
+    }
+
+    private void setAdapter() {
+        list = findViewById(R.id.nav_list_item);
+        adapter = new DrawerAdapter(Arrays.asList(
+                createItemFor(POS_TRENDING_REPO).setChecked(true),
+                createItemFor(POS_TRENDING_DEVELOPERS),
+                createItemFor(POS_TRENDING_LANGUAGES)));
+        list.setNestedScrollingEnabled(false);
+        list.setLayoutManager(new LinearLayoutManager(this));
+        list.setAdapter(adapter);
+        adapter.setSelected(POS_TRENDING_REPO);
+    }
+
+    private void showFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.fadein,R.anim.fadeout);
+        fragmentTransaction.replace(R.id.container, fragment)
+                .commit();
+    }
+
+    private DrawerItem createItemFor(int position) {
+        return new SimpleItem(screenIcons[position], screenTitles[position])
+                .withTextTint(getResources().getColor(R.color.md_blue_grey_700))
+                .withSelectedTextTint(getResources().getColor(R.color.md_grey_900));
+    }
+
+    private void bindUIWithComponents() {
+
+
+        setAdapter();
+        adapter.setListener(new DrawerAdapter.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int position) {
+                final int pos = position;
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (pos == POS_TRENDING_REPO) {
+                            showFragment(TrendingRepositories.getInstance());
+                            return;
+                        }
+                    }
+                },5);
+
+                slidingRootNav.closeMenu();
+
+            }
+        });
         FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentScreen,new TrendingRepositories());
+        fragmentTransaction.replace(R.id.container,new TrendingRepositories());
         fragmentTransaction.commit();
-        init();
-        toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toggle.setDrawerIndicatorEnabled(true);
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
-    public void init(){
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
+    private String[] loadScreenTitles() {
+        return getResources().getStringArray(R.array.ld_activityScreenTitles);
     }
 
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+    private Drawable[] loadScreenIcons() {
+        TypedArray ta = getResources().obtainTypedArray(R.array.ld_activityScreenIcons);
+        Drawable[] icons = new Drawable[ta.length()];
+        for (int i = 0; i < ta.length(); i++) {
+            int id = ta.getResourceId(i, 0);
+            if (id != 0) {
+                icons[i] = ContextCompat.getDrawable(this, id);
+            }
         }
+        ta.recycle();
+        return icons;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+    public void exitApp(){
+        Intent exitIntent = new Intent(Intent.ACTION_MAIN);
+        exitIntent.addCategory(Intent.CATEGORY_HOME);
+        exitIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        this.startActivity(exitIntent);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return toggle != null && toggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        Fragment fragment = null;
-
-        if (id == R.id.nav_repo) {
-            fragment = new TrendingRepositories();
-        }
-        else if (id == R.id.nav_user) {
-            fragment = new TrendingUsers();
-        }
-        else if (id == R.id.nav_language) {
-            fragment = new TrendingLanguages();
-        }
-
-        if (fragment != null){
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragmentScreen,fragment);
-            fragmentTransaction.commit();
-        }
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
+    public void onBackPressed() {
+        super.onBackPressed();
+        exitApp();
     }
+
 }
