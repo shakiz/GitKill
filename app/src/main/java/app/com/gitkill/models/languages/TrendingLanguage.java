@@ -16,7 +16,7 @@ import java.util.Map;
     "urlParam",
     "name"
 })
-public class TrendingLanguagePojo {
+public class TrendingLanguage {
 
     @JsonProperty("urlParam")
     private String urlParam;

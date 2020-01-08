@@ -13,15 +13,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import app.com.gitkill.R;
-import app.com.gitkill.models.repositories.TrendingRepoPojo;
+import app.com.gitkill.models.repositories.TrendingRepositories;
 
 public class TrendingRepositoriesAdapter extends RecyclerView.Adapter<TrendingRepositoriesAdapter.ViewHolder>{
-    private ArrayList<TrendingRepoPojo> repositoriesArrayList;
+    private ArrayList<TrendingRepositories> repositoriesArrayList;
     private String TAG = "TrendingRepositoriesAdapter";
     private Context context;
     private onItemClickListener onItemClickListener;
 
-    public TrendingRepositoriesAdapter(ArrayList<TrendingRepoPojo> repositoriesArrayList, Context context,onItemClickListener onItemClickListener) {
+    public TrendingRepositoriesAdapter(ArrayList<TrendingRepositories> repositoriesArrayList, Context context, onItemClickListener onItemClickListener) {
         this.repositoriesArrayList = repositoriesArrayList;
         this.context = context;
         this.onItemClickListener = onItemClickListener;
@@ -36,7 +36,7 @@ public class TrendingRepositoriesAdapter extends RecyclerView.Adapter<TrendingRe
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        final TrendingRepoPojo trendingRepo=repositoriesArrayList.get(position);
+        final TrendingRepositories trendingRepo=repositoriesArrayList.get(position);
         Log.v(TAG,trendingRepo.getAuthor());
         viewHolder.RepoOwner.setText("Name : "+trendingRepo.getAuthor());
         viewHolder.RepoName.setText("Name : "+trendingRepo.getName());
@@ -76,6 +76,6 @@ public class TrendingRepositoriesAdapter extends RecyclerView.Adapter<TrendingRe
     }
 
     public interface onItemClickListener {
-        void respond(TrendingRepoPojo trendingRepoPojo);
+        void respond(TrendingRepositories trendingRepositories);
     }
 }

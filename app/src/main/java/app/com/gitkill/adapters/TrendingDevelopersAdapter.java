@@ -11,15 +11,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import java.util.ArrayList;
 import app.com.gitkill.R;
-import app.com.gitkill.models.users.TrendingDevelopersPojo;
+import app.com.gitkill.models.users.TrendingDevelopers;
 
 public class TrendingDevelopersAdapter extends RecyclerView.Adapter<TrendingDevelopersAdapter.ViewHolder>{
 
-    private ArrayList<TrendingDevelopersPojo> trendingDevelopersList;
+    private ArrayList<TrendingDevelopers> trendingDevelopersList;
     private Context context;
     private onItemClickListener onItemClickListener;
 
-    public TrendingDevelopersAdapter(ArrayList<TrendingDevelopersPojo> trendingDevelopersList, Context context, onItemClickListener onItemClickListener) {
+    public TrendingDevelopersAdapter(ArrayList<TrendingDevelopers> trendingDevelopersList, Context context, onItemClickListener onItemClickListener) {
         this.trendingDevelopersList = trendingDevelopersList;
         this.context = context;
         this.onItemClickListener = onItemClickListener;
@@ -34,7 +34,7 @@ public class TrendingDevelopersAdapter extends RecyclerView.Adapter<TrendingDeve
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        final TrendingDevelopersPojo trendingDevelopers = trendingDevelopersList.get(position);
+        final TrendingDevelopers trendingDevelopers = trendingDevelopersList.get(position);
         viewHolder.UserName.setText(trendingDevelopers.getUsername());
         viewHolder.Type.setText(trendingDevelopers.getName());
         viewHolder.ProfileLink.setText(trendingDevelopers.getUrl());
@@ -66,6 +66,6 @@ public class TrendingDevelopersAdapter extends RecyclerView.Adapter<TrendingDeve
     }
 
     public interface onItemClickListener {
-        void respond(TrendingDevelopersPojo trendingDevelopersPojo);
+        void respond(TrendingDevelopers trendingDevelopers);
     }
 }

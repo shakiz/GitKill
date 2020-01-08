@@ -2,9 +2,9 @@ package app.com.gitkill.apiutils;
 
 import java.util.ArrayList;
 
-import app.com.gitkill.models.languages.TrendingLanguagePojo;
-import app.com.gitkill.models.repositories.TrendingRepoPojo;
-import app.com.gitkill.models.users.TrendingDevelopersPojo;
+import app.com.gitkill.models.languages.TrendingLanguage;
+import app.com.gitkill.models.repositories.TrendingRepositories;
+import app.com.gitkill.models.users.TrendingDevelopers;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Url;
@@ -12,11 +12,11 @@ import retrofit2.http.Url;
 public interface AllApiService {
     //Call for trending repositories
     @GET
-    Call<ArrayList<TrendingRepoPojo>> getTrendingRepos(@Url String url);
+    Call<ArrayList<TrendingRepositories>> getTrendingRepos(@Url String url);
     //Call for trending languages
     @GET
-    Call<ArrayList<TrendingLanguagePojo>> getTrendingLanguages(@Url String url);
+    Call<ArrayList<TrendingLanguage>> getTrendingLanguages(@Url String url);
     //Call for trending users
     @GET
-    Call<ArrayList<TrendingDevelopersPojo>> getTrendingUsers(@Url String url);
+    Call<ArrayList<TrendingDevelopers>> getTrendingUsers(@Url String url);
 }

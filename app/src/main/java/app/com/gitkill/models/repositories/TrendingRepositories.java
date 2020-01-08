@@ -27,7 +27,7 @@ import java.util.Map;
     "language",
     "languageColor"
 })
-public class TrendingRepoPojo implements Serializable {
+public class TrendingRepositories implements Serializable {
 
     @JsonProperty("author")
     private String author;
@@ -54,7 +54,7 @@ public class TrendingRepoPojo implements Serializable {
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    public TrendingRepoPojo(String author, String name, String language, Integer stars, Integer forks, String url) {
+    public TrendingRepositories(String author, String name, String language, Integer stars, Integer forks, String url) {
         this.author=author;
         this.name=name;
         this.language=language;
@@ -185,7 +185,7 @@ public class TrendingRepoPojo implements Serializable {
 
     @Override
     public String toString() {
-        return "TrendingRepoPojo{" +
+        return "TrendingRepositories{" +
                 "author='" + author + '\'' +
                 ", name='" + name + '\'' +
                 ", avatar='" + avatar + '\'' +

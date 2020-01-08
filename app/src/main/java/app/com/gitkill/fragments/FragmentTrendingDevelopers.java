@@ -21,7 +21,7 @@ import app.com.gitkill.R;
 import app.com.gitkill.adapters.TrendingDevelopersAdapter;
 import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
-import app.com.gitkill.models.users.TrendingDevelopersPojo;
+import app.com.gitkill.models.users.TrendingDevelopers;
 import dmax.dialog.SpotsDialog;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -38,7 +38,7 @@ public class FragmentTrendingDevelopers extends Fragment {
     private Spinner languageSpinner,timeSpinner;
     private RecyclerView recyclerViewDevelopers;
     private ArrayList<String> languageList, timeList;
-    private ArrayList<TrendingDevelopersPojo> trendingDevelopersList;
+    private ArrayList<TrendingDevelopers> trendingDevelopersList;
     private Retrofit retrofit;
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
@@ -94,7 +94,7 @@ public class FragmentTrendingDevelopers extends Fragment {
     private void loadListView(){
         TrendingDevelopersAdapter trendingDevelopersAdapter = new TrendingDevelopersAdapter(trendingDevelopersList, getContext(), new TrendingDevelopersAdapter.onItemClickListener() {
             @Override
-            public void respond(TrendingDevelopersPojo trendingDevelopersPojo) {
+            public void respond(TrendingDevelopers trendingDevelopersPojo) {
 
             }
         });
@@ -167,15 +167,15 @@ public class FragmentTrendingDevelopers extends Fragment {
         }
         //Creating the instance for api service from AllApiService interface
         apiService=retrofit.create(AllApiService.class);
-        final Call<ArrayList<TrendingDevelopersPojo>> userInformationCall=apiService.getTrendingUsers(allUrlClass.TRENDING_DEVS_URL);
+        final Call<ArrayList<TrendingDevelopers>> userInformationCall=apiService.getTrendingUsers(allUrlClass.TRENDING_DEVS_URL);
         //handling user requests and their interactions with the application.
-        userInformationCall.enqueue(new Callback<ArrayList<TrendingDevelopersPojo>>() {
+        userInformationCall.enqueue(new Callback<ArrayList<TrendingDevelopers>>() {
             @Override
-            public void onResponse(Call<ArrayList<TrendingDevelopersPojo>> call, Response<ArrayList<TrendingDevelopersPojo>> response) {
+            public void onResponse(Call<ArrayList<TrendingDevelopers>> call, Response<ArrayList<TrendingDevelopers>> response) {
                 try{
                     for(int start=0;start<response.body().size();start++){
-                        TrendingDevelopersPojo userPojo=response.body().get(start);
-                        trendingDevelopersList.add(new TrendingDevelopersPojo(userPojo.getUsername(),userPojo.getName(),userPojo.getType(),userPojo.getUrl(),userPojo.getAvatar(),userPojo.getRepo()));
+                        TrendingDevelopers userPojo=response.body().get(start);
+                        trendingDevelopersList.add(new TrendingDevelopers(userPojo.getUsername(),userPojo.getName(),userPojo.getType(),userPojo.getUrl(),userPojo.getAvatar(),userPojo.getRepo()));
                     }
                 }
                 catch (Exception e){
@@ -183,7 +183,7 @@ public class FragmentTrendingDevelopers extends Fragment {
                 }
             }
             @Override
-            public void onFailure(Call<ArrayList<TrendingDevelopersPojo>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<TrendingDevelopers>> call, Throwable t) {
                 Log.v(TAG,""+t.getMessage());
             }
         });

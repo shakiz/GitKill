@@ -21,7 +21,7 @@ import app.com.gitkill.R;
 import app.com.gitkill.adapters.TrendingRepositoriesAdapter;
 import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
-import app.com.gitkill.models.repositories.TrendingRepoPojo;
+import app.com.gitkill.models.repositories.TrendingRepositories;
 import dmax.dialog.SpotsDialog;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -39,7 +39,7 @@ public class FragmentTrendingRepositories extends Fragment {
     private ArrayList<String> languageList, timeList;
     private RecyclerView recyclerViewRepo;
     private TrendingRepositoriesAdapter trendingRepositoriesAdapter;
-    private ArrayList<TrendingRepoPojo> trendingRepoList;
+    private ArrayList<TrendingRepositories> trendingRepoList;
     private Retrofit retrofit;
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
@@ -105,7 +105,7 @@ public class FragmentTrendingRepositories extends Fragment {
     private void loadListView(){
         trendingRepositoriesAdapter = new TrendingRepositoriesAdapter(trendingRepoList, getContext(), new TrendingRepositoriesAdapter.onItemClickListener() {
             @Override
-            public void respond(TrendingRepoPojo trendingRepoPojo) {
+            public void respond(TrendingRepositories trendingRepositories) {
 
             }
         });
@@ -177,15 +177,15 @@ public class FragmentTrendingRepositories extends Fragment {
         }
         //Creating the instance for api service from AllApiService interface
         apiService=retrofit.create(AllApiService.class);
-        final Call<ArrayList<TrendingRepoPojo>> userInformationCall=apiService.getTrendingRepos(allUrlClass.TRENDING_REPOS_URL);
+        final Call<ArrayList<TrendingRepositories>> userInformationCall=apiService.getTrendingRepos(allUrlClass.TRENDING_REPOS_URL);
         //handling user requests and their interactions with the application.
-        userInformationCall.enqueue(new Callback<ArrayList<TrendingRepoPojo>>() {
+        userInformationCall.enqueue(new Callback<ArrayList<TrendingRepositories>>() {
             @Override
-            public void onResponse(Call<ArrayList<TrendingRepoPojo>> call, Response<ArrayList<TrendingRepoPojo>> response) {
+            public void onResponse(Call<ArrayList<TrendingRepositories>> call, Response<ArrayList<TrendingRepositories>> response) {
                 try{
                     for(int start=0;start<response.body().size();start++){
-                        TrendingRepoPojo repoPojo=response.body().get(start);
-                        trendingRepoList.add(new TrendingRepoPojo(repoPojo.getAuthor(),repoPojo.getName(),repoPojo.getLanguage(),repoPojo.getStars(),repoPojo.getForks(),repoPojo.getUrl()));
+                        TrendingRepositories repoPojo=response.body().get(start);
+                        trendingRepoList.add(new TrendingRepositories(repoPojo.getAuthor(),repoPojo.getName(),repoPojo.getLanguage(),repoPojo.getStars(),repoPojo.getForks(),repoPojo.getUrl()));
                     }
                 }
                 catch (Exception e){
@@ -193,7 +193,7 @@ public class FragmentTrendingRepositories extends Fragment {
                 }
             }
             @Override
-            public void onFailure(Call<ArrayList<TrendingRepoPojo>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<TrendingRepositories>> call, Throwable t) {
                 Log.v(TAG,""+t.getMessage());
             }
         });

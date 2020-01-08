@@ -20,7 +20,7 @@ import java.util.Map;
     "avatar",
     "repo"
 })
-public class TrendingDevelopersPojo {
+public class TrendingDevelopers {
 
     @JsonProperty("username")
     private String username;
@@ -38,7 +38,7 @@ public class TrendingDevelopersPojo {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 
-    public TrendingDevelopersPojo(String username, String name, String type, String url, String avatar, Repo repo) {
+    public TrendingDevelopers(String username, String name, String type, String url, String avatar, Repo repo) {
         this.username = username;
         this.name = name;
         this.type = type;
