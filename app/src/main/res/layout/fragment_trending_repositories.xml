@@ -81,12 +81,23 @@
                         android:layout_height="38dp"
                         android:layout_marginTop="5dp"
                         android:background="@drawable/edittext_back"
-                        android:id="@+id/TimeSpinner"
+                        android:id="@+id/SinceSpinner"
                         android:padding="4dp"></Spinner>
 
                 </LinearLayout>
 
             </LinearLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/Search"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@color/md_white_1000"
+                android:backgroundTint="@color/md_white_1000"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_search"
+                app:fabSize="mini"/>
 
         </LinearLayout>
 
