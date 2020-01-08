@@ -37,4 +37,5 @@
     <string name="home">Home</string>
     <string name="itemname">Item Name</string>
     <string name="type">Type</string>
+    <string name="since">Since</string>
 </resources>

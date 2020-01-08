@@ -38,12 +38,12 @@ public class TrendingRepositoriesAdapter extends RecyclerView.Adapter<TrendingRe
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         final TrendingRepositories trendingRepo=repositoriesArrayList.get(position);
         Log.v(TAG,trendingRepo.getAuthor());
-        viewHolder.RepoOwner.setText("Name : "+trendingRepo.getAuthor());
-        viewHolder.RepoName.setText("Name : "+trendingRepo.getName());
-        viewHolder.NumberOfStars.setText("Stars : "+trendingRepo.getStars());
-        viewHolder.NumberOfForks.setText("Forks : "+trendingRepo.getForks());
-        viewHolder.Language.setText("Forks : "+trendingRepo.getLanguage());
-        viewHolder.RepoLink.setText("Repo link : "+trendingRepo.getUrl());
+        viewHolder.RepoOwner.setText(trendingRepo.getAuthor());
+        viewHolder.RepoName.setText(trendingRepo.getName());
+        viewHolder.NumberOfStars.setText(""+trendingRepo.getStars());
+        viewHolder.NumberOfForks.setText(""+trendingRepo.getForks());
+        viewHolder.Language.setText(""+trendingRepo.getLanguage());
+        viewHolder.RepoLink.setText(""+trendingRepo.getUrl());
 
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

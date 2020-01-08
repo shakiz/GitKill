@@ -76,7 +76,9 @@ public class FragmentTrendingDevelopers extends Fragment {
         //Adding the language list
         languageList.add("Java");
         languageList.add("Python");
-        languageList.add("Javascript");
+        languageList.add("C");
+        languageList.add("C++");
+        languageList.add("C#");
         languageList.add("PHP");
         //Adding data to time list
         timeList.add("Daily");
