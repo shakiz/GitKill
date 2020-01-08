@@ -1,8 +1,9 @@
 package app.com.gitkill.fragments;
 
-
-import android.content.Context;
+import android.app.AlertDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,19 +14,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import java.util.ArrayList;
-
 import app.com.gitkill.R;
-import app.com.gitkill.adapters.TrendingDevelopersAdapter;
 import app.com.gitkill.adapters.TrendingRepositoriesAdapter;
 import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
-import app.com.gitkill.pojoclasses.repositories.TrendingRepoPojo;
-import app.com.gitkill.pojoclasses.users.TrendingUserPojo;
+import app.com.gitkill.models.repositories.TrendingRepoPojo;
+import dmax.dialog.SpotsDialog;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -35,46 +32,55 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class TrendingUsers extends Fragment {
-
+public class FragmentTrendingRepositories extends Fragment {
+    private static final FragmentTrendingRepositories FRAGMENT_TRENDING_REPOSITORIES = null;
     private ArrayAdapter<String> arrayAdapter;
     private Spinner languageSpinner,timeSpinner;
-    private RecyclerView recyclerViewUser;
-    private Context context;
     private ArrayList<String> languageList, timeList;
-    private ArrayList<TrendingUserPojo> trendingUserList;
-    private TrendingDevelopersAdapter trendingDevelopersAdapter;
-    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView recyclerViewRepo;
+    private TrendingRepositoriesAdapter trendingRepositoriesAdapter;
+    private ArrayList<TrendingRepoPojo> trendingRepoList;
     private Retrofit retrofit;
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
-    private String TAG = "TrendingRepositories";
+    private String TAG = "FragmentTrendingRepositories";
     private OkHttpClient.Builder builder;
-    private ShimmerFrameLayout shimmerFrameLayout;
+    private AlertDialog progressDialog;
 
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.context = context;
+    public static synchronized FragmentTrendingRepositories getInstance(){
+        if (FRAGMENT_TRENDING_REPOSITORIES == null) return new FragmentTrendingRepositories();
+        else return FRAGMENT_TRENDING_REPOSITORIES;
     }
 
-    public TrendingUsers() {
-    }
 
+    public FragmentTrendingRepositories() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_trending_users, container, false);
+        View view = inflater.inflate(R.layout.fragment_trending_repositories, container, false);
         init(view);
-        getUserData();
+        bindUiWithComponents(view);
+        return view;
+    }
+
+    private void bindUiWithComponents(View view) {
         setData();
+        new BackgroundDataLoad(view).execute();
         setAdapter(languageSpinner,languageList);
         setAdapter(timeSpinner,timeList);
-        setRecyclerAdapter(recyclerViewUser);
+        setAdapter(timeSpinner,timeList);
+    }
 
-        return view;
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void setData() {
@@ -91,38 +97,71 @@ public class TrendingUsers extends Fragment {
     }
 
     private void setAdapter(Spinner spinner, ArrayList<String> languageList) {
-        arrayAdapter = new ArrayAdapter<>(context,R.layout.spinner_drop,languageList);
+        arrayAdapter = new ArrayAdapter<>(getContext(),R.layout.spinner_drop,languageList);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
     }
 
+    private void loadListView(){
+        trendingRepositoriesAdapter = new TrendingRepositoriesAdapter(trendingRepoList, getContext(), new TrendingRepositoriesAdapter.onItemClickListener() {
+            @Override
+            public void respond(TrendingRepoPojo trendingRepoPojo) {
+
+            }
+        });
+        recyclerViewRepo.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewRepo.setAdapter(trendingRepositoriesAdapter);
+        trendingRepositoriesAdapter.notifyDataSetChanged();
+    }
+
     private void init(View view) {
+        recyclerViewRepo = view.findViewById(R.id.RecyclerRepoList);
         languageSpinner = view.findViewById(R.id.LanguageSpinner);
         timeSpinner = view.findViewById(R.id.TimeSpinner);
-        recyclerViewUser = view.findViewById(R.id.RecyclerUserList);
-        shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout);
-        trendingUserList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         languageList = new ArrayList<>();
         timeList = new ArrayList<>();
+        trendingRepoList = new ArrayList<>();
+        progressDialog = new SpotsDialog(getContext(),R.style.CustomProgressDialog);
     }
 
-    private void setRecyclerAdapter(RecyclerView recyclerView){
-        layoutManager = new LinearLayoutManager(context);
-        trendingDevelopersAdapter = new TrendingDevelopersAdapter(trendingUserList,context);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(trendingDevelopersAdapter);
-        trendingDevelopersAdapter.notifyDataSetChanged();
-        shimmerFrameLayout.stopShimmerAnimation();
+    private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
 
-        if (trendingUserList.size()>0){
-            shimmerFrameLayout.stopShimmerAnimation();
-            shimmerFrameLayout.setVisibility(View.GONE);
+        View view;
+
+        public BackgroundDataLoad(View view) {
+            this.view = view;
         }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            loadRecord();
+            return "done";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    if (progressDialog.isShowing()) {
+                        if (trendingRepoList.size()>0) {
+                            loadListView();
+                        }
+                        progressDialog.dismiss();
+                    }
+                }
+            }, 4000);
+        }
+
     }
 
-
-    private void getUserData() {
+    private void loadRecord() {
         builder= new OkHttpClient.Builder();
         loggingInterceptorForRetrofit(builder);
         if (retrofit == null){
@@ -130,7 +169,7 @@ public class TrendingUsers extends Fragment {
                     .setLenient()
                     .create();
             retrofit=new Retrofit.Builder()
-                    .baseUrl(allUrlClass.TRENDING_DEVS_URL)
+                    .baseUrl(allUrlClass.TRENDING_REPOS_URL)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .client(builder.build())
@@ -138,26 +177,23 @@ public class TrendingUsers extends Fragment {
         }
         //Creating the instance for api service from AllApiService interface
         apiService=retrofit.create(AllApiService.class);
-        final Call<ArrayList<TrendingUserPojo>> userInformationCall=apiService.getTrendingUsers(allUrlClass.TRENDING_DEVS_URL);
+        final Call<ArrayList<TrendingRepoPojo>> userInformationCall=apiService.getTrendingRepos(allUrlClass.TRENDING_REPOS_URL);
         //handling user requests and their interactions with the application.
-        userInformationCall.enqueue(new Callback<ArrayList<TrendingUserPojo>>() {
+        userInformationCall.enqueue(new Callback<ArrayList<TrendingRepoPojo>>() {
             @Override
-            public void onResponse(Call<ArrayList<TrendingUserPojo>> call, Response<ArrayList<TrendingUserPojo>> response) {
+            public void onResponse(Call<ArrayList<TrendingRepoPojo>> call, Response<ArrayList<TrendingRepoPojo>> response) {
                 try{
                     for(int start=0;start<response.body().size();start++){
-                        TrendingUserPojo userPojo=response.body().get(start);
-                        Log.v(TAG,userPojo.getUsername());
-                        Log.v(TAG,userPojo.getRepo().getName());
-                        trendingUserList.add(new TrendingUserPojo(userPojo.getUsername(),userPojo.getName(),userPojo.getType(),userPojo.getUrl(),userPojo.getAvatar(),userPojo.getRepo()));
+                        TrendingRepoPojo repoPojo=response.body().get(start);
+                        trendingRepoList.add(new TrendingRepoPojo(repoPojo.getAuthor(),repoPojo.getName(),repoPojo.getLanguage(),repoPojo.getStars(),repoPojo.getForks(),repoPojo.getUrl()));
                     }
                 }
                 catch (Exception e){
                     Log.v("EXCEPTION : ",""+e.getMessage());
                 }
-                setRecyclerAdapter(recyclerViewUser);
             }
             @Override
-            public void onFailure(Call<ArrayList<TrendingUserPojo>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<TrendingRepoPojo>> call, Throwable t) {
                 Log.v(TAG,""+t.getMessage());
             }
         });
@@ -170,4 +206,5 @@ public class TrendingUsers extends Fragment {
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         builder.addInterceptor(httpLoggingInterceptor);
     }
+
 }

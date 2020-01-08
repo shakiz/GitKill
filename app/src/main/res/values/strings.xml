@@ -15,7 +15,7 @@
     <string name="select_language">Select Language</string>
     <string name="select_time">Select Time</string>
     <string name="trending_repos">Trending Repositories</string>
-    <string name="trending_users_heading">List of Trending users</string>
+    <string name="trending_developers_heading">List of Trending Developers</string>
     <string name="trending_repos_heading">List Of Trending Repositories</string>
     <string name="trending_languages_heading">List of Trending Languages</string>
     <string name="author_name">Author Name</string>
@@ -36,4 +36,5 @@
     <string name="owner_name">Owner Name</string>
     <string name="home">Home</string>
     <string name="itemname">Item Name</string>
+    <string name="type">Type</string>
 </resources>

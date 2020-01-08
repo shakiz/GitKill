@@ -1,5 +1,5 @@
 
-package app.com.gitkill.pojoclasses.users;
+package app.com.gitkill.models.users;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;

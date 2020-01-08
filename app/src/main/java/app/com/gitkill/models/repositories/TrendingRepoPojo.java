@@ -1,5 +1,5 @@
 
-package app.com.gitkill.pojoclasses.repositories;
+package app.com.gitkill.models.repositories;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;

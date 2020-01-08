@@ -1,5 +1,5 @@
 
-package app.com.gitkill.pojoclasses.users;
+package app.com.gitkill.models.users;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -20,7 +20,7 @@ import java.util.Map;
     "avatar",
     "repo"
 })
-public class TrendingUserPojo {
+public class TrendingDevelopersPojo {
 
     @JsonProperty("username")
     private String username;
@@ -38,7 +38,7 @@ public class TrendingUserPojo {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 
-    public TrendingUserPojo(String username, String name, String type, String url, String avatar, Repo repo) {
+    public TrendingDevelopersPojo(String username, String name, String type, String url, String avatar, Repo repo) {
         this.username = username;
         this.name = name;
         this.type = type;

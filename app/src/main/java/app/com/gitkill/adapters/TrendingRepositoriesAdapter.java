@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import app.com.gitkill.R;
-import app.com.gitkill.pojoclasses.repositories.TrendingRepoPojo;
+import app.com.gitkill.models.repositories.TrendingRepoPojo;
 
 public class TrendingRepositoriesAdapter extends RecyclerView.Adapter<TrendingRepositoriesAdapter.ViewHolder>{
     private ArrayList<TrendingRepoPojo> repositoriesArrayList;

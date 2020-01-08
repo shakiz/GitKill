@@ -1,4 +1,4 @@
-package app.com.gitkill;
+package app.com.gitkill.onboard;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -16,10 +16,12 @@ import android.view.MenuItem;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 import java.util.Arrays;
+import app.com.gitkill.R;
 import app.com.gitkill.drawerextra.DrawerAdapter;
 import app.com.gitkill.drawerextra.DrawerItem;
 import app.com.gitkill.drawerextra.SimpleItem;
-import app.com.gitkill.fragments.TrendingRepositories;
+import app.com.gitkill.fragments.FragmentTrendingDevelopers;
+import app.com.gitkill.fragments.FragmentTrendingRepositories;
 
 public class HomeActivity extends AppCompatActivity {
     private SlidingRootNav slidingRootNav ;
@@ -91,7 +93,11 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (pos == POS_TRENDING_REPO) {
-                            showFragment(TrendingRepositories.getInstance());
+                            showFragment(FragmentTrendingRepositories.getInstance());
+                            return;
+                        }
+                        else if (pos == POS_TRENDING_DEVELOPERS){
+                            showFragment(FragmentTrendingDevelopers.getInstance());
                             return;
                         }
                     }
@@ -102,7 +108,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
         FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container,new TrendingRepositories());
+        fragmentTransaction.replace(R.id.container,new FragmentTrendingRepositories());
         fragmentTransaction.commit();
     }
 

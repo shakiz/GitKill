@@ -1,5 +1,5 @@
 
-package app.com.gitkill.pojoclasses.languages;
+package app.com.gitkill.models.languages;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;

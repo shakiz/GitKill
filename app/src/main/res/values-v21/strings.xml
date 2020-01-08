@@ -3,4 +3,5 @@
     <string name="owner_name">Owner Name</string>
     <string name="home">Home</string>
     <string name="itemname">Item Name</string>
+    <string name="type">Type</string>
 </resources>
