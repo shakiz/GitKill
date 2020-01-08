@@ -28,4 +28,12 @@
     <string name="name">Name</string>
     <string name="profile_link">Profile Link</string>
     <string name="nodata">No Data</string>
+
+
+    <string name="number_of_stars">Stars</string>
+    <string name="number_of_forks">Forks</string>
+    <string name="number_of_watch">Watch</string>
+    <string name="owner_name">Owner Name</string>
+    <string name="home">Home</string>
+    <string name="itemname">Item Name</string>
 </resources>
