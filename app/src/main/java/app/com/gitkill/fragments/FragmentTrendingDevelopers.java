@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import com.google.gson.Gson;
@@ -35,26 +37,25 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class FragmentTrendingDevelopers extends Fragment {
     private static final FragmentTrendingDevelopers FRAGMENT_TRENDING_DEVELOPERS = null;
     private ArrayAdapter<String> arrayAdapter;
-    private Spinner languageSpinner,timeSpinner;
+    private Spinner languageSpinner,sinceSpinner;
     private RecyclerView recyclerViewDevelopers;
     private ArrayList<String> languageList, timeList;
     private ArrayList<TrendingDevelopers> trendingDevelopersList;
     private Retrofit retrofit;
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
-    private String TAG = "FragmentTrendingRepositories";
+    private String TAG = "FragmentTrendingRepositories" , languageStr = "" , sinceStr = "";
     private OkHttpClient.Builder builder;
     private AlertDialog progressDialog;
+    private FloatingActionButton search;
 
     public static synchronized FragmentTrendingDevelopers getInstance(){
         if (FRAGMENT_TRENDING_DEVELOPERS == null) return new FragmentTrendingDevelopers();
         else return FRAGMENT_TRENDING_DEVELOPERS;
     }
 
-
     public FragmentTrendingDevelopers() {
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,13 +68,53 @@ public class FragmentTrendingDevelopers extends Fragment {
 
     private void bindUIWithComponents(View view) {
         setData();
-        new BackgroundDataLoad(view).execute();
+        new BackgroundDataLoad(view, allUrlClass.TRENDING_DEVS_URL).execute();
         setAdapter(languageSpinner,languageList);
-        setAdapter(timeSpinner,timeList);
+        setAdapter(sinceSpinner,timeList);
+
+        languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                languageStr = adapterView.getItemAtPosition(position).toString().toLowerCase();
+                String newUrl = allUrlClass.BASE_URL+"developers?language="+languageStr;
+                Log.v("SpinnerURL",newUrl);
+                new BackgroundDataLoad(view,newUrl).execute();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        sinceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                sinceStr = adapterView.getItemAtPosition(position).toString().toLowerCase();
+                String newUrl = allUrlClass.BASE_URL+"developers?since="+sinceStr;
+                Log.v("SpinnerURL",newUrl);
+                new BackgroundDataLoad(view,newUrl).execute();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String newUrl = allUrlClass.BASE_URL+"developers?"+"language="+languageStr+"&since="+sinceStr;
+                Log.v("SpinnerURL",newUrl);
+                new BackgroundDataLoad(view,newUrl).execute();
+            }
+        });
     }
 
     private void setData() {
         //Adding the language list
+        languageList.add("Select Language");
         languageList.add("Java");
         languageList.add("Python");
         languageList.add("C");
@@ -81,6 +122,7 @@ public class FragmentTrendingDevelopers extends Fragment {
         languageList.add("C#");
         languageList.add("PHP");
         //Adding data to time list
+        timeList.add("Select");
         timeList.add("Daily");
         timeList.add("Weekly");
         timeList.add("Monthly");
@@ -107,8 +149,9 @@ public class FragmentTrendingDevelopers extends Fragment {
 
     private void init(View view) {
         languageSpinner = view.findViewById(R.id.LanguageSpinner);
-        timeSpinner = view.findViewById(R.id.TimeSpinner);
+        sinceSpinner = view.findViewById(R.id.SinceSpinner);
         recyclerViewDevelopers = view.findViewById(R.id.RecyclerUserList);
+        search = view.findViewById(R.id.Search);
         trendingDevelopersList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         languageList = new ArrayList<>();
@@ -119,9 +162,11 @@ public class FragmentTrendingDevelopers extends Fragment {
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
 
         View view;
+        String url;
 
-        public BackgroundDataLoad(View view) {
+        public BackgroundDataLoad(View view, String url) {
             this.view = view;
+            this.url = url;
         }
 
         @Override
@@ -131,7 +176,7 @@ public class FragmentTrendingDevelopers extends Fragment {
 
         @Override
         protected String doInBackground(String... strings) {
-            loadRecord();
+            loadRecord(url);
             return "done";
         }
 
@@ -153,7 +198,9 @@ public class FragmentTrendingDevelopers extends Fragment {
     }
 
 
-    private void loadRecord() {
+    private void loadRecord(String url) {
+        Log.v("URL",url);
+        trendingDevelopersList.clear();
         builder= new OkHttpClient.Builder();
         loggingInterceptorForRetrofit(builder);
         if (retrofit == null){
@@ -161,7 +208,7 @@ public class FragmentTrendingDevelopers extends Fragment {
                     .setLenient()
                     .create();
             retrofit=new Retrofit.Builder()
-                    .baseUrl(allUrlClass.TRENDING_DEVS_URL)
+                    .baseUrl(url)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .client(builder.build())
@@ -169,7 +216,7 @@ public class FragmentTrendingDevelopers extends Fragment {
         }
         //Creating the instance for api service from AllApiService interface
         apiService=retrofit.create(AllApiService.class);
-        final Call<ArrayList<TrendingDevelopers>> userInformationCall=apiService.getTrendingUsers(allUrlClass.TRENDING_DEVS_URL);
+        final Call<ArrayList<TrendingDevelopers>> userInformationCall=apiService.getTrendingUsers(url);
         //handling user requests and their interactions with the application.
         userInformationCall.enqueue(new Callback<ArrayList<TrendingDevelopers>>() {
             @Override

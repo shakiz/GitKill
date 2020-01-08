@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import app.com.gitkill.R;
 
-public class TrendingLanguages extends Fragment {
+public class FragmentTrendingLanguages extends Fragment {
 
     private ArrayAdapter<String> arrayAdapter;
     private Spinner timeSpinner;
@@ -27,7 +27,7 @@ public class TrendingLanguages extends Fragment {
         this.context = context;
     }
 
-    public TrendingLanguages() {
+    public FragmentTrendingLanguages() {
     }
 
 
