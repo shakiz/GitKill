@@ -5,4 +5,7 @@
     <string name="itemname">Item Name</string>
     <string name="type">Type</string>
     <string name="since">Since</string>
+    <string name="full_name">Full Name</string>
+    <string name="license">License</string>
+    <string name="top_android_topic_heading">Top android topic list</string>
 </resources>

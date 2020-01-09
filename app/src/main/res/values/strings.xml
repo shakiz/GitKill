@@ -18,6 +18,7 @@
     <string name="trending_developers_heading">List of Trending Developers</string>
     <string name="trending_repos_heading">List Of Trending Repositories</string>
     <string name="trending_languages_heading">List of Trending Languages</string>
+    <string name="top_android_topic_heading">Top Android Topic List</string>
     <string name="author_name">Author Name</string>
     <string name="language">Language</string>
     <string name="repo_name">Repo name</string>
@@ -38,4 +39,9 @@
     <string name="itemname">Item Name</string>
     <string name="type">Type</string>
     <string name="since">Since</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="full_name">Full Name</string>
+    <string name="license">License</string>
 </resources>

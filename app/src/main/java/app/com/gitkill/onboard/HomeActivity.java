@@ -20,6 +20,7 @@ import app.com.gitkill.R;
 import app.com.gitkill.drawerextra.DrawerAdapter;
 import app.com.gitkill.drawerextra.DrawerItem;
 import app.com.gitkill.drawerextra.SimpleItem;
+import app.com.gitkill.fragments.FragmentAndroid;
 import app.com.gitkill.fragments.FragmentTrendingDevelopers;
 import app.com.gitkill.fragments.FragmentTrendingRepositories;
 
@@ -31,7 +32,8 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView list;
     private static final int POS_TRENDING_REPO = 0;
     private static final int POS_TRENDING_DEVELOPERS = 1;
-    private static final int POS_TRENDING_LANGUAGES = 2;
+    //private static final int POS_TRENDING_LANGUAGES = 2;
+    private static final int POS_TRENDING_ON_ANDROID= 2;
     private Toolbar toolbar;
 
     @Override
@@ -61,7 +63,7 @@ public class HomeActivity extends AppCompatActivity {
         adapter = new DrawerAdapter(Arrays.asList(
                 createItemFor(POS_TRENDING_REPO).setChecked(true),
                 createItemFor(POS_TRENDING_DEVELOPERS),
-                createItemFor(POS_TRENDING_LANGUAGES)));
+                createItemFor(POS_TRENDING_ON_ANDROID)));
         list.setNestedScrollingEnabled(false);
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(adapter);
@@ -98,6 +100,10 @@ public class HomeActivity extends AppCompatActivity {
                         }
                         else if (pos == POS_TRENDING_DEVELOPERS){
                             showFragment(FragmentTrendingDevelopers.getInstance());
+                            return;
+                        }
+                        else if (pos == POS_TRENDING_ON_ANDROID){
+                            showFragment(FragmentAndroid.getInstance());
                             return;
                         }
                     }
