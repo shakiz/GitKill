@@ -25,6 +25,6 @@ public interface AllApiService {
     Call<ArrayList<TrendingDevelopers>> getTrendingUsers(@Url String url);
 
     //Call for topics android
-    @GET()
+    @GET
     Call<AndroidTopic> getAndroidTopics(@Url String url, @Query("q") String q);
 }

@@ -88,6 +88,17 @@ public class Item {
     @JsonProperty("score")
     private Double score;
 
+    public Item(String full_name, String html_url, String language, Integer stargazers_count, Integer watchers_count, Integer forks_count, Integer forks, Integer watchers) {
+        this.full_name = full_name;
+        this.html_url = html_url;
+        this.language = language;
+        this.stargazers_count = stargazers_count;
+        this.watchers_count = watchers_count;
+        this.forks_count = forks_count;
+        this.forks = forks;
+        this.watchers = watchers;
+    }
+
     @JsonProperty("full_name")
     public String getFullName() {
         return full_name;

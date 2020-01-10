@@ -22,6 +22,11 @@ public class License {
     @JsonProperty("url")
     private String url;
 
+    public License(String name, String url) {
+        this.name = name;
+        this.url = url;
+    }
+
     @JsonProperty("key")
     public String getKey() {
         return key;

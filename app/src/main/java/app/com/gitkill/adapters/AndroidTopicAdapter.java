@@ -10,17 +10,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import java.util.ArrayList;
 import app.com.gitkill.R;
-import app.com.gitkill.models.androidtopic.AndroidTopic;
 import app.com.gitkill.models.androidtopic.Item;
 
 public class AndroidTopicAdapter extends RecyclerView.Adapter<AndroidTopicAdapter.ViewHolder> {
     private onItemClickListener onItemClickListener;
-    private ArrayList<AndroidTopic> androidTopicList;
+    private ArrayList<Item> androidItemList;
     private Context context;
 
-    public AndroidTopicAdapter(ArrayList<AndroidTopic> androidTopicList, Context context, onItemClickListener onItemClickListener) {
+    public AndroidTopicAdapter(ArrayList<Item> androidItemList, Context context, onItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
-        this.androidTopicList = androidTopicList;
+        this.androidItemList = androidItemList;
         this.context = context;
     }
 
@@ -33,10 +32,11 @@ public class AndroidTopicAdapter extends RecyclerView.Adapter<AndroidTopicAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        final Item androidItem = androidTopicList.get(i).getItems().get(i);
+        final Item androidItem = androidItemList.get(i);
         viewHolder.FullName.setText(androidItem.getFullName());
         viewHolder.RepoLink.setText(androidItem.getHtmlUrl());
-        viewHolder.License.setText(androidItem.getLicense().getName());
+        viewHolder.Language.setText(androidItem.getLanguage());
+        //viewHolder.License.setText(androidItem.getLicense().getName());
         viewHolder.NumberOfStars.setText(""+androidItem.getStargazersCount());
         viewHolder.NumberOfForks.setText(""+androidItem.getForksCount());
         viewHolder.NumberOfWatch.setText(""+androidItem.getWatchersCount());
@@ -50,18 +50,18 @@ public class AndroidTopicAdapter extends RecyclerView.Adapter<AndroidTopicAdapte
 
     @Override
     public int getItemCount() {
-        return 0;
+        return androidItemList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
-        TextView FullName , RepoLink , License , NumberOfStars , NumberOfWatch , NumberOfForks;
+        TextView FullName , RepoLink , Language , NumberOfStars , NumberOfWatch , NumberOfForks;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             cardView = itemView.findViewById(R.id.item_card_view);
             FullName = itemView.findViewById(R.id.FullName);
             RepoLink = itemView.findViewById(R.id.RepoLink);
-            License = itemView.findViewById(R.id.License);
+            Language = itemView.findViewById(R.id.Language);
             NumberOfStars = itemView.findViewById(R.id.NumberOfStars);
             NumberOfForks = itemView.findViewById(R.id.NumberOfForks);
             NumberOfWatch = itemView.findViewById(R.id.NumberOfWatch);

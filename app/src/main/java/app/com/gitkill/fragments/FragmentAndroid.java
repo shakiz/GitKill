@@ -20,6 +20,7 @@ import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
 import app.com.gitkill.models.androidtopic.AndroidTopic;
 import app.com.gitkill.models.androidtopic.Item;
+import app.com.gitkill.models.androidtopic.License;
 import dmax.dialog.SpotsDialog;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -36,7 +37,7 @@ public class FragmentAndroid extends Fragment {
     private RecyclerView androidTopicRecyclerView;
     private OkHttpClient.Builder builder;
     private AlertDialog progressDialog;
-    private ArrayList<AndroidTopic> androiTopicList;
+    private ArrayList<Item> androiTopicList;
     private Retrofit retrofit;
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
@@ -141,15 +142,18 @@ public class FragmentAndroid extends Fragment {
         }
         //Creating the instance for api service from AllApiService interface
         apiService=retrofit.create(AllApiService.class);
-        final Call<AndroidTopic> userInformationCall=apiService.getAndroidTopics(url+"repositories","android");
+        final Call<AndroidTopic> androidTopicCall=apiService.getAndroidTopics(url+"repositories","android");
         //handling user requests and their interactions with the application.
-        userInformationCall.enqueue(new Callback<AndroidTopic>() {
+        androidTopicCall.enqueue(new Callback<AndroidTopic>() {
             @Override
             public void onResponse(Call<AndroidTopic> call, Response<AndroidTopic> response) {
                 try{
-                        AndroidTopic userPojo=response.body();
-                        androiTopicList.add(new AndroidTopic(userPojo.getItems()));
-
+                    for (int start=0;start<response.body().getItems().size();start++) {
+                        Item item=response.body().getItems().get(start);
+                        //License license = item.getLicense();
+                        androiTopicList.add(new Item(item.getFullName(),item.getHtmlUrl(),item.getLanguage(),item.getStargazersCount(),item.getWatchersCount(),
+                                item.getForksCount(),item.getForks(),item.getWatchers()));
+                    }
                 }
                 catch (Exception e){
                     Log.v("EXCEPTION : ",""+e.getMessage());
@@ -160,7 +164,9 @@ public class FragmentAndroid extends Fragment {
                 Log.v(TAG,""+t.getMessage());
             }
         });
+
     }
+
 
     public void loggingInterceptorForRetrofit(OkHttpClient.Builder builder){
         //Creating the logging interceptor

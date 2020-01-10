@@ -8,7 +8,7 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/item_card_view"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
@@ -32,7 +32,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="24dp"
-                android:layout_weight="5.4"
+                android:layout_weight="5"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
                 android:paddingTop="0dp">
@@ -65,7 +65,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/RepoUrl"
+                        android:id="@+id/RepoLink"
                         android:layout_marginLeft="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -88,11 +88,11 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/License"
+                        android:id="@+id/Language"
                         android:layout_marginLeft="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_license"
+                        android:drawableLeft="@drawable/ic_language"
                         android:drawablePadding="4dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
@@ -111,7 +111,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1.2"
+                android:layout_weight="1.6"
                 android:layout_margin="4dp"
                 android:gravity="center"
                 android:orientation="vertical">
