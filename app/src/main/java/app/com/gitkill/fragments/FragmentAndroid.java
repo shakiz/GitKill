@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
 import app.com.gitkill.models.androidtopic.AndroidTopic;
 import app.com.gitkill.models.androidtopic.Item;
-import app.com.gitkill.models.androidtopic.License;
+import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -41,6 +42,7 @@ public class FragmentAndroid extends Fragment {
     private Retrofit retrofit;
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
+    private CircleImageView refreshListButton;
 
     public FragmentAndroid() {
         // Required empty public constructor
@@ -64,6 +66,7 @@ public class FragmentAndroid extends Fragment {
 
     private void init(View view) {
         androidTopicRecyclerView = view.findViewById(R.id.AndroidTopicList);
+        refreshListButton = view.findViewById(R.id.RefreshList);
         androiTopicList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         progressDialog = new SpotsDialog(getContext(),R.style.CustomProgressDialog);
@@ -71,6 +74,13 @@ public class FragmentAndroid extends Fragment {
 
     private void bindUIWithComponents(View view) {
         new BackgroundDataLoad(view , allUrlClass.ANDROID_TOPICS_URL).execute();
+
+        refreshListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new BackgroundDataLoad(view , allUrlClass.ANDROID_TOPICS_URL).execute();
+            }
+        });
     }
 
     private void loadListView(){
@@ -108,17 +118,19 @@ public class FragmentAndroid extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    if (progressDialog.isShowing()) {
-                        if (androiTopicList.size()>0) {
-                            loadListView();
+            if (result.equals("done")){
+                Log.v("result async task :: ",result);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        if (progressDialog.isShowing()) {
+                            if (androiTopicList.size()>0)loadListView();
+                            else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
+                            progressDialog.dismiss();
                         }
-                        progressDialog.dismiss();
                     }
-                }
-            }, 4000);
+                }, 6000);
+            }
         }
 
     }
