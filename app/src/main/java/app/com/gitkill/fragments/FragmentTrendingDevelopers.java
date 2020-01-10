@@ -1,6 +1,5 @@
 package app.com.gitkill.fragments;
 
-
 import android.app.AlertDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import app.com.gitkill.adapters.TrendingDevelopersAdapter;
 import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
 import app.com.gitkill.models.users.TrendingDevelopers;
+import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -48,6 +50,7 @@ public class FragmentTrendingDevelopers extends Fragment {
     private OkHttpClient.Builder builder;
     private AlertDialog progressDialog;
     private FloatingActionButton search;
+    private CircleImageView refreshListButton;
 
     public static synchronized FragmentTrendingDevelopers getInstance(){
         if (FRAGMENT_TRENDING_DEVELOPERS == null) return new FragmentTrendingDevelopers();
@@ -110,6 +113,13 @@ public class FragmentTrendingDevelopers extends Fragment {
                 new BackgroundDataLoad(view,newUrl).execute();
             }
         });
+
+        refreshListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new BackgroundDataLoad(view, allUrlClass.TRENDING_DEVS_URL).execute();
+            }
+        });
     }
 
     private void setData() {
@@ -151,6 +161,7 @@ public class FragmentTrendingDevelopers extends Fragment {
         languageSpinner = view.findViewById(R.id.LanguageSpinner);
         sinceSpinner = view.findViewById(R.id.SinceSpinner);
         recyclerViewDevelopers = view.findViewById(R.id.RecyclerUserList);
+        refreshListButton = view.findViewById(R.id.RefreshList);
         search = view.findViewById(R.id.Search);
         trendingDevelopersList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
@@ -182,17 +193,19 @@ public class FragmentTrendingDevelopers extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    if (progressDialog.isShowing()) {
-                        if (trendingDevelopersList.size()>0) {
-                            loadListView();
+            if (result.equals("done")){
+                Log.v("result async task :: ",result);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        if (progressDialog.isShowing()) {
+                            if (trendingDevelopersList.size()>0)loadListView();
+                            else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
+                            progressDialog.dismiss();
                         }
-                        progressDialog.dismiss();
                     }
-                }
-            }, 4000);
+                }, 6000);
+            }
         }
 
     }
