@@ -2,7 +2,7 @@ package app.com.gitkill.apiutils;
 
 import java.util.ArrayList;
 
-import app.com.gitkill.models.androidtopic.AndroidTopic;
+import app.com.gitkill.models.alltopic.TopicBase;
 import app.com.gitkill.models.languages.TrendingLanguage;
 import app.com.gitkill.models.repositories.TrendingRepositories;
 import app.com.gitkill.models.users.TrendingDevelopers;
@@ -26,5 +26,5 @@ public interface AllApiService {
 
     //Call for topics android
     @GET
-    Call<AndroidTopic> getAndroidTopics(@Url String url, @Query("q") String q);
+    Call<TopicBase> getAndroidTopics(@Url String url, @Query("q") String q);
 }

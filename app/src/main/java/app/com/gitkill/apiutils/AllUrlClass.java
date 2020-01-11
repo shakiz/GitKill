@@ -5,5 +5,5 @@ public class AllUrlClass {
     public String TRENDING_REPOS_URL = BASE_URL+"repositories/";
     public String TRENDING_DEVS_URL = BASE_URL+"developers/";
     public String TRENDING_LANGUAGES_URL = BASE_URL+"languages/";
-    public String ANDROID_TOPICS_URL = "https://api.github.com/search/";
+    public String ALL_TOPICS_BASE_URL = "https://api.github.com/search/";
 }

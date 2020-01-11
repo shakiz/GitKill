@@ -16,11 +16,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import app.com.gitkill.R;
-import app.com.gitkill.adapters.AndroidTopicAdapter;
+import app.com.gitkill.adapters.AllTopicAdapter;
 import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
-import app.com.gitkill.models.androidtopic.AndroidTopic;
-import app.com.gitkill.models.androidtopic.Item;
+import app.com.gitkill.models.alltopic.TopicBase;
+import app.com.gitkill.models.alltopic.Item;
 import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
 import okhttp3.OkHttpClient;
@@ -73,26 +73,26 @@ public class FragmentAndroid extends Fragment {
     }
 
     private void bindUIWithComponents(View view) {
-        new BackgroundDataLoad(view , allUrlClass.ANDROID_TOPICS_URL).execute();
+        new BackgroundDataLoad(view , allUrlClass.ALL_TOPICS_BASE_URL).execute();
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new BackgroundDataLoad(view , allUrlClass.ANDROID_TOPICS_URL).execute();
+                new BackgroundDataLoad(view , allUrlClass.ALL_TOPICS_BASE_URL).execute();
             }
         });
     }
 
     private void loadListView(){
-        AndroidTopicAdapter androidTopicAdapter = new AndroidTopicAdapter(androiTopicList, getContext(), new AndroidTopicAdapter.onItemClickListener() {
+        AllTopicAdapter allTopicAdapter = new AllTopicAdapter(androiTopicList, getContext(), new AllTopicAdapter.onItemClickListener() {
             @Override
             public void respond(Item androidTopic) {
 
             }
         });
         androidTopicRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        androidTopicRecyclerView.setAdapter(androidTopicAdapter);
-        androidTopicAdapter.notifyDataSetChanged();
+        androidTopicRecyclerView.setAdapter(allTopicAdapter);
+        allTopicAdapter.notifyDataSetChanged();
     }
 
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
@@ -154,11 +154,11 @@ public class FragmentAndroid extends Fragment {
         }
         //Creating the instance for api service from AllApiService interface
         apiService=retrofit.create(AllApiService.class);
-        final Call<AndroidTopic> androidTopicCall=apiService.getAndroidTopics(url+"repositories","android");
+        final Call<TopicBase> androidTopicCall=apiService.getAndroidTopics(url+"repositories","android");
         //handling user requests and their interactions with the application.
-        androidTopicCall.enqueue(new Callback<AndroidTopic>() {
+        androidTopicCall.enqueue(new Callback<TopicBase>() {
             @Override
-            public void onResponse(Call<AndroidTopic> call, Response<AndroidTopic> response) {
+            public void onResponse(Call<TopicBase> call, Response<TopicBase> response) {
                 try{
                     for (int start=0;start<response.body().getItems().size();start++) {
                         Item item=response.body().getItems().get(start);
@@ -172,7 +172,7 @@ public class FragmentAndroid extends Fragment {
                 }
             }
             @Override
-            public void onFailure(Call<AndroidTopic> call, Throwable t) {
+            public void onFailure(Call<TopicBase> call, Throwable t) {
                 Log.v(TAG,""+t.getMessage());
             }
         });

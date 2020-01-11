@@ -10,14 +10,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import java.util.ArrayList;
 import app.com.gitkill.R;
-import app.com.gitkill.models.androidtopic.Item;
+import app.com.gitkill.models.alltopic.Item;
 
-public class AndroidTopicAdapter extends RecyclerView.Adapter<AndroidTopicAdapter.ViewHolder> {
+public class AllTopicAdapter extends RecyclerView.Adapter<AllTopicAdapter.ViewHolder> {
     private onItemClickListener onItemClickListener;
     private ArrayList<Item> androidItemList;
     private Context context;
 
-    public AndroidTopicAdapter(ArrayList<Item> androidItemList, Context context, onItemClickListener onItemClickListener) {
+    public AllTopicAdapter(ArrayList<Item> androidItemList, Context context, onItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
         this.androidItemList = androidItemList;
         this.context = context;

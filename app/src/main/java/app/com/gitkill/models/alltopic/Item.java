@@ -1,4 +1,4 @@
-package app.com.gitkill.models.androidtopic;
+package app.com.gitkill.models.alltopic;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

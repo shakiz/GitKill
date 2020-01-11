@@ -19,6 +19,7 @@
     <string name="trending_repos_heading">List Of Trending Repositories</string>
     <string name="trending_languages_heading">List of Trending Languages</string>
     <string name="top_android_topic_heading">Top Android Topic List</string>
+    <string name="top_web_topic_heading">Top Web Topic List</string>
     <string name="author_name">Author Name</string>
     <string name="language">Language</string>
     <string name="repo_name">Repo name</string>
