@@ -23,6 +23,7 @@ import app.com.gitkill.drawerextra.SimpleItem;
 import app.com.gitkill.fragments.FragmentAndroid;
 import app.com.gitkill.fragments.FragmentTrendingDevelopers;
 import app.com.gitkill.fragments.FragmentTrendingRepositories;
+import app.com.gitkill.fragments.FragmentWeb;
 
 public class HomeActivity extends AppCompatActivity {
     private SlidingRootNav slidingRootNav ;
@@ -33,7 +34,8 @@ public class HomeActivity extends AppCompatActivity {
     private static final int POS_TRENDING_REPO = 0;
     private static final int POS_TRENDING_DEVELOPERS = 1;
     //private static final int POS_TRENDING_LANGUAGES = 2;
-    private static final int POS_TRENDING_ON_ANDROID= 2;
+    private static final int POS_TRENDING_ON_ANDROID = 2;
+    private static final int POS_TRENDING_ON_WEB = 3;
     private Toolbar toolbar;
 
     @Override
@@ -63,7 +65,8 @@ public class HomeActivity extends AppCompatActivity {
         adapter = new DrawerAdapter(Arrays.asList(
                 createItemFor(POS_TRENDING_REPO).setChecked(true),
                 createItemFor(POS_TRENDING_DEVELOPERS),
-                createItemFor(POS_TRENDING_ON_ANDROID)));
+                createItemFor(POS_TRENDING_ON_ANDROID),
+                createItemFor(POS_TRENDING_ON_WEB)));
         list.setNestedScrollingEnabled(false);
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(adapter);
@@ -104,6 +107,10 @@ public class HomeActivity extends AppCompatActivity {
                         }
                         else if (pos == POS_TRENDING_ON_ANDROID){
                             showFragment(FragmentAndroid.getInstance());
+                            return;
+                        }
+                        else if (pos == POS_TRENDING_ON_WEB){
+                            showFragment(FragmentWeb.getInstance());
                             return;
                         }
                     }

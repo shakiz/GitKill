@@ -5,12 +5,14 @@
         <item>Trending Repositories</item>
         <item>Trending Developers</item>
         <item>Android Topics</item>
+        <item>Web Topics</item>
     </string-array>
 
     <array name="ld_activityScreenIcons">
         <item>@drawable/ic_repository</item>
         <item>@drawable/ic_developers</item>
         <item>@drawable/ic_android</item>
+        <item>@drawable/ic_web</item>
     </array>
 
 </resources>

@@ -84,7 +84,7 @@ public class FragmentAndroid extends Fragment {
     }
 
     private void loadListView(){
-        AllTopicAdapter allTopicAdapter = new AllTopicAdapter(androiTopicList, getContext(), new AllTopicAdapter.onItemClickListener() {
+        AllTopicAdapter allTopicAdapter = new AllTopicAdapter(androiTopicList, getContext(), R.layout.adapter_layout_android_topics, new AllTopicAdapter.onItemClickListener() {
             @Override
             public void respond(Item androidTopic) {
 

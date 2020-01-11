@@ -15,18 +15,20 @@ import app.com.gitkill.models.alltopic.Item;
 public class AllTopicAdapter extends RecyclerView.Adapter<AllTopicAdapter.ViewHolder> {
     private onItemClickListener onItemClickListener;
     private ArrayList<Item> androidItemList;
+    private int layoutRes;
     private Context context;
 
-    public AllTopicAdapter(ArrayList<Item> androidItemList, Context context, onItemClickListener onItemClickListener) {
+    public AllTopicAdapter(ArrayList<Item> androidItemList, Context context, int layoutRes, onItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
         this.androidItemList = androidItemList;
         this.context = context;
+        this.layoutRes = layoutRes;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.adapter_layout_android_topics,viewGroup,false);
+        View view = LayoutInflater.from(context).inflate(layoutRes,viewGroup,false);
         return new ViewHolder(view);
     }
 
