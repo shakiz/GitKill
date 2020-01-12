@@ -47,4 +47,5 @@
     <string name="license">License</string>
     <string name="no_data_message">No data , please refresh</string>
     <string name="select_your_query">Select your query</string>
+    <string name="trending_machine_learning_libraries_heading">List of trending ML libraries</string>
 </resources>
