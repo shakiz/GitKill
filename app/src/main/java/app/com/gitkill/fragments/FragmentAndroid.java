@@ -11,6 +11,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -43,6 +46,9 @@ public class FragmentAndroid extends Fragment {
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
     private CircleImageView refreshListButton;
+    private Spinner androidFilterSpinner;
+    private String[] androidFilterList = new String[]{"Select Query","Layouts","Drawing",
+            "Navigation","Scanning","RecyclerView","ListView","Image Processing","Binding","Debugging"};
 
     public FragmentAndroid() {
         // Required empty public constructor
@@ -67,20 +73,43 @@ public class FragmentAndroid extends Fragment {
     private void init(View view) {
         androidTopicRecyclerView = view.findViewById(R.id.AndroidTopicList);
         refreshListButton = view.findViewById(R.id.RefreshList);
+        androidFilterSpinner = view.findViewById(R.id.AndroidFilterSpinner);
         androiTopicList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         progressDialog = new SpotsDialog(getContext(),R.style.CustomProgressDialog);
     }
 
     private void bindUIWithComponents(View view) {
-        new BackgroundDataLoad(view , allUrlClass.ALL_TOPICS_BASE_URL).execute();
+
+        setAdapter();
+
+        new BackgroundDataLoad(view , allUrlClass.ALL_TOPICS_BASE_URL , "android").execute();
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new BackgroundDataLoad(view , allUrlClass.ALL_TOPICS_BASE_URL).execute();
+                new BackgroundDataLoad(view , allUrlClass.ALL_TOPICS_BASE_URL , "android").execute();
             }
         });
+
+        androidFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                String queryString = adapterView.getItemAtPosition(position).toString();
+                new BackgroundDataLoad(view, allUrlClass.ALL_TOPICS_BASE_URL, "android"+queryString ).execute();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void setAdapter() {
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(),R.layout.spinner_drop,androidFilterList);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        androidFilterSpinner.setAdapter(arrayAdapter);
     }
 
     private void loadListView(){
@@ -98,11 +127,12 @@ public class FragmentAndroid extends Fragment {
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
 
         View view;
-        String url;
+        String url , querySting;
 
-        public BackgroundDataLoad(View view, String url) {
+        public BackgroundDataLoad(View view, String url, String querySting) {
             this.view = view;
             this.url = url;
+            this.querySting = querySting;
         }
 
         @Override
@@ -112,7 +142,7 @@ public class FragmentAndroid extends Fragment {
 
         @Override
         protected String doInBackground(String... strings) {
-            loadRecord(url);
+            loadRecord(url , querySting);
             return "done";
         }
 
@@ -136,7 +166,7 @@ public class FragmentAndroid extends Fragment {
     }
 
 
-    private void loadRecord(String url) {
+    private void loadRecord(String url , String queryString) {
         Log.v("URL",url);
         androiTopicList.clear();
         builder= new OkHttpClient.Builder();
@@ -154,7 +184,7 @@ public class FragmentAndroid extends Fragment {
         }
         //Creating the instance for api service from AllApiService interface
         apiService=retrofit.create(AllApiService.class);
-        final Call<TopicBase> androidTopicCall=apiService.getAndroidTopics(url+"repositories","android");
+        final Call<TopicBase> androidTopicCall=apiService.getAndroidTopics(url+"repositories",queryString);
         //handling user requests and their interactions with the application.
         androidTopicCall.enqueue(new Callback<TopicBase>() {
             @Override
