@@ -67,9 +67,9 @@ public class HomeActivity extends AppCompatActivity {
         adapter = new DrawerAdapter(Arrays.asList(
                 createItemFor(POS_TRENDING_REPO).setChecked(true),
                 createItemFor(POS_TRENDING_DEVELOPERS),
-                createItemFor(POS_TRENDING_ML_LIBRARIES),
                 createItemFor(POS_TRENDING_ON_ANDROID),
-                createItemFor(POS_TRENDING_ON_WEB)));
+                createItemFor(POS_TRENDING_ON_WEB),
+                createItemFor(POS_TRENDING_ML_LIBRARIES)));
         list.setNestedScrollingEnabled(false);
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(adapter);
