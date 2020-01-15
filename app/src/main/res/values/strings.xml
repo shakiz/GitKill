@@ -48,4 +48,7 @@
     <string name="no_data_message">No data , please refresh</string>
     <string name="select_your_query">Select your query</string>
     <string name="trending_machine_learning_libraries_heading">List of trending ML libraries</string>
+
+    <string name="welcome">Welcome</string>
+    <string name="splash_screen_moto">We are so glad that you are here</string>
 </resources>
