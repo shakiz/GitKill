@@ -1,4 +1,4 @@
-package app.com.gitkill.onboard;
+package app.com.gitkill.activities.s.onboard;
 
 import android.content.Intent;
 import android.content.res.TypedArray;

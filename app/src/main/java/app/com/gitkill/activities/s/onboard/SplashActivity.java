@@ -1,4 +1,4 @@
-package app.com.gitkill.onboard;
+package app.com.gitkill.activities.s.onboard;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -33,7 +33,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 startActivity(new Intent(SplashActivity.this,HomeActivity.class));
             }
-        }, 1000);
+        }, 2000);
 
     }
 }

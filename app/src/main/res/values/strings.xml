@@ -51,4 +51,6 @@
 
     <string name="welcome">Welcome</string>
     <string name="splash_screen_moto">We are so glad that you are here</string>
+    <string name="item_details">Item Details</string>
+    <string name="profession">Profession</string>
 </resources>
