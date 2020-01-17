@@ -1,6 +1,8 @@
 package app.com.gitkill.fragments;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -149,7 +151,9 @@ public class FragmentTrendingDevelopers extends Fragment {
         TrendingDevelopersAdapter trendingDevelopersAdapter = new TrendingDevelopersAdapter(trendingDevelopersList, getContext(), new TrendingDevelopersAdapter.onItemClickListener() {
             @Override
             public void respond(TrendingDevelopers trendingDevelopersPojo) {
-
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setData(Uri.parse(trendingDevelopersPojo.getUrl()));
+                startActivity(browserIntent);
             }
         });
         recyclerViewDevelopers.setLayoutManager(new LinearLayoutManager(getContext()));

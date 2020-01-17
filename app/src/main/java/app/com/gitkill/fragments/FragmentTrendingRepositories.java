@@ -2,6 +2,7 @@ package app.com.gitkill.fragments;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -152,7 +153,9 @@ public class FragmentTrendingRepositories extends Fragment {
         trendingRepositoriesAdapter = new TrendingRepositoriesAdapter(trendingRepoList, getContext(), new TrendingRepositoriesAdapter.onItemClickListener() {
             @Override
             public void respond(TrendingRepositories trendingRepositories) {
-                getContext().startActivity(new Intent(getContext() , DetailsActivity.class));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setData(Uri.parse(trendingRepositories.getUrl()));
+                startActivity(browserIntent);
             }
         });
         recyclerViewRepo.setLayoutManager(new LinearLayoutManager(getContext()));

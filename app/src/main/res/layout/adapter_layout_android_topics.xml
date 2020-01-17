@@ -13,6 +13,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:layout_marginRight="8dp"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_marginLeft="24dp"
         app:cardCornerRadius="10dp"
         android:elevation="12dp"

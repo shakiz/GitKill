@@ -1,6 +1,8 @@
 package app.com.gitkill.fragments;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -89,7 +91,9 @@ public class FragmentWeb extends Fragment {
         AllTopicAdapter allTopicAdapter = new AllTopicAdapter(webTopicList, getContext(),R.layout.adapter_layout_web_topics, new AllTopicAdapter.onItemClickListener() {
             @Override
             public void respond(Item androidTopic) {
-
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setData(Uri.parse(androidTopic.getHtmlUrl()));
+                startActivity(browserIntent);
             }
         });
         webTopicRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

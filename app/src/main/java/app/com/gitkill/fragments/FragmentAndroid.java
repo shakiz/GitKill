@@ -1,6 +1,8 @@
 package app.com.gitkill.fragments;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import app.com.gitkill.R;
+import app.com.gitkill.activities.s.details.DetailsActivity;
 import app.com.gitkill.adapters.AllTopicAdapter;
 import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
@@ -116,7 +119,12 @@ public class FragmentAndroid extends Fragment {
         AllTopicAdapter allTopicAdapter = new AllTopicAdapter(androiTopicList, getContext(), R.layout.adapter_layout_android_topics, new AllTopicAdapter.onItemClickListener() {
             @Override
             public void respond(Item androidTopic) {
-
+//                Intent intent = new Intent(getContext() , DetailsActivity.class);
+//                intent.putExtra("item", androidTopic);
+//                getContext().startActivity(intent);
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setData(Uri.parse(androidTopic.getHtmlUrl()));
+                startActivity(browserIntent);
             }
         });
         androidTopicRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

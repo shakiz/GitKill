@@ -12,6 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_marginRight="8dp"
         android:layout_marginLeft="24dp"
         app:cardCornerRadius="10dp"
