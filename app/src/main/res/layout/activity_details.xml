@@ -336,10 +336,9 @@
                             android:orientation="vertical">
 
                             <de.hdodenhof.circleimageview.CircleImageView
-                                android:layout_width="42dp"
-                                android:layout_height="42dp"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
                                 android:layout_gravity="center"
-                                android:padding="2dp"
                                 android:src="@drawable/ic_language_latest"/>
 
                             <TextView
@@ -361,7 +360,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="72dp"
                 android:layout_marginTop="-30dp"
                 android:layout_marginBottom="-30dp"
                 android:layout_gravity="center"
@@ -369,13 +368,13 @@
                 android:orientation="horizontal">
 
                 <View
-                    android:layout_width="12dp"
-                    android:layout_height="80dp"
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
                     android:background="@drawable/curve_back"/>
                 <View
-                    android:layout_width="12dp"
-                    android:layout_height="80dp"
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content"
                     android:rotation="180"
                     android:background="@drawable/curve_back"/>
 

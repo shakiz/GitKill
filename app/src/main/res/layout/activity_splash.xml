@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
+    android:background="@color/md_white_1000"
     android:focusableInTouchMode="true"
     tools:context=".activities.s.onboard.SplashActivity"
     android:orientation="vertical">
@@ -20,8 +21,8 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="320dp"
-            android:layout_height="320dp"
+            android:layout_width="304dp"
+            android:layout_height="304dp"
             android:src="@drawable/banner"
             android:layout_gravity="center"
             android:translationZ="8dp"
