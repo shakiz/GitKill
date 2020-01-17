@@ -15,14 +15,14 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:paddingBottom="4dp">
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/mainLayout"
-            android:layout_margin="16dp"
+            android:layout_margin="12dp"
+            android:paddingBottom="4dp"
             android:orientation="vertical">
 
             <!--Username and profession section-->
@@ -55,6 +55,7 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardUseCompatPadding="true"
                 app:cardCornerRadius="16dp"
                 android:layout_margin="8dp"
                 android:paddingBottom="8dp"
@@ -78,9 +79,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
+                            android:layout_marginLeft="4dp"
                             android:text="@string/repo_name"
                             android:padding="4dp"
-                            android:layout_margin="4dp"
                             android:textColor="@color/md_grey_800"/>
 
                         <TextView
@@ -88,10 +89,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
+                            android:layout_marginLeft="4dp"
                             android:text="@string/profession"
                             android:layout_below="@id/RepoName"
                             android:padding="4dp"
-                            android:layout_margin="4dp"
                             android:textColor="@color/md_grey_800"/>
 
                         <TextView
@@ -111,7 +112,8 @@
                             android:id="@+id/UserIcon"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:layout_margin="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginTop="6dp"
                             app:civ_border_width="2px"
                             app:civ_border_color="@color/md_grey_300"
                             android:layout_alignParentRight="true"
@@ -127,7 +129,6 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:weightSum="3.8"
-                        android:paddingBottom="2dp"
                         android:layout_margin="4dp">
 
                         <View
@@ -143,7 +144,7 @@
                             android:foreground="?attr/selectableItemBackgroundBorderless"
                             android:layout_height="wrap_content"
                             app:cardCornerRadius="10dp"
-                            android:layout_marginBottom="4dp"
+                            app:cardUseCompatPadding="true"
                             app:cardBackgroundColor="@color/md_white_1000">
 
                             <LinearLayout
@@ -155,8 +156,8 @@
                                 android:orientation="vertical">
 
                                 <de.hdodenhof.circleimageview.CircleImageView
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
                                     android:src="@drawable/ic_git_fork_new"/>
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -176,11 +177,11 @@
                             android:layout_width="0dp"
                             android:layout_weight=".7"
                             android:layout_height="wrap_content"
+                            app:cardUseCompatPadding="true"
                             android:translationZ="4dp"
                             android:clickable="true"
                             android:foreground="?attr/selectableItemBackgroundBorderless"
                             app:cardCornerRadius="10dp"
-                            android:layout_marginBottom="4dp"
                             app:cardBackgroundColor="@color/md_white_1000">
 
                             <LinearLayout
@@ -192,8 +193,8 @@
                                 android:orientation="vertical">
 
                                 <de.hdodenhof.circleimageview.CircleImageView
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
                                     android:src="@drawable/ic_watching_icon"/>
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -215,9 +216,9 @@
                             android:layout_height="wrap_content"
                             android:clickable="true"
                             android:foreground="?attr/selectableItemBackgroundBorderless"
-                            android:layout_marginBottom="4dp"
                             android:translationZ="4dp"
                             app:cardCornerRadius="10dp"
+                            app:cardUseCompatPadding="true"
                             app:cardBackgroundColor="@color/md_white_1000">
 
                             <LinearLayout
@@ -229,8 +230,8 @@
                                 android:orientation="vertical">
 
                                 <de.hdodenhof.circleimageview.CircleImageView
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
                                     android:src="@drawable/ic_star_latest"/>
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -254,7 +255,7 @@
                             android:layout_height="wrap_content"
                             android:translationZ="4dp"
                             app:cardCornerRadius="10dp"
-                            android:layout_marginBottom="4dp"
+                            app:cardUseCompatPadding="true"
                             app:cardBackgroundColor="@color/md_white_1000">
 
                             <LinearLayout
@@ -266,8 +267,8 @@
                                 android:orientation="vertical">
 
                                 <de.hdodenhof.circleimageview.CircleImageView
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
                                     android:src="@drawable/ic_bug"/>
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -369,12 +370,12 @@
 
                 <View
                     android:layout_width="12dp"
-                    android:layout_height="100dp"
+                    android:layout_height="80dp"
                     android:layout_marginRight="16dp"
                     android:background="@drawable/curve_back"/>
                 <View
                     android:layout_width="12dp"
-                    android:layout_height="100dp"
+                    android:layout_height="80dp"
                     android:rotation="180"
                     android:background="@drawable/curve_back"/>
 
@@ -383,6 +384,7 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:cardUseCompatPadding="true"
                 app:cardCornerRadius="16dp"
                 android:layout_margin="8dp"
                 android:paddingBottom="8dp"
@@ -392,7 +394,6 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingBottom="8dp"
                     android:layout_margin="2dp">
 
                     <!--Details top layout-->
@@ -407,6 +408,7 @@
                         android:layout_below="@id/sliding_tabs"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_margin="4dp"
                         android:background="@android:color/white" />
 
 
