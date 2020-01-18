@@ -119,12 +119,12 @@ public class FragmentAndroid extends Fragment {
         AllTopicAdapter allTopicAdapter = new AllTopicAdapter(androiTopicList, getContext(), R.layout.adapter_layout_android_topics, new AllTopicAdapter.onItemClickListener() {
             @Override
             public void respond(Item androidTopic) {
-//                Intent intent = new Intent(getContext() , DetailsActivity.class);
-//                intent.putExtra("item", androidTopic);
-//                getContext().startActivity(intent);
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setData(Uri.parse(androidTopic.getHtmlUrl()));
-                startActivity(browserIntent);
+                Intent intent = new Intent(getContext() , DetailsActivity.class);
+                intent.putExtra("item", androidTopic);
+                getContext().startActivity(intent);
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+//                browserIntent.setData(Uri.parse(androidTopic.getHtmlUrl()));
+//                startActivity(browserIntent);
             }
         });
         androidTopicRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

@@ -21,6 +21,7 @@ import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 
 import app.com.gitkill.R;
+import app.com.gitkill.activities.s.details.DetailsActivity;
 import app.com.gitkill.adapters.AllTopicAdapter;
 import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
@@ -92,9 +93,12 @@ public class FragmentMachineLearning extends Fragment {
         AllTopicAdapter allTopicAdapter = new AllTopicAdapter(mlItemList, getContext(), R.layout.adapter_layout_trending_ml_repos, new AllTopicAdapter.onItemClickListener() {
             @Override
             public void respond(Item androidTopic) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setData(Uri.parse(androidTopic.getHtmlUrl()));
-                startActivity(browserIntent);
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+//                browserIntent.setData(Uri.parse(androidTopic.getHtmlUrl()));
+//                startActivity(browserIntent);
+                Intent intent = new Intent(getContext() , DetailsActivity.class);
+                intent.putExtra("item", androidTopic);
+                getContext().startActivity(intent);
             }
         });
         androidTopicRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

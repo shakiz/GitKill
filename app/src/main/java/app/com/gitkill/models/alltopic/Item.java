@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.io.Serializable;
+
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonPropertyOrder({
     "full_name",
@@ -33,7 +35,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
     "default_branch",
     "score"
 })
-public class Item {
+public class Item implements Serializable {
 
     @JsonProperty("full_name")
     private String full_name;

@@ -6,7 +6,7 @@
     android:id="@+id/parent_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/details_background"
+    android:background="@drawable/details_back"
     android:focusable="true"
     android:focusableInTouchMode="true"
     tools:context=".activities.s.details.DetailsActivity">
@@ -75,7 +75,7 @@
                         android:layout_height="wrap_content">
 
                         <TextView
-                            android:id="@+id/RepoName"
+                            android:id="@+id/RepoLink"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
@@ -91,7 +91,7 @@
                             android:textSize="14sp"
                             android:layout_marginLeft="4dp"
                             android:text="@string/profession"
-                            android:layout_below="@id/RepoName"
+                            android:layout_below="@id/RepoLink"
                             android:padding="4dp"
                             android:textColor="@color/md_grey_800"/>
 
@@ -160,6 +160,10 @@
                                     android:layout_height="28dp"
                                     android:src="@drawable/ic_git_fork_new"/>
                                 <TextView
+                                    android:id="@+id/NumberOfForks"
+                                    android:textColor="@color/md_grey_800"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="124"/>
@@ -197,6 +201,10 @@
                                     android:layout_height="28dp"
                                     android:src="@drawable/ic_watching_icon"/>
                                 <TextView
+                                    android:id="@+id/NumberOfWatch"
+                                    android:textColor="@color/md_grey_800"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="324"/>
@@ -234,6 +242,10 @@
                                     android:layout_height="28dp"
                                     android:src="@drawable/ic_star_latest"/>
                                 <TextView
+                                    android:id="@+id/NumberOfStars"
+                                    android:textColor="@color/md_grey_800"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="253"/>
@@ -271,6 +283,10 @@
                                     android:layout_height="28dp"
                                     android:src="@drawable/ic_bug"/>
                                 <TextView
+                                    android:id="@+id/NumberOfIssues"
+                                    android:textColor="@color/md_grey_800"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="256"/>
@@ -287,8 +303,8 @@
                     </LinearLayout>
 
                     <!--Section create , update date and language-->
-
                     <LinearLayout
+                        android:id="@+id/Section3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/Section2"
