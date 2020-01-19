@@ -1,6 +1,7 @@
 package app.com.gitkill.fragments;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -14,15 +15,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import app.com.gitkill.R;
-import app.com.gitkill.activities.s.details.DetailsActivity;
 import app.com.gitkill.adapters.TrendingRepositoriesAdapter;
 import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
@@ -54,6 +58,10 @@ public class FragmentTrendingRepositories extends Fragment {
     private AlertDialog progressDialog;
     private FloatingActionButton search;
     private CircleImageView refreshListButton;
+    private Dialog itemDialog;
+    private RelativeLayout dialogLayout;
+    //Dialog components
+    private TextView RepoName , RepoLink , UserName , Language , NumberOfStars , NumberOfForks , Description;
 
     public static synchronized FragmentTrendingRepositories getInstance(){
         if (FRAGMENT_TRENDING_REPOSITORIES == null) return new FragmentTrendingRepositories();
@@ -153,9 +161,11 @@ public class FragmentTrendingRepositories extends Fragment {
         trendingRepositoriesAdapter = new TrendingRepositoriesAdapter(trendingRepoList, getContext(), new TrendingRepositoriesAdapter.onItemClickListener() {
             @Override
             public void respond(TrendingRepositories trendingRepositories) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setData(Uri.parse(trendingRepositories.getUrl()));
-                startActivity(browserIntent);
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+//                browserIntent.setData(Uri.parse(trendingRepositories.getUrl()));
+//                startActivity(browserIntent);
+
+                showDialog(trendingRepositories);
             }
         });
         recyclerViewRepo.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -264,14 +274,50 @@ public class FragmentTrendingRepositories extends Fragment {
         builder.addInterceptor(httpLoggingInterceptor);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
+    private void showDialog(TrendingRepositories trendingRepositories) {
+        itemDialog = new Dialog(getContext());
+        itemDialog.setContentView(R.layout.popup_trending_repo_items_details);
+        customViewInit(itemDialog);
+        itemDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        Animation a = AnimationUtils.loadAnimation(itemDialog.getContext(), R.anim.push_up_in);
+        dialogLayout.startAnimation(a);
+        setCustomDialogData(trendingRepositories);
+        itemDialog.show();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void setCustomDialogData(final TrendingRepositories trendingRepositories) {
+        UserName.setText(trendingRepositories.getAuthor());
+        RepoName.setText(trendingRepositories.getName());
+
+        if (trendingRepositories.getDescription() == null) Description.setText("No description available for this repository");
+        else Description.setText(trendingRepositories.getDescription());
+
+        if (trendingRepositories.getLanguage() == null) Language.setText("No language selected for this repository");
+        else Language.setText(trendingRepositories.getLanguage());
+
+        RepoLink.setText(trendingRepositories.getUrl());
+        NumberOfStars.setText("Stars : "+trendingRepositories.getStars());
+        NumberOfForks.setText("Forks : "+trendingRepositories.getForks());
+
+        RepoLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setData(Uri.parse(trendingRepositories.getUrl()));
+                startActivity(browserIntent);
+            }
+        });
+    }
+
+    private void customViewInit(Dialog itemDialog) {
+        UserName = itemDialog.findViewById(R.id.UserName);
+        RepoName = itemDialog.findViewById(R.id.RepoName);
+        RepoLink = itemDialog.findViewById(R.id.RepoLink);
+        Description = itemDialog.findViewById(R.id.Description);
+        Language = itemDialog.findViewById(R.id.Language);
+        NumberOfStars = itemDialog.findViewById(R.id.NumberOfStars);
+        NumberOfForks = itemDialog.findViewById(R.id.NumberOfForks);
+        dialogLayout = itemDialog.findViewById(R.id.dialogLayout);
     }
 
 }
