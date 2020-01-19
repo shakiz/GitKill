@@ -173,7 +173,7 @@ public class FragmentWeb extends Fragment {
                     for (int start=0;start<response.body().getItems().size();start++) {
                         Item item=response.body().getItems().get(start);
                         //License license = item.getLicense();
-                        webTopicList.add(new Item(item.getFullName(),item.getHtmlUrl(),item.getLanguage(),item.getStargazersCount(),item.getWatchersCount(),
+                        webTopicList.add(new Item(item.getFullName(),item.getAvatar_url(),item.getHtmlUrl(),item.getLanguage(),item.getStargazersCount(),item.getWatchersCount(),
                                 item.getForksCount(),item.getForks(),item.getWatchers()));
                     }
                 }

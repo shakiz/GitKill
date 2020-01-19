@@ -4,10 +4,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.squareup.picasso.Picasso;
 import app.com.gitkill.R;
 import app.com.gitkill.adapters.DetailsFragmentPagerAdapter;
 import app.com.gitkill.models.alltopic.Item;
@@ -15,7 +15,6 @@ import app.com.gitkill.models.alltopic.Item;
 public class DetailsActivity extends AppCompatActivity {
     private TextView UserName , RepoLink , Profession , Description , NumberOfForks , NumberOfStars , NumberOfWatch , NumberOfIssues , Language , CreatedAt , UpdatedAt;
     private ImageView UserIcon;
-    private LinearLayout creationLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +28,7 @@ public class DetailsActivity extends AppCompatActivity {
     private void init() {
         UserName = findViewById(R.id.UserName);
         RepoLink = findViewById(R.id.RepoLink);
+        UserIcon = findViewById(R.id.UserIcon);
         Profession = findViewById(R.id.Profession);
         Description = findViewById(R.id.Description);
         NumberOfForks = findViewById(R.id.NumberOfForks);
@@ -38,7 +38,6 @@ public class DetailsActivity extends AppCompatActivity {
         Language = findViewById(R.id.Language);
         CreatedAt = findViewById(R.id.Created_At);
         UpdatedAt = findViewById(R.id.Updated_At);
-        creationLayout = findViewById(R.id.Section3);
     }
 
     private void bindUIWithComponents() {
@@ -74,6 +73,9 @@ public class DetailsActivity extends AppCompatActivity {
 
         if (getData().getUpdatedAt() == null) UpdatedAt.setText("No data found");
         else UpdatedAt.setText(getData().getUpdatedAt());
+
+
+        Picasso.get().load(getData().getAvatar_url()).into(UserIcon);
     }
 
     private void setViewPager(){

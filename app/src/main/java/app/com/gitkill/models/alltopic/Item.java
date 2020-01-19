@@ -39,6 +39,8 @@ public class Item implements Serializable {
 
     @JsonProperty("full_name")
     private String full_name;
+    @JsonProperty("avatar_url")
+    private String avatar_url;
     @JsonProperty("html_url")
     private String html_url;
     @JsonProperty("description")
@@ -90,8 +92,9 @@ public class Item implements Serializable {
     @JsonProperty("score")
     private Double score;
 
-    public Item(String full_name, String html_url, String language, Integer stargazers_count, Integer watchers_count, Integer forks_count, Integer forks, Integer watchers) {
+    public Item(String full_name,String avatar_url, String html_url, String language, Integer stargazers_count, Integer watchers_count, Integer forks_count, Integer forks, Integer watchers) {
         this.full_name = full_name;
+        this.avatar_url = avatar_url;
         this.html_url = html_url;
         this.language = language;
         this.stargazers_count = stargazers_count;
@@ -359,5 +362,14 @@ public class Item implements Serializable {
     @JsonProperty("score")
     public void setScore(Double score) {
         this.score = score;
+    }
+
+    @JsonProperty("avatar_url")
+    public String getAvatar_url() {
+        return avatar_url;
+    }
+    @JsonProperty("avatar_url")
+    public void setAvatar_url(String avatar_url) {
+        this.avatar_url = avatar_url;
     }
 }
