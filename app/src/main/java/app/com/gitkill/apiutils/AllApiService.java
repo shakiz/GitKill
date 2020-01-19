@@ -3,6 +3,7 @@ package app.com.gitkill.apiutils;
 import java.util.ArrayList;
 
 import app.com.gitkill.models.alltopic.TopicBase;
+import app.com.gitkill.models.details.FollowersAndFollowing;
 import app.com.gitkill.models.languages.TrendingLanguage;
 import app.com.gitkill.models.repositories.TrendingRepositories;
 import app.com.gitkill.models.users.TrendingDevelopers;
@@ -27,4 +28,8 @@ public interface AllApiService {
     //Call for topics android
     @GET
     Call<TopicBase> getAndroidTopics(@Url String url, @Query("q") String q);
+
+    //Call for followers and following list
+    @GET
+    Call<ArrayList<FollowersAndFollowing>> getFollowersAndFollowing(@Url String url);
 }
