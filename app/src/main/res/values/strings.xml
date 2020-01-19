@@ -59,4 +59,5 @@
     <string name="followers">Followers</string>
     <string name="following">Following</string>
     <string name="welcome_">Welcome ,</string>
+    <string name="popular_repo">Popular Repository</string>
 </resources>

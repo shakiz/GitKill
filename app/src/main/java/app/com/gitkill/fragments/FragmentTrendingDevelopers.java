@@ -1,6 +1,7 @@
 package app.com.gitkill.fragments;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -14,9 +15,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -53,6 +59,11 @@ public class FragmentTrendingDevelopers extends Fragment {
     private AlertDialog progressDialog;
     private FloatingActionButton search;
     private CircleImageView refreshListButton;
+    private Dialog itemDialog;
+    private RelativeLayout dialogLayout;
+    //Dialog components
+    private TextView  UserName , RepoName , ProfileLink , RepoLink , Description;
+    private LinearLayout linearLayout;
 
     public static synchronized FragmentTrendingDevelopers getInstance(){
         if (FRAGMENT_TRENDING_DEVELOPERS == null) return new FragmentTrendingDevelopers();
@@ -151,9 +162,7 @@ public class FragmentTrendingDevelopers extends Fragment {
         TrendingDevelopersAdapter trendingDevelopersAdapter = new TrendingDevelopersAdapter(trendingDevelopersList, getContext(), new TrendingDevelopersAdapter.onItemClickListener() {
             @Override
             public void respond(TrendingDevelopers trendingDevelopersPojo) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setData(Uri.parse(trendingDevelopersPojo.getUrl()));
-                startActivity(browserIntent);
+                showDialog(trendingDevelopersPojo);
             }
         });
         recyclerViewDevelopers.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -261,5 +270,56 @@ public class FragmentTrendingDevelopers extends Fragment {
         //Setting the level
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         builder.addInterceptor(httpLoggingInterceptor);
+    }
+
+    private void showDialog(TrendingDevelopers trendingDevelopers) {
+        itemDialog = new Dialog(getContext());
+        itemDialog.setContentView(R.layout.popup_trending_developers_items_details);
+        customViewInit(itemDialog);
+        itemDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        Animation a = AnimationUtils.loadAnimation(itemDialog.getContext(), R.anim.push_up_in);
+        dialogLayout.startAnimation(a);
+        setCustomDialogData(trendingDevelopers);
+        itemDialog.show();
+    }
+
+    private void setCustomDialogData(final TrendingDevelopers trendingDevelopers) {
+        UserName.setText(trendingDevelopers.getUsername());
+        ProfileLink.setText(trendingDevelopers.getUrl());
+
+        RepoName.setText(trendingDevelopers.getName());
+
+        if (trendingDevelopers.getRepo().getDescription() == null) Description.setText("No description available for this repository");
+        else Description.setText(trendingDevelopers.getRepo().getDescription());
+
+        RepoLink.setText(trendingDevelopers.getRepo().getUrl());
+
+        RepoLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setData(Uri.parse(trendingDevelopers.getRepo().getUrl()));
+                startActivity(browserIntent);
+            }
+        });
+
+        ProfileLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setData(Uri.parse(trendingDevelopers.getUrl()));
+                startActivity(browserIntent);
+            }
+        });
+    }
+
+    private void customViewInit(Dialog itemDialog) {
+        UserName = itemDialog.findViewById(R.id.UserName);
+        RepoName = itemDialog.findViewById(R.id.RepoName);
+        RepoLink = itemDialog.findViewById(R.id.RepoLink);
+        ProfileLink = itemDialog.findViewById(R.id.ProfileLink);
+        Description = itemDialog.findViewById(R.id.Description);
+        dialogLayout = itemDialog.findViewById(R.id.dialogLayout);
+        linearLayout = itemDialog.findViewById(R.id.Section2);
     }
 }
