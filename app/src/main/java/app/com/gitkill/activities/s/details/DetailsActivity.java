@@ -80,7 +80,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void setViewPager(){
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        DetailsFragmentPagerAdapter adapter = new DetailsFragmentPagerAdapter(getSupportFragmentManager(), this);
+        DetailsFragmentPagerAdapter adapter = new DetailsFragmentPagerAdapter(getSupportFragmentManager(), this, getData().getFullName());
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);

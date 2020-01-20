@@ -35,6 +35,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class FollowersFragment extends Fragment {
 
     private static final FollowersFragment FOLLOWERS_FRAGMENT = null;
+    private static String UserName = "";
     private ArrayList<FollowersAndFollowing> followersList;
     private RecyclerView followersRecyclerView;
     private Retrofit retrofit;
@@ -47,9 +48,14 @@ public class FollowersFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static Fragment getInstance() {
+    public static Fragment getInstance(String userName) {
+        setData(userName);
         if (FOLLOWERS_FRAGMENT == null) return new FollowersFragment();
         else return FOLLOWERS_FRAGMENT;
+    }
+
+    public static void setData(String userName) {
+        UserName = userName.split("/")[0];
     }
 
 
@@ -146,7 +152,7 @@ public class FollowersFragment extends Fragment {
         }
         //Creating the instance for api service from AllApiService interface
         apiService=retrofit.create(AllApiService.class);
-        final Call<ArrayList<FollowersAndFollowing>> followersAndFollowingCall=apiService.getFollowersAndFollowing(url+"shakiz/followers");
+        final Call<ArrayList<FollowersAndFollowing>> followersAndFollowingCall=apiService.getFollowersAndFollowing(url+UserName+"/followers");
         //handling user requests and their interactions with the application.
         followersAndFollowingCall.enqueue(new Callback<ArrayList<FollowersAndFollowing>>() {
             @Override

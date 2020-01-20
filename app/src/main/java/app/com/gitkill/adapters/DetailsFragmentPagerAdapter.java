@@ -11,15 +11,18 @@ import app.com.gitkill.fragments.details.FollowingFragment;
 public class DetailsFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private Context context;
-    public DetailsFragmentPagerAdapter(FragmentManager fm, Context context) {
+    private String userName;
+
+    public DetailsFragmentPagerAdapter(FragmentManager fm, Context context, String userName) {
         super(fm);
         this.context = context;
+        this.userName = userName;
     }
 
     @Override
     public Fragment getItem(int position) {
-        if (position == 0) return FollowersFragment.getInstance();
-        else if (position == 1) return FollowingFragment.getInstance();
+        if (position == 0) return FollowersFragment.getInstance(userName);
+        else if (position == 1) return FollowingFragment.getInstance(userName);
         else return null;
     }
 
