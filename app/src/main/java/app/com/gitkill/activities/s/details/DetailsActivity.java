@@ -5,9 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.squareup.picasso.Picasso;
 import app.com.gitkill.R;
 import app.com.gitkill.adapters.DetailsFragmentPagerAdapter;
 import app.com.gitkill.models.alltopic.Item;
@@ -75,7 +73,7 @@ public class DetailsActivity extends AppCompatActivity {
         else UpdatedAt.setText(getData().getUpdatedAt());
 
 
-        Picasso.get().load(getData().getAvatar_url()).into(UserIcon);
+        //Picasso.get().load(getData().getAvatar_url()).into(UserIcon);
     }
 
     private void setViewPager(){

@@ -10,6 +10,7 @@ import java.io.Serializable;
 @JsonPropertyOrder({
     "full_name",
     "html_url",
+    "avatar_url",
     "description",
     "created_at",
     "updated_at",
@@ -39,10 +40,10 @@ public class Item implements Serializable {
 
     @JsonProperty("full_name")
     private String full_name;
-    @JsonProperty("avatar_url")
-    private String avatar_url;
     @JsonProperty("html_url")
     private String html_url;
+    @JsonProperty("avatar_url")
+    private String avatar_url;
     @JsonProperty("description")
     private String description;
     @JsonProperty("created_at")
