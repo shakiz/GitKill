@@ -22,6 +22,19 @@
             android:layout_marginRight="4dp"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/NoDataMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:visibility="gone"
+                android:textColor="@color/md_red_400"
+                android:textSize="16sp"
+                android:padding="8dp"
+                android:layout_margin="4dp"
+                android:text="@string/nodata"/>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/RecyclerFollowingList"
                 android:layout_width="match_parent"

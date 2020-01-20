@@ -33,6 +33,7 @@
 
             <TextView
                 android:id="@+id/ProfileLink"
+                android:autoLink="all"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -43,7 +44,7 @@
                 android:textSize="16sp"
                 android:clickable="true"
                 android:textColor="@color/md_grey_800"
-                android:text="@string/repo_link"/>
+                android:text="@string/profile_link"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -112,6 +113,7 @@
 
                     <TextView
                         android:id="@+id/RepoLink"
+                        android:autoLink="all"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"

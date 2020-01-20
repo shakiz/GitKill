@@ -143,7 +143,7 @@
                     android:layout_gravity="left"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
-                    android:drawableLeft="@drawable/ic_language"
+                    android:drawableLeft="@drawable/ic_language_code"
                     android:drawablePadding="8dp"
                     android:layout_width="wrap_content"
                     android:maxLines="1"

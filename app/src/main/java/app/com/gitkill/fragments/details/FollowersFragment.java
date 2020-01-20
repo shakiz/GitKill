@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -43,6 +44,7 @@ public class FollowersFragment extends Fragment {
     private AllApiService apiService;
     private OkHttpClient.Builder builder;
     private AlertDialog progressDialog;
+    private TextView NoData;
 
     public FollowersFragment() {
         // Required empty public constructor
@@ -69,6 +71,7 @@ public class FollowersFragment extends Fragment {
     }
 
     private void init(View view) {
+        NoData = view.findViewById(R.id.NoDataMessage);
         followersRecyclerView = view.findViewById(R.id.RecyclerFollowersList);
         followersList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
@@ -123,7 +126,10 @@ public class FollowersFragment extends Fragment {
                     public void run() {
                         if (progressDialog.isShowing()) {
                             if (followersList.size()>0)loadListView();
-                            else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
+                            else {
+                                NoData.setVisibility(View.VISIBLE);
+                                Toast.makeText(getContext(),R.string.no_followers_found,Toast.LENGTH_LONG).show();
+                            }
                             progressDialog.dismiss();
                         }
                     }
