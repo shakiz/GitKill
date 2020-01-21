@@ -1,8 +1,8 @@
 package app.com.gitkill.fragments;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,7 +32,6 @@ import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
 import app.com.gitkill.models.repositories.TrendingRepositories;
 import de.hdodenhof.circleimageview.CircleImageView;
-import dmax.dialog.SpotsDialog;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -55,10 +54,9 @@ public class FragmentTrendingRepositories extends Fragment {
     private AllApiService apiService;
     private String TAG = "FragmentTrendingRepositories" , languageStr = "" , sinceStr = "";
     private OkHttpClient.Builder builder;
-    private AlertDialog progressDialog;
     private FloatingActionButton search;
     private CircleImageView refreshListButton;
-    private Dialog itemDialog;
+    private Dialog itemDialog , loadingDialog;
     private RelativeLayout dialogLayout;
     //Dialog components
     private TextView RepoName , RepoLink , UserName , Language , NumberOfStars , NumberOfForks , Description;
@@ -91,7 +89,7 @@ public class FragmentTrendingRepositories extends Fragment {
         languageList = new ArrayList<>();
         timeList = new ArrayList<>();
         trendingRepoList = new ArrayList<>();
-        progressDialog = new SpotsDialog(getContext(),R.style.CustomProgressDialog);
+        loadingDialog = new Dialog(getContext());
     }
 
     private void bindUiWithComponents(View view) {
@@ -198,7 +196,7 @@ public class FragmentTrendingRepositories extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            progressDialog.show();
+            showLoadingView();
         }
 
         @Override
@@ -214,14 +212,13 @@ public class FragmentTrendingRepositories extends Fragment {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        if (progressDialog.isShowing()) {
+                        if (loadingDialog.isShowing()) {
                             if (trendingRepoList.size()>0)loadListView();
                             else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
-                            progressDialog.dismiss();
+                            loadingDialog.cancel();
                         }
                     }
-                }, 4000);
-
+                }, 6000);
             }
         }
 
@@ -284,6 +281,12 @@ public class FragmentTrendingRepositories extends Fragment {
         dialogLayout.startAnimation(a);
         setCustomDialogData(trendingRepositories);
         itemDialog.show();
+    }
+
+    private void showLoadingView(){
+        loadingDialog.setContentView(R.layout.loading_layout);
+        loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loadingDialog.show();
     }
 
     private void setCustomDialogData(final TrendingRepositories trendingRepositories) {
