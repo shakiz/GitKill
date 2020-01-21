@@ -65,8 +65,8 @@ public class FollowingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_following, container, false);init(view);
-        bindUIWithComponents(view);
+        View view = inflater.inflate(R.layout.fragment_following, container, false);
+        init(view);
         return view;
     }
 
@@ -78,8 +78,14 @@ public class FollowingFragment extends Fragment {
         progressDialog = new SpotsDialog(getContext(),R.style.CustomProgressDialog);
     }
 
-    private void bindUIWithComponents(View view) {
-        new BackgroundDataLoad(view , allUrlClass.FOLLOWERS_AND_FOLLOWING).execute();
+    private void bindUIWithComponents() {
+        new BackgroundDataLoad(allUrlClass.FOLLOWERS_AND_FOLLOWING).execute();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) bindUIWithComponents();
     }
 
     private void loadListView(){
@@ -98,11 +104,9 @@ public class FollowingFragment extends Fragment {
 
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
 
-        View view;
         String url ;
 
-        public BackgroundDataLoad(View view, String url) {
-            this.view = view;
+        public BackgroundDataLoad( String url) {
             this.url = url;
         }
 
