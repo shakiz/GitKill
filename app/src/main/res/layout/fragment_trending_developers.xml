@@ -107,17 +107,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardBackgroundColor="@color/md_white_1000"
-        app:cardCornerRadius="4dp"
-        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="8dp"
+        android:layout_marginBottom="8dp"
         app:cardUseCompatPadding="true"
-        app:elevation="16dp">
+        app:elevation="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingTop="8dp"
-            android:paddingBottom="16dp">
+            android:paddingBottom="8dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"

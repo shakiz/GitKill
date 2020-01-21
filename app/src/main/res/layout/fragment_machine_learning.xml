@@ -17,14 +17,14 @@
         app:cardCornerRadius="8dp"
         android:translationZ="8dp"
         app:cardUseCompatPadding="true"
-        app:elevation="8dp">
+        app:elevation="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingTop="8dp"
-            android:paddingBottom="16dp">
+            android:paddingBottom="8dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"

@@ -15,43 +15,44 @@
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/md_white_1000"
         app:cardCornerRadius="4dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         app:cardUseCompatPadding="true"
-        app:elevation="16dp">
+        app:elevation="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingTop="8dp"
-            android:paddingBottom="16dp">
+            android:paddingBottom="8dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:orientation="vertical"
-            android:layout_weight="1">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/select_your_query"
-                android:textColor="@color/md_grey_800"
-                android:padding="4dp"
-                android:textSize="16sp"/>
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:orientation="vertical"
+                android:layout_weight="1">
 
-            <Spinner
-                style="@style/Base.TextAppearance.AppCompat.Medium"
-                android:layout_width="match_parent"
-                android:layout_height="38dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/edittext_back"
-                android:id="@+id/AndroidFilterSpinner"
-                android:padding="4dp"></Spinner>
-        </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/select_your_query"
+                    android:textColor="@color/md_grey_800"
+                    android:padding="4dp"
+                    android:textSize="16sp"/>
+
+                <Spinner
+                    style="@style/Base.TextAppearance.AppCompat.Medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/edittext_back"
+                    android:id="@+id/AndroidFilterSpinner"
+                    android:padding="4dp"></Spinner>
+            </LinearLayout>
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
@@ -61,16 +62,16 @@
         android:layout_height="match_parent"
         app:cardBackgroundColor="@color/md_white_1000"
         app:cardCornerRadius="4dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         app:cardUseCompatPadding="true"
-        app:elevation="16dp">
+        app:elevation="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingTop="8dp"
-            android:paddingBottom="16dp">
+            android:paddingBottom="8dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"

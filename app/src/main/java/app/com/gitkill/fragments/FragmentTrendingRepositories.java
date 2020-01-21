@@ -81,6 +81,19 @@ public class FragmentTrendingRepositories extends Fragment {
         return view;
     }
 
+    private void init(View view) {
+        recyclerViewRepo = view.findViewById(R.id.RecyclerRepoList);
+        languageSpinner = view.findViewById(R.id.LanguageSpinner);
+        sinceSpinner = view.findViewById(R.id.SinceSpinner);
+        refreshListButton = view.findViewById(R.id.RefreshList);
+        search = view.findViewById(R.id.Search);
+        allUrlClass = new AllUrlClass();
+        languageList = new ArrayList<>();
+        timeList = new ArrayList<>();
+        trendingRepoList = new ArrayList<>();
+        progressDialog = new SpotsDialog(getContext(),R.style.CustomProgressDialog);
+    }
+
     private void bindUiWithComponents(View view) {
         setData();
         new BackgroundDataLoad(view,allUrlClass.TRENDING_REPOS_URL).execute();
@@ -173,19 +186,6 @@ public class FragmentTrendingRepositories extends Fragment {
         trendingRepositoriesAdapter.notifyDataSetChanged();
     }
 
-    private void init(View view) {
-        recyclerViewRepo = view.findViewById(R.id.RecyclerRepoList);
-        languageSpinner = view.findViewById(R.id.LanguageSpinner);
-        sinceSpinner = view.findViewById(R.id.SinceSpinner);
-        refreshListButton = view.findViewById(R.id.RefreshList);
-        search = view.findViewById(R.id.Search);
-        allUrlClass = new AllUrlClass();
-        languageList = new ArrayList<>();
-        timeList = new ArrayList<>();
-        trendingRepoList = new ArrayList<>();
-        progressDialog = new SpotsDialog(getContext(),R.style.CustomProgressDialog);
-    }
-
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
 
         View view;
@@ -220,7 +220,8 @@ public class FragmentTrendingRepositories extends Fragment {
                             progressDialog.dismiss();
                         }
                     }
-                }, 6000);
+                }, 4000);
+
             }
         }
 

@@ -35,7 +35,7 @@
     </style>
 
 
-    <style name="CustomProgressDialog" parent="android:Theme.DeviceDefault.Dialog">
+    <style name="CustomProgressDialog" parent="android:Theme.DeviceDefault.Light.Dialog">
         <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
         <item name="DialogTitleText">Please Wait</item>
         <item name="DialogSpotColor">@android:color/white</item>
