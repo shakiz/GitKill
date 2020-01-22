@@ -1,8 +1,6 @@
 package app.com.gitkill.fragments;
 
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,12 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import java.util.ArrayList;
-
 import app.com.gitkill.R;
 import app.com.gitkill.activities.s.details.DetailsActivity;
 import app.com.gitkill.adapters.AllTopicAdapter;
@@ -27,8 +22,8 @@ import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
 import app.com.gitkill.models.alltopic.Item;
 import app.com.gitkill.models.alltopic.TopicBase;
+import app.com.gitkill.utils.UX;
 import de.hdodenhof.circleimageview.CircleImageView;
-import dmax.dialog.SpotsDialog;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -44,7 +39,7 @@ public class FragmentMachineLearning extends Fragment {
     private static final FragmentMachineLearning FRAGMENT_MACHINE_LEARNING = null;
     private RecyclerView androidTopicRecyclerView;
     private OkHttpClient.Builder builder;
-    private AlertDialog progressDialog;
+    private UX ux;
     private ArrayList<Item> mlItemList;
     private Retrofit retrofit;
     private AllUrlClass allUrlClass;
@@ -75,7 +70,7 @@ public class FragmentMachineLearning extends Fragment {
         refreshListButton = view.findViewById(R.id.RefreshList);
         allUrlClass = new AllUrlClass();
         mlItemList = new ArrayList<>();
-        progressDialog = new SpotsDialog(getContext(),R.style.CustomProgressDialog);
+        ux = new UX(getContext());
     }
 
     private void bindUIWithComponents(View view) {
@@ -119,7 +114,7 @@ public class FragmentMachineLearning extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            progressDialog.show();
+            ux.getLoadingView();
         }
 
         @Override
@@ -135,13 +130,11 @@ public class FragmentMachineLearning extends Fragment {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        if (progressDialog.isShowing()) {
-                            if (mlItemList.size()>0)loadListView();
-                            else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
-                            progressDialog.dismiss();
-                        }
+                        if (mlItemList.size()>0)loadListView();
+                        else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
+                        ux.removeLoadingView();
                     }
-                }, 6000);
+                }, 5000);
             }
         }
 

@@ -1,6 +1,5 @@
 package app.com.gitkill.fragments.details;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -23,7 +22,7 @@ import app.com.gitkill.adapters.FollowersAndFollowingAdapter;
 import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
 import app.com.gitkill.models.details.FollowersAndFollowing;
-import dmax.dialog.SpotsDialog;
+import app.com.gitkill.utils.UX;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -43,7 +42,7 @@ public class FollowingFragment extends Fragment {
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
     private OkHttpClient.Builder builder;
-    private AlertDialog progressDialog;
+    private UX ux;
     private TextView NoData;
 
     public FollowingFragment() {
@@ -75,7 +74,7 @@ public class FollowingFragment extends Fragment {
         followersRecyclerView = view.findViewById(R.id.RecyclerFollowingList);
         followingList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
-        progressDialog = new SpotsDialog(getContext(),R.style.CustomProgressDialog);
+        ux = new UX(getContext());
     }
 
     private void bindUIWithComponents() {
@@ -112,7 +111,7 @@ public class FollowingFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            progressDialog.show();
+            ux.getLoadingView();
         }
 
         @Override
@@ -128,16 +127,14 @@ public class FollowingFragment extends Fragment {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        if (progressDialog.isShowing()) {
-                            if (followingList.size()>0)loadListView();
-                            else {
-                                NoData.setVisibility(View.VISIBLE);
-                                Toast.makeText(getContext(),R.string.no_following_found,Toast.LENGTH_LONG).show();
-                            }
-                            progressDialog.dismiss();
+                        if (followingList.size()>0)loadListView();
+                        else {
+                            NoData.setVisibility(View.VISIBLE);
+                            Toast.makeText(getContext(),R.string.no_following_found,Toast.LENGTH_LONG).show();
                         }
+                        ux.removeLoadingView();
                     }
-                }, 6000);
+                }, 5000);
             }
         }
 

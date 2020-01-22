@@ -1,6 +1,5 @@
 package app.com.gitkill.fragments;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -24,7 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
@@ -33,8 +31,8 @@ import app.com.gitkill.adapters.TrendingDevelopersAdapter;
 import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
 import app.com.gitkill.models.users.TrendingDevelopers;
+import app.com.gitkill.utils.UX;
 import de.hdodenhof.circleimageview.CircleImageView;
-import dmax.dialog.SpotsDialog;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -56,7 +54,7 @@ public class FragmentTrendingDevelopers extends Fragment {
     private AllApiService apiService;
     private String TAG = "FragmentTrendingRepositories" , languageStr = "" , sinceStr = "";
     private OkHttpClient.Builder builder;
-    private AlertDialog progressDialog;
+    private UX ux;
     private FloatingActionButton search;
     private CircleImageView refreshListButton;
     private Dialog itemDialog;
@@ -180,7 +178,7 @@ public class FragmentTrendingDevelopers extends Fragment {
         allUrlClass = new AllUrlClass();
         languageList = new ArrayList<>();
         timeList = new ArrayList<>();
-        progressDialog = new SpotsDialog(getContext(),R.style.CustomProgressDialog);
+        ux = new UX(getContext());
     }
 
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
@@ -195,7 +193,7 @@ public class FragmentTrendingDevelopers extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            progressDialog.show();
+            ux.getLoadingView();
         }
 
         @Override
@@ -211,13 +209,11 @@ public class FragmentTrendingDevelopers extends Fragment {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        if (progressDialog.isShowing()) {
-                            if (trendingDevelopersList.size()>0)loadListView();
-                            else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
-                            progressDialog.dismiss();
-                        }
+                        if (trendingDevelopersList.size()>0)loadListView();
+                        else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
+                        ux.removeLoadingView();
                     }
-                }, 6000);
+                }, 5000);
             }
         }
 

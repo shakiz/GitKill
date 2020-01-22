@@ -1,8 +1,6 @@
 package app.com.gitkill.fragments;
 
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,8 +25,8 @@ import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
 import app.com.gitkill.models.alltopic.TopicBase;
 import app.com.gitkill.models.alltopic.Item;
+import app.com.gitkill.utils.UX;
 import de.hdodenhof.circleimageview.CircleImageView;
-import dmax.dialog.SpotsDialog;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -43,7 +41,7 @@ public class FragmentAndroid extends Fragment {
     private static final FragmentAndroid FRAGMENT_ANDROID = null;
     private RecyclerView androidTopicRecyclerView;
     private OkHttpClient.Builder builder;
-    private AlertDialog progressDialog;
+    private UX ux;
     private ArrayList<Item> androiTopicList;
     private Retrofit retrofit;
     private AllUrlClass allUrlClass;
@@ -79,7 +77,7 @@ public class FragmentAndroid extends Fragment {
         androidFilterSpinner = view.findViewById(R.id.AndroidFilterSpinner);
         androiTopicList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
-        progressDialog = new SpotsDialog(getContext(),R.style.CustomProgressDialog);
+        ux = new UX(getContext());
     }
 
     private void bindUIWithComponents(View view) {
@@ -145,7 +143,7 @@ public class FragmentAndroid extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            progressDialog.show();
+            ux.getLoadingView();
         }
 
         @Override
@@ -161,13 +159,11 @@ public class FragmentAndroid extends Fragment {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        if (progressDialog.isShowing()) {
-                            if (androiTopicList.size()>0)loadListView();
-                            else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
-                            progressDialog.dismiss();
-                        }
+                        if (androiTopicList.size()>0)loadListView();
+                        else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
+                        ux.removeLoadingView();
                     }
-                }, 6000);
+                }, 5000);
             }
         }
 

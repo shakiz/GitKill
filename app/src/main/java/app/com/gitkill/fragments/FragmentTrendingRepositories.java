@@ -31,6 +31,7 @@ import app.com.gitkill.adapters.TrendingRepositoriesAdapter;
 import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
 import app.com.gitkill.models.repositories.TrendingRepositories;
+import app.com.gitkill.utils.UX;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -56,8 +57,9 @@ public class FragmentTrendingRepositories extends Fragment {
     private OkHttpClient.Builder builder;
     private FloatingActionButton search;
     private CircleImageView refreshListButton;
-    private Dialog itemDialog , loadingDialog;
+    private Dialog itemDialog ;
     private RelativeLayout dialogLayout;
+    private UX ux;
     //Dialog components
     private TextView RepoName , RepoLink , UserName , Language , NumberOfStars , NumberOfForks , Description;
 
@@ -88,13 +90,13 @@ public class FragmentTrendingRepositories extends Fragment {
         allUrlClass = new AllUrlClass();
         languageList = new ArrayList<>();
         timeList = new ArrayList<>();
+        ux = new UX(getContext());
         trendingRepoList = new ArrayList<>();
-        loadingDialog = new Dialog(getContext());
     }
 
     private void bindUiWithComponents(View view) {
         setData();
-        new BackgroundDataLoad(view,allUrlClass.TRENDING_REPOS_URL).execute();
+        new BackgroundDataLoad(allUrlClass.TRENDING_REPOS_URL).execute();
         setAdapter(languageSpinner,languageList);
         setAdapter(sinceSpinner,timeList);
 
@@ -104,7 +106,7 @@ public class FragmentTrendingRepositories extends Fragment {
                 languageStr = adapterView.getItemAtPosition(position).toString().toLowerCase();
                 String newUrl = allUrlClass.BASE_URL+"repositories?language="+languageStr;
                 Log.v("SpinnerURL",newUrl);
-                new BackgroundDataLoad(view,newUrl).execute();
+                new BackgroundDataLoad(newUrl).execute();
             }
 
             @Override
@@ -119,7 +121,7 @@ public class FragmentTrendingRepositories extends Fragment {
                 sinceStr = adapterView.getItemAtPosition(position).toString().toLowerCase();
                 String newUrl = allUrlClass.BASE_URL+"repositories?since="+sinceStr;
                 Log.v("SpinnerURL",newUrl);
-                new BackgroundDataLoad(view,newUrl).execute();
+                new BackgroundDataLoad(newUrl).execute();
             }
 
             @Override
@@ -133,14 +135,14 @@ public class FragmentTrendingRepositories extends Fragment {
             public void onClick(View view) {
                 String newUrl = allUrlClass.BASE_URL+"repositories?"+"language="+languageStr+"&since="+sinceStr;
                 Log.v("SpinnerURL",newUrl);
-                new BackgroundDataLoad(view,newUrl).execute();
+                new BackgroundDataLoad(newUrl).execute();
             }
         });
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new BackgroundDataLoad(view,allUrlClass.TRENDING_REPOS_URL).execute();
+                new BackgroundDataLoad(allUrlClass.TRENDING_REPOS_URL).execute();
             }
         });
     }
@@ -172,10 +174,6 @@ public class FragmentTrendingRepositories extends Fragment {
         trendingRepositoriesAdapter = new TrendingRepositoriesAdapter(trendingRepoList, getContext(), new TrendingRepositoriesAdapter.onItemClickListener() {
             @Override
             public void respond(TrendingRepositories trendingRepositories) {
-//                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-//                browserIntent.setData(Uri.parse(trendingRepositories.getUrl()));
-//                startActivity(browserIntent);
-
                 showDialog(trendingRepositories);
             }
         });
@@ -186,17 +184,15 @@ public class FragmentTrendingRepositories extends Fragment {
 
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
 
-        View view;
         String url;
 
-        public BackgroundDataLoad(View view , String url) {
-            this.view = view;
+        public BackgroundDataLoad( String url) {
             this.url = url;
         }
 
         @Override
         protected void onPreExecute() {
-            showLoadingView();
+            ux.getLoadingView();
         }
 
         @Override
@@ -212,13 +208,11 @@ public class FragmentTrendingRepositories extends Fragment {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        if (loadingDialog.isShowing()) {
-                            if (trendingRepoList.size()>0)loadListView();
-                            else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
-                            loadingDialog.cancel();
-                        }
+                        if (trendingRepoList.size()>0)loadListView();
+                        else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
+                        ux.removeLoadingView();
                     }
-                }, 6000);
+                }, 5000);
             }
         }
 
@@ -281,12 +275,6 @@ public class FragmentTrendingRepositories extends Fragment {
         dialogLayout.startAnimation(a);
         setCustomDialogData(trendingRepositories);
         itemDialog.show();
-    }
-
-    private void showLoadingView(){
-        loadingDialog.setContentView(R.layout.loading_layout);
-        loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        loadingDialog.show();
     }
 
     private void setCustomDialogData(final TrendingRepositories trendingRepositories) {

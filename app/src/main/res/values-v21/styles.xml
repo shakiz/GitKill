@@ -34,14 +34,6 @@
         <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
-
-    <style name="CustomProgressDialog" parent="android:Theme.DeviceDefault.Dialog">
-        <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
-        <item name="DialogTitleText">Please Wait</item>
-        <item name="DialogSpotColor">@android:color/white</item>
-        <item name="DialogSpotCount">8</item>
-    </style>
-
     <style name="TextAppearance.Widget.Event.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <!--Any text styling can be done here-->
         <item name="android:textStyle">normal</item>

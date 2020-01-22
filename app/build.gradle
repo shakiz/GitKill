@@ -41,9 +41,6 @@ dependencies {
     // circle image view
     implementation 'de.hdodenhof:circleimageview:2.1.0'
 
-    //Progress dialog
-    implementation 'com.github.d-max:spots-dialog:0.4@aar'
-
     // android custom menu
     implementation 'com.yarolegovich:sliding-root-nav:1.1.0'
 
