@@ -2,7 +2,6 @@ package app.com.gitkill.fragments;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,9 +31,9 @@ import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
 import app.com.gitkill.models.repositories.TrendingRepositories;
 import app.com.gitkill.utils.UX;
+import app.com.gitkill.utils.UtilsManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,6 +59,7 @@ public class FragmentTrendingRepositories extends Fragment {
     private Dialog itemDialog ;
     private RelativeLayout dialogLayout;
     private UX ux;
+    private UtilsManager utilsManager;
     //Dialog components
     private TextView RepoName , RepoLink , UserName , Language , NumberOfStars , NumberOfForks , Description;
 
@@ -91,6 +91,7 @@ public class FragmentTrendingRepositories extends Fragment {
         languageList = new ArrayList<>();
         timeList = new ArrayList<>();
         ux = new UX(getContext());
+        utilsManager = new UtilsManager(getContext());
         trendingRepoList = new ArrayList<>();
     }
 
@@ -222,7 +223,7 @@ public class FragmentTrendingRepositories extends Fragment {
         Log.v("URL",url);
         trendingRepoList.clear();
         builder= new OkHttpClient.Builder();
-        loggingInterceptorForRetrofit(builder);
+        utilsManager.loggingInterceptorForRetrofit(builder);
         if (retrofit == null){
             Gson gson = new GsonBuilder()
                     .setLenient()
@@ -256,14 +257,6 @@ public class FragmentTrendingRepositories extends Fragment {
                 Log.v(TAG,""+t.getMessage());
             }
         });
-    }
-
-    public void loggingInterceptorForRetrofit(OkHttpClient.Builder builder){
-        //Creating the logging interceptor
-        HttpLoggingInterceptor httpLoggingInterceptor=new HttpLoggingInterceptor();
-        //Setting the level
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        builder.addInterceptor(httpLoggingInterceptor);
     }
 
     private void showDialog(TrendingRepositories trendingRepositories) {

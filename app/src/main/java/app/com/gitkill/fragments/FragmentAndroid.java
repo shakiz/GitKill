@@ -26,9 +26,9 @@ import app.com.gitkill.apiutils.AllUrlClass;
 import app.com.gitkill.models.alltopic.TopicBase;
 import app.com.gitkill.models.alltopic.Item;
 import app.com.gitkill.utils.UX;
+import app.com.gitkill.utils.UtilsManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,6 +42,7 @@ public class FragmentAndroid extends Fragment {
     private RecyclerView androidTopicRecyclerView;
     private OkHttpClient.Builder builder;
     private UX ux;
+    private UtilsManager utilsManager;
     private ArrayList<Item> androiTopicList;
     private Retrofit retrofit;
     private AllUrlClass allUrlClass;
@@ -78,6 +79,7 @@ public class FragmentAndroid extends Fragment {
         androiTopicList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         ux = new UX(getContext());
+        utilsManager = new UtilsManager(getContext());
     }
 
     private void bindUIWithComponents(View view) {
@@ -120,9 +122,6 @@ public class FragmentAndroid extends Fragment {
                 Intent intent = new Intent(getContext() , DetailsActivity.class);
                 intent.putExtra("item", androidTopic);
                 getContext().startActivity(intent);
-//                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-//                browserIntent.setData(Uri.parse(androidTopic.getHtmlUrl()));
-//                startActivity(browserIntent);
             }
         });
         androidTopicRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -174,7 +173,7 @@ public class FragmentAndroid extends Fragment {
         Log.v("URL",url);
         androiTopicList.clear();
         builder= new OkHttpClient.Builder();
-        loggingInterceptorForRetrofit(builder);
+        utilsManager.loggingInterceptorForRetrofit(builder);
         if (retrofit == null){
             Gson gson = new GsonBuilder()
                     .setLenient()
@@ -211,15 +210,6 @@ public class FragmentAndroid extends Fragment {
             }
         });
 
-    }
-
-
-    public void loggingInterceptorForRetrofit(OkHttpClient.Builder builder){
-        //Creating the logging interceptor
-        HttpLoggingInterceptor httpLoggingInterceptor=new HttpLoggingInterceptor();
-        //Setting the level
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        builder.addInterceptor(httpLoggingInterceptor);
     }
 
 }

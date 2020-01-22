@@ -23,9 +23,9 @@ import app.com.gitkill.apiutils.AllUrlClass;
 import app.com.gitkill.models.alltopic.Item;
 import app.com.gitkill.models.alltopic.TopicBase;
 import app.com.gitkill.utils.UX;
+import app.com.gitkill.utils.UtilsManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,6 +46,7 @@ public class FragmentWeb extends Fragment {
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
     private CircleImageView refreshListButton;
+    private UtilsManager utilsManager;
 
     public FragmentWeb() {
         // Required empty public constructor
@@ -73,6 +74,7 @@ public class FragmentWeb extends Fragment {
         webTopicList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         ux = new UX(getContext());
+        utilsManager = new UtilsManager(getContext());
     }
 
     private void bindUIWithComponents(View view) {
@@ -90,9 +92,6 @@ public class FragmentWeb extends Fragment {
         AllTopicAdapter allTopicAdapter = new AllTopicAdapter(webTopicList, getContext(),R.layout.adapter_layout_web_topics, new AllTopicAdapter.onItemClickListener() {
             @Override
             public void respond(Item androidTopic) {
-//                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-//                browserIntent.setData(Uri.parse(androidTopic.getHtmlUrl()));
-//                startActivity(browserIntent);
                 Intent intent = new Intent(getContext() , DetailsActivity.class);
                 intent.putExtra("item", androidTopic);
                 getContext().startActivity(intent);
@@ -146,7 +145,7 @@ public class FragmentWeb extends Fragment {
         Log.v("URL",url);
         webTopicList.clear();
         builder= new OkHttpClient.Builder();
-        loggingInterceptorForRetrofit(builder);
+        utilsManager.loggingInterceptorForRetrofit(builder);
         if (retrofit == null){
             Gson gson = new GsonBuilder()
                     .setLenient()
@@ -183,15 +182,6 @@ public class FragmentWeb extends Fragment {
             }
         });
 
-    }
-
-
-    public void loggingInterceptorForRetrofit(OkHttpClient.Builder builder){
-        //Creating the logging interceptor
-        HttpLoggingInterceptor httpLoggingInterceptor=new HttpLoggingInterceptor();
-        //Setting the level
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        builder.addInterceptor(httpLoggingInterceptor);
     }
 
 }

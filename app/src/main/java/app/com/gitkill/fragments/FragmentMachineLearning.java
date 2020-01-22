@@ -23,9 +23,9 @@ import app.com.gitkill.apiutils.AllUrlClass;
 import app.com.gitkill.models.alltopic.Item;
 import app.com.gitkill.models.alltopic.TopicBase;
 import app.com.gitkill.utils.UX;
+import app.com.gitkill.utils.UtilsManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,6 +40,7 @@ public class FragmentMachineLearning extends Fragment {
     private RecyclerView androidTopicRecyclerView;
     private OkHttpClient.Builder builder;
     private UX ux;
+    private UtilsManager utilsManager;
     private ArrayList<Item> mlItemList;
     private Retrofit retrofit;
     private AllUrlClass allUrlClass;
@@ -71,6 +72,7 @@ public class FragmentMachineLearning extends Fragment {
         allUrlClass = new AllUrlClass();
         mlItemList = new ArrayList<>();
         ux = new UX(getContext());
+        utilsManager = new UtilsManager(getContext());
     }
 
     private void bindUIWithComponents(View view) {
@@ -145,7 +147,7 @@ public class FragmentMachineLearning extends Fragment {
         Log.v("URL",url);
         mlItemList.clear();
         builder= new OkHttpClient.Builder();
-        loggingInterceptorForRetrofit(builder);
+        utilsManager.loggingInterceptorForRetrofit(builder);
         if (retrofit == null){
             Gson gson = new GsonBuilder()
                     .setLenient()
@@ -183,15 +185,4 @@ public class FragmentMachineLearning extends Fragment {
         });
 
     }
-
-
-    public void loggingInterceptorForRetrofit(OkHttpClient.Builder builder){
-        //Creating the logging interceptor
-        HttpLoggingInterceptor httpLoggingInterceptor=new HttpLoggingInterceptor();
-        //Setting the level
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        builder.addInterceptor(httpLoggingInterceptor);
-    }
-
-
 }

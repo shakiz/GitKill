@@ -32,9 +32,9 @@ import app.com.gitkill.apiutils.AllApiService;
 import app.com.gitkill.apiutils.AllUrlClass;
 import app.com.gitkill.models.users.TrendingDevelopers;
 import app.com.gitkill.utils.UX;
+import app.com.gitkill.utils.UtilsManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,6 +55,7 @@ public class FragmentTrendingDevelopers extends Fragment {
     private String TAG = "FragmentTrendingRepositories" , languageStr = "" , sinceStr = "";
     private OkHttpClient.Builder builder;
     private UX ux;
+    private UtilsManager utilsManager;
     private FloatingActionButton search;
     private CircleImageView refreshListButton;
     private Dialog itemDialog;
@@ -179,6 +180,7 @@ public class FragmentTrendingDevelopers extends Fragment {
         languageList = new ArrayList<>();
         timeList = new ArrayList<>();
         ux = new UX(getContext());
+        utilsManager = new UtilsManager(getContext());
     }
 
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
@@ -224,7 +226,7 @@ public class FragmentTrendingDevelopers extends Fragment {
         Log.v("URL",url);
         trendingDevelopersList.clear();
         builder= new OkHttpClient.Builder();
-        loggingInterceptorForRetrofit(builder);
+        utilsManager.loggingInterceptorForRetrofit(builder);
         if (retrofit == null){
             Gson gson = new GsonBuilder()
                     .setLenient()
@@ -258,14 +260,6 @@ public class FragmentTrendingDevelopers extends Fragment {
                 Log.v(TAG,""+t.getMessage());
             }
         });
-    }
-
-    public void loggingInterceptorForRetrofit(OkHttpClient.Builder builder){
-        //Creating the logging interceptor
-        HttpLoggingInterceptor httpLoggingInterceptor=new HttpLoggingInterceptor();
-        //Setting the level
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        builder.addInterceptor(httpLoggingInterceptor);
     }
 
     private void showDialog(TrendingDevelopers trendingDevelopers) {
