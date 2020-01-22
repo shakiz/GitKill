@@ -77,7 +77,7 @@ public class FragmentTrendingRepositories extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trending_repositories, container, false);
         init(view);
-        bindUiWithComponents(view);
+        bindUiWithComponents();
         return view;
     }
 
@@ -95,7 +95,7 @@ public class FragmentTrendingRepositories extends Fragment {
         trendingRepoList = new ArrayList<>();
     }
 
-    private void bindUiWithComponents(View view) {
+    private void bindUiWithComponents() {
         setData();
         new BackgroundDataLoad(allUrlClass.TRENDING_REPOS_URL).execute();
         setAdapter(languageSpinner,languageList);

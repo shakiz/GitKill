@@ -130,10 +130,13 @@ public class FollowingFragment extends Fragment {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        if (followingList.size()>0)loadListView();
+                        if (followingList.size()>0){
+                            loadListView();
+                            NoData.setVisibility(View.GONE);
+                        }
                         else {
                             NoData.setVisibility(View.VISIBLE);
-                            Toast.makeText(getContext(),R.string.no_following_found,Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),R.string.no_following_found,Toast.LENGTH_SHORT).show();
                         }
                         ux.removeLoadingView();
                     }

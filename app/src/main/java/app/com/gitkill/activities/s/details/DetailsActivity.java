@@ -27,7 +27,7 @@ public class DetailsActivity extends AppCompatActivity {
         UserName = findViewById(R.id.UserName);
         RepoLink = findViewById(R.id.RepoLink);
         UserIcon = findViewById(R.id.UserIcon);
-        Profession = findViewById(R.id.Profession);
+//        Profession = findViewById(R.id.Profession);
         Description = findViewById(R.id.Description);
         NumberOfForks = findViewById(R.id.NumberOfForks);
         NumberOfStars = findViewById(R.id.NumberOfStars);

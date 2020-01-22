@@ -125,10 +125,13 @@ public class FollowersFragment extends Fragment {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        if (followersList.size()>0)loadListView();
+                        if (followersList.size()>0){
+                            loadListView();
+                            NoData.setVisibility(View.GONE);
+                        }
                         else {
                             NoData.setVisibility(View.VISIBLE);
-                            Toast.makeText(getContext(),R.string.no_followers_found,Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),R.string.no_followers_found,Toast.LENGTH_SHORT).show();
                         }
                         ux.removeLoadingView();
                     }
