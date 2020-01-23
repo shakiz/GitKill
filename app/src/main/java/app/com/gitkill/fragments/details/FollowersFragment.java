@@ -135,7 +135,7 @@ public class FollowersFragment extends Fragment {
                         }
                         ux.removeLoadingView();
                     }
-                }, 5000);
+                }, 6000);
             }
         }
 

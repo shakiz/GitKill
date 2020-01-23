@@ -136,7 +136,7 @@ public class FragmentMachineLearning extends Fragment {
                         else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
                         ux.removeLoadingView();
                     }
-                }, 5000);
+                }, 6000);
             }
         }
 

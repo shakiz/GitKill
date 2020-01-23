@@ -140,7 +140,7 @@ public class FollowingFragment extends Fragment {
                         }
                         ux.removeLoadingView();
                     }
-                }, 5000);
+                }, 6000);
             }
         }
 
