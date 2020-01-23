@@ -18,6 +18,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -60,6 +61,8 @@ public class FragmentTrendingRepositories extends Fragment {
     private RelativeLayout dialogLayout;
     private UX ux;
     private UtilsManager utilsManager;
+    private TextView NoData;
+    private ImageView NoDataIV;
     //Dialog components
     private TextView RepoName , RepoLink , UserName , Language , NumberOfStars , NumberOfForks , Description;
 
@@ -82,10 +85,12 @@ public class FragmentTrendingRepositories extends Fragment {
     }
 
     private void init(View view) {
-        recyclerViewRepo = view.findViewById(R.id.RecyclerRepoList);
+        recyclerViewRepo = view.findViewById(R.id.mRecyclerView);
         languageSpinner = view.findViewById(R.id.LanguageSpinner);
         sinceSpinner = view.findViewById(R.id.SinceSpinner);
         refreshListButton = view.findViewById(R.id.RefreshList);
+        NoData = view.findViewById(R.id.NoDataMessage);
+        NoDataIV = view.findViewById(R.id.NoDataIV);
         search = view.findViewById(R.id.Search);
         allUrlClass = new AllUrlClass();
         languageList = new ArrayList<>();
@@ -209,8 +214,15 @@ public class FragmentTrendingRepositories extends Fragment {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        if (trendingRepoList.size()>0)loadListView();
-                        else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
+                        if (trendingRepoList.size()>0){
+                            loadListView();NoData.setVisibility(View.GONE);
+                            NoDataIV.setVisibility(View.GONE);
+                        }
+                        else {
+                            NoData.setVisibility(View.VISIBLE);
+                            NoDataIV.setVisibility(View.VISIBLE);
+                            Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
+                        }
                         ux.removeLoadingView();
                     }
                 }, 6000);

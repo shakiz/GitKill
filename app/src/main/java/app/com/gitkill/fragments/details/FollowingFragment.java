@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
@@ -25,7 +26,6 @@ import app.com.gitkill.models.details.FollowersAndFollowing;
 import app.com.gitkill.utils.UX;
 import app.com.gitkill.utils.UtilsManager;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,6 +46,7 @@ public class FollowingFragment extends Fragment {
     private UX ux;
     private UtilsManager utilsManager;
     private TextView NoData;
+    private ImageView NoDataIV;
 
     public FollowingFragment() {
         // Required empty public constructor
@@ -73,7 +74,8 @@ public class FollowingFragment extends Fragment {
 
     private void init(View view) {
         NoData = view.findViewById(R.id.NoDataMessage);
-        followersRecyclerView = view.findViewById(R.id.RecyclerFollowingList);
+        followersRecyclerView = view.findViewById(R.id.mRecyclerView);
+        NoDataIV = view.findViewById(R.id.NoDataIV);
         followingList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         ux = new UX(getContext());
@@ -133,10 +135,12 @@ public class FollowingFragment extends Fragment {
                         if (followingList.size()>0){
                             loadListView();
                             NoData.setVisibility(View.GONE);
+                            NoDataIV.setVisibility(View.GONE);
                         }
                         else {
                             NoData.setVisibility(View.VISIBLE);
-                            Toast.makeText(getContext(),R.string.no_following_found,Toast.LENGTH_SHORT).show();
+                            NoDataIV.setVisibility(View.VISIBLE);
+                            Toast.makeText(getContext(),R.string.no_followers_found,Toast.LENGTH_SHORT).show();
                         }
                         ux.removeLoadingView();
                     }

@@ -18,6 +18,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -60,6 +61,8 @@ public class FragmentTrendingDevelopers extends Fragment {
     private CircleImageView refreshListButton;
     private Dialog itemDialog;
     private RelativeLayout dialogLayout;
+    private TextView NoData;
+    private ImageView NoDataIV;
     //Dialog components
     private TextView  UserName , RepoName , ProfileLink , RepoLink , Description;
     private LinearLayout linearLayout;
@@ -172,7 +175,7 @@ public class FragmentTrendingDevelopers extends Fragment {
     private void init(View view) {
         languageSpinner = view.findViewById(R.id.LanguageSpinner);
         sinceSpinner = view.findViewById(R.id.SinceSpinner);
-        recyclerViewDevelopers = view.findViewById(R.id.RecyclerUserList);
+        recyclerViewDevelopers = view.findViewById(R.id.mRecyclerView);
         refreshListButton = view.findViewById(R.id.RefreshList);
         search = view.findViewById(R.id.Search);
         trendingDevelopersList = new ArrayList<>();
@@ -180,6 +183,8 @@ public class FragmentTrendingDevelopers extends Fragment {
         languageList = new ArrayList<>();
         timeList = new ArrayList<>();
         ux = new UX(getContext());
+        NoData = view.findViewById(R.id.NoDataMessage);
+        NoDataIV = view.findViewById(R.id.NoDataIV);
         utilsManager = new UtilsManager(getContext());
     }
 
@@ -211,8 +216,16 @@ public class FragmentTrendingDevelopers extends Fragment {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        if (trendingDevelopersList.size()>0)loadListView();
-                        else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
+                        if (trendingDevelopersList.size()>0){
+                            loadListView();
+                            NoData.setVisibility(View.GONE);
+                            NoDataIV.setVisibility(View.GONE);
+                        }
+                        else {
+                            NoData.setVisibility(View.VISIBLE);
+                            NoDataIV.setVisibility(View.VISIBLE);
+                            Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
+                        }
                         ux.removeLoadingView();
                     }
                 }, 6000);

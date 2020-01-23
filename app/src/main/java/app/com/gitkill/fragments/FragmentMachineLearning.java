@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -32,7 +34,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-
 import static android.support.constraint.Constraints.TAG;
 
 public class FragmentMachineLearning extends Fragment {
@@ -46,6 +47,8 @@ public class FragmentMachineLearning extends Fragment {
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
     private CircleImageView refreshListButton;
+    private TextView NoData;
+    private ImageView NoDataIV;
 
     public FragmentMachineLearning() {
         // Required empty public constructor
@@ -67,8 +70,10 @@ public class FragmentMachineLearning extends Fragment {
     }
 
     private void init(View view) {
-        androidTopicRecyclerView = view.findViewById(R.id.RecyclerMLList);
+        androidTopicRecyclerView = view.findViewById(R.id.mRecyclerView);
         refreshListButton = view.findViewById(R.id.RefreshList);
+        NoData = view.findViewById(R.id.NoDataMessage);
+        NoDataIV = view.findViewById(R.id.NoDataIV);
         allUrlClass = new AllUrlClass();
         mlItemList = new ArrayList<>();
         ux = new UX(getContext());
@@ -90,9 +95,6 @@ public class FragmentMachineLearning extends Fragment {
         AllTopicAdapter allTopicAdapter = new AllTopicAdapter(mlItemList, getContext(), R.layout.adapter_layout_trending_ml_repos, new AllTopicAdapter.onItemClickListener() {
             @Override
             public void respond(Item androidTopic) {
-//                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-//                browserIntent.setData(Uri.parse(androidTopic.getHtmlUrl()));
-//                startActivity(browserIntent);
                 Intent intent = new Intent(getContext() , DetailsActivity.class);
                 intent.putExtra("item", androidTopic);
                 getContext().startActivity(intent);
@@ -132,8 +134,16 @@ public class FragmentMachineLearning extends Fragment {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        if (mlItemList.size()>0)loadListView();
-                        else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
+                        if (mlItemList.size()>0){
+                            loadListView();
+                            NoData.setVisibility(View.GONE);
+                            NoDataIV.setVisibility(View.GONE);
+                        }
+                        else {
+                            NoData.setVisibility(View.VISIBLE);
+                            NoDataIV.setVisibility(View.VISIBLE);
+                            Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
+                        }
                         ux.removeLoadingView();
                     }
                 }, 6000);

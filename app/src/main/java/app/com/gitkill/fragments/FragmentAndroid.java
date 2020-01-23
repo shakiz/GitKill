@@ -13,7 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -49,6 +51,8 @@ public class FragmentAndroid extends Fragment {
     private AllApiService apiService;
     private CircleImageView refreshListButton;
     private Spinner androidFilterSpinner;
+    private TextView NoData;
+    private ImageView NoDataIV;
     private String[] androidFilterList = new String[]{"Select Query","Layouts","Drawing",
             "Navigation","Scanning","RecyclerView","ListView","Image Processing","Binding","Debugging"};
 
@@ -73,9 +77,11 @@ public class FragmentAndroid extends Fragment {
     }
 
     private void init(View view) {
-        androidTopicRecyclerView = view.findViewById(R.id.AndroidTopicList);
+        androidTopicRecyclerView = view.findViewById(R.id.mRecyclerView);
         refreshListButton = view.findViewById(R.id.RefreshList);
         androidFilterSpinner = view.findViewById(R.id.AndroidFilterSpinner);
+        NoData = view.findViewById(R.id.NoDataMessage);
+        NoDataIV = view.findViewById(R.id.NoDataIV);
         androiTopicList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         ux = new UX(getContext());
@@ -158,8 +164,16 @@ public class FragmentAndroid extends Fragment {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        if (androiTopicList.size()>0)loadListView();
-                        else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
+                        if (androiTopicList.size()>0){
+                            loadListView();
+                            NoData.setVisibility(View.GONE);
+                            NoDataIV.setVisibility(View.GONE);
+                        }
+                        else {
+                            NoData.setVisibility(View.VISIBLE);
+                            NoDataIV.setVisibility(View.VISIBLE);
+                            Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
+                        }
                         ux.removeLoadingView();
                     }
                 }, 6000);

@@ -23,8 +23,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -164,12 +162,10 @@
                 android:orientation="vertical">
 
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/RecyclerUserList"
-                    android:layout_width="match_parent"
+                <include
                     android:layout_height="match_parent"
-                    tools:listitem="@layout/adapter_layout_trending_developers"
-                    android:visibility="visible" />
+                    android:layout_width="match_parent"
+                    layout="@layout/generic_recycler_view_layout"/>
 
             </LinearLayout>
         </LinearLayout>

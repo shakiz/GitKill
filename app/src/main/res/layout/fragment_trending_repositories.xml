@@ -157,22 +157,11 @@
 
             </RelativeLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <include
                 android:layout_height="match_parent"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                layout="@layout/generic_recycler_view_layout"/>
 
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/RecyclerRepoList"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:listitem="@layout/adapter_layout_trending_repositories"
-                    android:visibility="visible" />
-
-            </LinearLayout>
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

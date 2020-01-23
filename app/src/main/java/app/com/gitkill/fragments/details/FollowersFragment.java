@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
@@ -45,6 +46,7 @@ public class FollowersFragment extends Fragment {
     private UX ux;
     private UtilsManager utilsManager;
     private TextView NoData;
+    private ImageView NoDataIV;
 
     public FollowersFragment() {
         // Required empty public constructor
@@ -72,7 +74,8 @@ public class FollowersFragment extends Fragment {
 
     private void init(View view) {
         NoData = view.findViewById(R.id.NoDataMessage);
-        followersRecyclerView = view.findViewById(R.id.RecyclerFollowersList);
+        followersRecyclerView = view.findViewById(R.id.mRecyclerView);
+        NoDataIV = view.findViewById(R.id.NoDataIV);
         followersList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         ux = new UX(getContext());
@@ -128,9 +131,11 @@ public class FollowersFragment extends Fragment {
                         if (followersList.size()>0){
                             loadListView();
                             NoData.setVisibility(View.GONE);
+                            NoDataIV.setVisibility(View.GONE);
                         }
                         else {
                             NoData.setVisibility(View.VISIBLE);
+                            NoDataIV.setVisibility(View.VISIBLE);
                             Toast.makeText(getContext(),R.string.no_followers_found,Toast.LENGTH_SHORT).show();
                         }
                         ux.removeLoadingView();

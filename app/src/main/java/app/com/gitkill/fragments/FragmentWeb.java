@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -45,6 +47,8 @@ public class FragmentWeb extends Fragment {
     private Retrofit retrofit;
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
+    private TextView NoData;
+    private ImageView NoDataIV;
     private CircleImageView refreshListButton;
     private UtilsManager utilsManager;
 
@@ -69,8 +73,10 @@ public class FragmentWeb extends Fragment {
     }
 
     private void init(View view) {
-        webTopicRecyclerView = view.findViewById(R.id.WebTopicList);
+        webTopicRecyclerView = view.findViewById(R.id.mRecyclerView);
         refreshListButton = view.findViewById(R.id.RefreshList);
+        NoData = view.findViewById(R.id.NoDataMessage);
+        NoDataIV = view.findViewById(R.id.NoDataIV);
         webTopicList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         ux = new UX(getContext());
@@ -130,8 +136,16 @@ public class FragmentWeb extends Fragment {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        if (webTopicList.size()>0)loadListView();
-                        else Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
+                        if (webTopicList.size()>0){
+                            loadListView();
+                            NoData.setVisibility(View.GONE);
+                            NoDataIV.setVisibility(View.GONE);
+                        }
+                        else {
+                            NoData.setVisibility(View.VISIBLE);
+                            NoDataIV.setVisibility(View.VISIBLE);
+                            Toast.makeText(getContext(),R.string.no_data_message,Toast.LENGTH_LONG).show();
+                        }
                         ux.removeLoadingView();
                     }
                 }, 6000);

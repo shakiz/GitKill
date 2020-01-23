@@ -71,12 +71,10 @@
                 android:orientation="vertical">
 
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/RecyclerMLList"
-                    android:layout_width="match_parent"
+                <include
                     android:layout_height="match_parent"
-                    tools:listitem="@layout/adapter_layout_trending_ml_repos"
-                    android:visibility="visible" />
+                    android:layout_width="match_parent"
+                    layout="@layout/generic_recycler_view_layout"/>
 
             </LinearLayout>
         </LinearLayout>
