@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "78144821401",
+    "firebase_url": "https://git-lib.firebaseio.com",
+    "project_id": "git-lib",
+    "storage_bucket": "git-lib.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78144821401:android:14d5d351c8e3bdcf5d8008",
+        "android_client_info": {
+          "package_name": "app.com.gitlib"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "78144821401-4vsg75o2hhbauha43cu4d5ncqnied03i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYmrdnOOZyL9ct6zS1_ZXYhhww4BjceqI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "78144821401-4vsg75o2hhbauha43cu4d5ncqnied03i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

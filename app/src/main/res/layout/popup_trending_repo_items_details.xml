@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="8dp"
@@ -87,121 +87,125 @@
             <!--Forks,Watching,Stars and Number of Issue layout-->
             <LinearLayout
                 android:id="@+id/Section2"
-                android:layout_below="@id/DetailsTopLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_below="@id/DetailsTopLayout"
                 android:layout_gravity="center"
+                android:layout_margin="4dp"
                 android:gravity="center"
-                android:weightSum="3.8"
-                android:layout_margin="4dp">
+                android:orientation="horizontal"
+                android:weightSum="3.8">
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_weight=".2"
-                    android:layout_height="0dp"/>
+                    android:layout_height="0dp"
+                    android:layout_weight=".2" />
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:translationZ="4dp"
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="10dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
-                    app:cardUseCompatPadding="true"
-                    app:cardBackgroundColor="@color/md_white_1000">
+                    android:layout_weight="1.5"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:translationZ="4dp"
+                    app:cardBackgroundColor="@color/md_white_1000"
+                    app:cardCornerRadius="10dp"
+                    app:cardUseCompatPadding="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:gravity="center"
                         android:layout_margin="4dp"
+                        android:padding="4dp"
+                        android:gravity="center"
                         android:orientation="vertical">
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:layout_width="28dp"
                             android:layout_height="28dp"
-                            android:src="@drawable/ic_git_fork_new"/>
+                            android:src="@drawable/ic_git_fork_new" />
+
                         <TextView
                             android:id="@+id/NumberOfForks"
-                            android:textColor="@color/md_grey_800"
-                            android:ellipsize="end"
-                            android:maxLines="1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="124"/>
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="124"
+                            android:textColor="@color/md_grey_800" />
 
                     </LinearLayout>
 
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_weight=".2"
-                    android:layout_height="0dp"/>
+                    android:layout_height="0dp"
+                    android:layout_weight=".2" />
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_weight=".2"
-                    android:layout_height="0dp"/>
+                    android:layout_height="0dp"
+                    android:layout_weight=".2" />
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
-                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
                     android:clickable="true"
                     android:foreground="?attr/selectableItemBackgroundBorderless"
                     android:translationZ="4dp"
+                    app:cardBackgroundColor="@color/md_white_1000"
                     app:cardCornerRadius="10dp"
-                    app:cardUseCompatPadding="true"
-                    app:cardBackgroundColor="@color/md_white_1000">
+                    app:cardUseCompatPadding="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="4dp"
                         android:layout_gravity="center"
+                        android:layout_margin="4dp"
+                        android:padding="4dp"
                         android:gravity="center"
                         android:orientation="vertical">
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:layout_width="28dp"
                             android:layout_height="28dp"
-                            android:src="@drawable/ic_star_latest"/>
+                            android:src="@drawable/ic_star_latest" />
+
                         <TextView
                             android:id="@+id/NumberOfStars"
-                            android:textColor="@color/md_grey_800"
-                            android:ellipsize="end"
-                            android:maxLines="1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="253"/>
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="253"
+                            android:textColor="@color/md_grey_800" />
 
                     </LinearLayout>
 
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_weight=".2"
-                    android:layout_height="0dp"/>
+                    android:layout_height="0dp"
+                    android:layout_weight=".2" />
 
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_weight=".2"
-                    android:layout_height="0dp"/>
+                    android:layout_height="0dp"
+                    android:layout_weight=".2" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </RelativeLayout>
