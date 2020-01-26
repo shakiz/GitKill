@@ -94,9 +94,6 @@ public class FragmentTrendingDevelopers extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 languageStr = adapterView.getItemAtPosition(position).toString().toLowerCase();
-                String newUrl = allUrlClass.BASE_URL+"developers?language="+languageStr;
-                Log.v("SpinnerURL",newUrl);
-                new BackgroundDataLoad(view,newUrl).execute();
             }
 
             @Override
@@ -109,9 +106,6 @@ public class FragmentTrendingDevelopers extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 sinceStr = adapterView.getItemAtPosition(position).toString().toLowerCase();
-                String newUrl = allUrlClass.BASE_URL+"developers?since="+sinceStr;
-                Log.v("SpinnerURL",newUrl);
-                new BackgroundDataLoad(view,newUrl).execute();
             }
 
             @Override

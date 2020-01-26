@@ -34,7 +34,6 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView list;
     private static final int POS_TRENDING_REPO = 0;
     private static final int POS_TRENDING_DEVELOPERS = 1;
-    //private static final int POS_TRENDING_LANGUAGES = 2;
     private static final int POS_TRENDING_ON_ANDROID = 2;
     private static final int POS_TRENDING_ON_WEB = 3;
     private static final int POS_TRENDING_ML_LIBRARIES = 4;
