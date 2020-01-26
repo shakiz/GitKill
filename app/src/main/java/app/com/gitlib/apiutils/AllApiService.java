@@ -27,7 +27,7 @@ public interface AllApiService {
 
     //Call for topics android
     @GET
-    Call<TopicBase> getAndroidTopics(@Url String url, @Query("q") String q);
+    Call<TopicBase> getAllTopics(@Url String url, @Query("q") String q);
 
     //Call for followers and following list
     @GET

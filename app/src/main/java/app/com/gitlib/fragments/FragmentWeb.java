@@ -8,7 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
@@ -50,6 +53,9 @@ public class FragmentWeb extends Fragment {
     private ImageView NoDataIV;
     private CircleImageView refreshListButton;
     private UtilsManager utilsManager;
+    private Spinner webFilterSpinner;
+    private String[] webFilterList = new String[]{"Select Query","Javascript","Typescript",
+            "Bootstrap","Laravel","Django","Vue Js","Angular"};
 
     public FragmentWeb() {
         // Required empty public constructor
@@ -76,6 +82,7 @@ public class FragmentWeb extends Fragment {
         refreshListButton = view.findViewById(R.id.RefreshList);
         NoData = view.findViewById(R.id.NoDataMessage);
         NoDataIV = view.findViewById(R.id.NoDataIV);
+        webFilterSpinner     = view.findViewById(R.id.WebFilterSpinner);
         webTopicList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         ux = new UX(getContext());
@@ -83,14 +90,35 @@ public class FragmentWeb extends Fragment {
     }
 
     private void bindUIWithComponents(View view) {
-        new BackgroundDataLoad(view , allUrlClass.ALL_TOPICS_BASE_URL).execute();
+        setAdapter();
+
+        new BackgroundDataLoad(allUrlClass.ALL_TOPICS_BASE_URL,"web").execute();
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new BackgroundDataLoad(view , allUrlClass.ALL_TOPICS_BASE_URL).execute();
+                new BackgroundDataLoad(allUrlClass.ALL_TOPICS_BASE_URL,"web").execute();
             }
         });
+
+        webFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                String queryString = adapterView.getItemAtPosition(position).toString();
+                new BackgroundDataLoad(allUrlClass.ALL_TOPICS_BASE_URL, "web"+queryString ).execute();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void setAdapter() {
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(),R.layout.spinner_drop,webFilterList);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        webFilterSpinner.setAdapter(arrayAdapter);
     }
 
     private void loadListView(){
@@ -109,12 +137,12 @@ public class FragmentWeb extends Fragment {
 
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
 
-        View view;
-        String url;
 
-        public BackgroundDataLoad(View view, String url) {
-            this.view = view;
+        String url , querySting;
+
+        public BackgroundDataLoad(String url, String querySting) {
             this.url = url;
+            this.querySting = querySting;
         }
 
         @Override
@@ -124,7 +152,7 @@ public class FragmentWeb extends Fragment {
 
         @Override
         protected String doInBackground(String... strings) {
-            loadRecord(url);
+            loadRecord(url , querySting);
             return "done";
         }
 
@@ -154,7 +182,7 @@ public class FragmentWeb extends Fragment {
     }
 
 
-    private void loadRecord(String url) {
+    private void loadRecord(String url , String queryString) {
         Log.v("URL",url);
         webTopicList.clear();
         builder= new OkHttpClient.Builder();
@@ -172,7 +200,7 @@ public class FragmentWeb extends Fragment {
         }
         //Creating the instance for api service from AllApiService interface
         apiService=retrofit.create(AllApiService.class);
-        final Call<TopicBase> androidTopicCall=apiService.getAndroidTopics(url+"repositories","web");
+        final Call<TopicBase> androidTopicCall=apiService.getAllTopics(url+"repositories",queryString);
         //handling user requests and their interactions with the application.
         androidTopicCall.enqueue(new Callback<TopicBase>() {
             @Override

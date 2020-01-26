@@ -200,7 +200,7 @@ public class FragmentAndroid extends Fragment {
         }
         //Creating the instance for api service from AllApiService interface
         apiService=retrofit.create(AllApiService.class);
-        final Call<TopicBase> androidTopicCall=apiService.getAndroidTopics(url+"repositories",queryString);
+        final Call<TopicBase> androidTopicCall=apiService.getAllTopics(url+"repositories",queryString);
         //handling user requests and their interactions with the application.
         androidTopicCall.enqueue(new Callback<TopicBase>() {
             @Override
