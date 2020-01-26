@@ -33,7 +33,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 startActivity(new Intent(SplashActivity.this,HomeActivity.class));
             }
-        }, 2000);
+        }, 1500);
 
     }
 }

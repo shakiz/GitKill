@@ -8,8 +8,8 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/LoadingIV"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:src="@drawable/loader_3"/>
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/loading"/>
 
 </LinearLayout>
