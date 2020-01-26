@@ -8,7 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
@@ -42,12 +45,15 @@ public class FragmentMachineLearning extends Fragment {
     private UX ux;
     private UtilsManager utilsManager;
     private ArrayList<Item> mlItemList;
+    private Spinner mlFilterSpinner;
     private Retrofit retrofit;
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
     private CircleImageView refreshListButton;
     private TextView NoData;
     private ImageView NoDataIV;
+    private String[] mlFilterList = new String[]{"Select Query","Big Data","Data Science",
+            "Natural Language Processing","Neural Network","Deep Learning"};
 
     public FragmentMachineLearning() {
         // Required empty public constructor
@@ -73,6 +79,7 @@ public class FragmentMachineLearning extends Fragment {
         refreshListButton = view.findViewById(R.id.RefreshList);
         NoData = view.findViewById(R.id.NoDataMessage);
         NoDataIV = view.findViewById(R.id.NoDataIV);
+        mlFilterSpinner = view.findViewById(R.id.MLFilterSpinner);
         allUrlClass = new AllUrlClass();
         mlItemList = new ArrayList<>();
         ux = new UX(getContext());
@@ -80,6 +87,9 @@ public class FragmentMachineLearning extends Fragment {
     }
 
     private void bindUIWithComponents(View view) {
+
+        setAdapter();
+
         new BackgroundDataLoad(view , allUrlClass.ALL_TOPICS_BASE_URL , "ml").execute();
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +98,25 @@ public class FragmentMachineLearning extends Fragment {
                 new BackgroundDataLoad(view , allUrlClass.ALL_TOPICS_BASE_URL , "ml").execute();
             }
         });
+
+        mlFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                String queryString = adapterView.getItemAtPosition(position).toString();
+                new BackgroundDataLoad(view, allUrlClass.ALL_TOPICS_BASE_URL, "" + queryString).execute();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void setAdapter() {
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(),R.layout.spinner_drop,mlFilterList);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mlFilterSpinner.setAdapter(arrayAdapter);
     }
 
     private void loadListView(){
