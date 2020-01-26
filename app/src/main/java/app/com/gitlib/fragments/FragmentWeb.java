@@ -82,7 +82,7 @@ public class FragmentWeb extends Fragment {
         refreshListButton = view.findViewById(R.id.RefreshList);
         NoData = view.findViewById(R.id.NoDataMessage);
         NoDataIV = view.findViewById(R.id.NoDataIV);
-        webFilterSpinner     = view.findViewById(R.id.WebFilterSpinner);
+        webFilterSpinner     = view.findViewById(R.id.FilterSpinner);
         webTopicList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         ux = new UX(getContext());

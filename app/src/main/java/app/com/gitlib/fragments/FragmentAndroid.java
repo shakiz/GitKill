@@ -78,7 +78,7 @@ public class FragmentAndroid extends Fragment {
     private void init(View view) {
         androidTopicRecyclerView = view.findViewById(R.id.mRecyclerView);
         refreshListButton = view.findViewById(R.id.RefreshList);
-        androidFilterSpinner = view.findViewById(R.id.AndroidFilterSpinner);
+        androidFilterSpinner = view.findViewById(R.id.FilterSpinner);
         NoData = view.findViewById(R.id.NoDataMessage);
         NoDataIV = view.findViewById(R.id.NoDataIV);
         androiTopicList = new ArrayList<>();

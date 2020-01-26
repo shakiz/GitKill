@@ -79,7 +79,7 @@ public class FragmentMachineLearning extends Fragment {
         refreshListButton = view.findViewById(R.id.RefreshList);
         NoData = view.findViewById(R.id.NoDataMessage);
         NoDataIV = view.findViewById(R.id.NoDataIV);
-        mlFilterSpinner = view.findViewById(R.id.MLFilterSpinner);
+        mlFilterSpinner = view.findViewById(R.id.FilterSpinner);
         allUrlClass = new AllUrlClass();
         mlItemList = new ArrayList<>();
         ux = new UX(getContext());
