@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +24,7 @@ import app.com.gitlib.apiutils.AllUrlClass;
 import app.com.gitlib.models.details.FollowersAndFollowing;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.utils.UtilsManager;
+import es.dmoral.toasty.Toasty;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -136,7 +136,7 @@ public class FollowersFragment extends Fragment {
                         else {
                             NoData.setVisibility(View.VISIBLE);
                             NoDataIV.setVisibility(View.VISIBLE);
-                            Toast.makeText(getContext(),R.string.no_followers_found,Toast.LENGTH_SHORT).show();
+                            Toasty.error(getContext(),R.string.no_followers_found).show();
                         }
                         ux.removeLoadingView();
                     }
