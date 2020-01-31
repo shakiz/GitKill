@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,8 +38,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class FragmentWeb extends Fragment {
-
-
     private static final FragmentWeb FRAGMENT_WEB = null;
     private RecyclerView webTopicRecyclerView;
     private OkHttpClient.Builder builder;
@@ -73,7 +70,7 @@ public class FragmentWeb extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_web, container, false);
         init(view);
-        bindUIWithComponents(view);
+        bindUIWithComponents();
         return view;
     }
 
@@ -89,8 +86,8 @@ public class FragmentWeb extends Fragment {
         utilsManager = new UtilsManager(getContext());
     }
 
-    private void bindUIWithComponents(View view) {
-        setAdapter();
+    private void bindUIWithComponents() {
+        ux.setSpinnerAdapter(webFilterSpinner,webFilterList);
 
         new BackgroundDataLoad(allUrlClass.ALL_TOPICS_BASE_URL,"web").execute();
 
@@ -113,12 +110,6 @@ public class FragmentWeb extends Fragment {
 
             }
         });
-    }
-
-    private void setAdapter() {
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(),R.layout.spinner_drop,webFilterList);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        webFilterSpinner.setAdapter(arrayAdapter);
     }
 
     private void loadListView(){

@@ -3,11 +3,17 @@ package app.com.gitlib.utils;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import java.util.ArrayList;
+
 import app.com.gitlib.R;
 
 public class UX {
     private Context context;
     public Dialog loadingDialog;
+    private ArrayAdapter arrayAdapter;
 
     public UX(Context context) {
         this.context = context;
@@ -23,5 +29,17 @@ public class UX {
 
     public void removeLoadingView(){
         if (loadingDialog.isShowing()) loadingDialog.cancel();
+    }
+
+    public void setSpinnerAdapter(Spinner spinner, ArrayList<String> spinnerItemList) {
+        arrayAdapter = new ArrayAdapter<>(context,R.layout.spinner_drop,spinnerItemList);
+        arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+    }
+
+    public void setSpinnerAdapter(Spinner spinner, String[] spinnerItemList) {
+        arrayAdapter = new ArrayAdapter<>(context,R.layout.spinner_drop,spinnerItemList);
+        arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
     }
 }

@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -45,7 +44,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class FragmentTrendingDevelopers extends Fragment {
     private static final FragmentTrendingDevelopers FRAGMENT_TRENDING_DEVELOPERS = null;
-    private ArrayAdapter<String> arrayAdapter;
     private Spinner languageSpinner,sinceSpinner;
     private RecyclerView recyclerViewDevelopers;
     private ArrayList<String> languageList, timeList;
@@ -65,7 +63,6 @@ public class FragmentTrendingDevelopers extends Fragment {
     private ImageView NoDataIV;
     //Dialog components
     private TextView  UserName , RepoName , ProfileLink , RepoLink , Description;
-    private LinearLayout linearLayout;
 
     public static synchronized FragmentTrendingDevelopers getInstance(){
         if (FRAGMENT_TRENDING_DEVELOPERS == null) return new FragmentTrendingDevelopers();
@@ -80,15 +77,15 @@ public class FragmentTrendingDevelopers extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trending_developers, container, false);
         init(view);
-        bindUIWithComponents(view);
+        bindUIWithComponents();
         return view;
     }
 
-    private void bindUIWithComponents(View view) {
+    private void bindUIWithComponents() {
         setData();
-        new BackgroundDataLoad(view, allUrlClass.TRENDING_DEVS_URL).execute();
-        setAdapter(languageSpinner,languageList);
-        setAdapter(sinceSpinner,timeList);
+        new BackgroundDataLoad(allUrlClass.TRENDING_DEVS_URL).execute();
+        ux.setSpinnerAdapter(languageSpinner,languageList);
+        ux.setSpinnerAdapter(sinceSpinner,timeList);
 
         languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -119,14 +116,14 @@ public class FragmentTrendingDevelopers extends Fragment {
             public void onClick(View view) {
                 String newUrl = allUrlClass.BASE_URL+"developers?"+"language="+languageStr+"&since="+sinceStr;
                 Log.v("SpinnerURL",newUrl);
-                new BackgroundDataLoad(view,newUrl).execute();
+                new BackgroundDataLoad(newUrl).execute();
             }
         });
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new BackgroundDataLoad(view, allUrlClass.TRENDING_DEVS_URL).execute();
+                new BackgroundDataLoad(allUrlClass.TRENDING_DEVS_URL).execute();
             }
         });
     }
@@ -146,12 +143,6 @@ public class FragmentTrendingDevelopers extends Fragment {
         timeList.add("Weekly");
         timeList.add("Monthly");
         timeList.add("Yearly");
-    }
-
-    private void setAdapter(Spinner spinner, ArrayList<String> languageList) {
-        arrayAdapter = new ArrayAdapter<>(getContext(),R.layout.spinner_drop,languageList);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(arrayAdapter);
     }
 
     private void loadListView(){
@@ -184,11 +175,9 @@ public class FragmentTrendingDevelopers extends Fragment {
 
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
 
-        View view;
         String url;
 
-        public BackgroundDataLoad(View view, String url) {
-            this.view = view;
+        public BackgroundDataLoad(String url) {
             this.url = url;
         }
 
@@ -317,6 +306,5 @@ public class FragmentTrendingDevelopers extends Fragment {
         ProfileLink = itemDialog.findViewById(R.id.ProfileLink);
         Description = itemDialog.findViewById(R.id.Description);
         dialogLayout = itemDialog.findViewById(R.id.dialogLayout);
-        linearLayout = itemDialog.findViewById(R.id.Section2);
     }
 }

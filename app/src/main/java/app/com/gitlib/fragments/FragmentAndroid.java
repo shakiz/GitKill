@@ -44,7 +44,7 @@ public class FragmentAndroid extends Fragment {
     private OkHttpClient.Builder builder;
     private UX ux;
     private UtilsManager utilsManager;
-    private ArrayList<Item> androiTopicList;
+    private ArrayList<Item> androidTopicList;
     private Retrofit retrofit;
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
@@ -81,7 +81,7 @@ public class FragmentAndroid extends Fragment {
         androidFilterSpinner = view.findViewById(R.id.FilterSpinner);
         NoData = view.findViewById(R.id.NoDataMessage);
         NoDataIV = view.findViewById(R.id.NoDataIV);
-        androiTopicList = new ArrayList<>();
+        androidTopicList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         ux = new UX(getContext());
         utilsManager = new UtilsManager(getContext());
@@ -89,7 +89,7 @@ public class FragmentAndroid extends Fragment {
 
     private void bindUIWithComponents(View view) {
 
-        setAdapter();
+        ux.setSpinnerAdapter(androidFilterSpinner,androidFilterList);
 
         new BackgroundDataLoad(view , allUrlClass.ALL_TOPICS_BASE_URL , "android").execute();
 
@@ -114,14 +114,8 @@ public class FragmentAndroid extends Fragment {
         });
     }
 
-    private void setAdapter() {
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(),R.layout.spinner_drop,androidFilterList);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        androidFilterSpinner.setAdapter(arrayAdapter);
-    }
-
     private void loadListView(){
-        AllTopicAdapter allTopicAdapter = new AllTopicAdapter(androiTopicList, getContext(), R.layout.adapter_layout_android_topics, new AllTopicAdapter.onItemClickListener() {
+        AllTopicAdapter allTopicAdapter = new AllTopicAdapter(androidTopicList, getContext(), R.layout.adapter_layout_android_topics, new AllTopicAdapter.onItemClickListener() {
             @Override
             public void respond(Item androidTopic) {
                 Intent intent = new Intent(getContext() , DetailsActivity.class);
@@ -163,7 +157,7 @@ public class FragmentAndroid extends Fragment {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        if (androiTopicList.size()>0){
+                        if (androidTopicList.size()>0){
                             loadListView();
                             NoData.setVisibility(View.GONE);
                             NoDataIV.setVisibility(View.GONE);
@@ -184,7 +178,7 @@ public class FragmentAndroid extends Fragment {
 
     private void loadRecord(String url , String queryString) {
         Log.v("URL",url);
-        androiTopicList.clear();
+        androidTopicList.clear();
         builder= new OkHttpClient.Builder();
         utilsManager.loggingInterceptorForRetrofit(builder);
         if (retrofit == null){
@@ -209,7 +203,7 @@ public class FragmentAndroid extends Fragment {
                     for (int start=0;start<response.body().getItems().size();start++) {
                         Item item=response.body().getItems().get(start);
                         //License license = item.getLicense();
-                        androiTopicList.add(new Item(item.getFullName(),item.getAvatar_url(),item.getHtmlUrl(),item.getLanguage(),item.getStargazersCount(),item.getWatchersCount(),
+                        androidTopicList.add(new Item(item.getFullName(),item.getAvatar_url(),item.getHtmlUrl(),item.getLanguage(),item.getStargazersCount(),item.getWatchersCount(),
                                 item.getForksCount(),item.getForks(),item.getWatchers()));
                     }
                 }

@@ -88,7 +88,7 @@ public class FragmentMachineLearning extends Fragment {
 
     private void bindUIWithComponents(View view) {
 
-        setAdapter();
+        ux.setSpinnerAdapter(mlFilterSpinner,mlFilterList);
 
         new BackgroundDataLoad(view , allUrlClass.ALL_TOPICS_BASE_URL , "ml").execute();
 

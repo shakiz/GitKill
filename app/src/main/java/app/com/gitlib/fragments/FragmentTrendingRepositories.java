@@ -44,7 +44,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class FragmentTrendingRepositories extends Fragment {
     private static final FragmentTrendingRepositories FRAGMENT_TRENDING_REPOSITORIES = null;
-    private ArrayAdapter<String> arrayAdapter;
     private Spinner languageSpinner,sinceSpinner;
     private ArrayList<String> languageList, timeList;
     private RecyclerView recyclerViewRepo;
@@ -103,8 +102,8 @@ public class FragmentTrendingRepositories extends Fragment {
     private void bindUiWithComponents() {
         setData();
         new BackgroundDataLoad(allUrlClass.TRENDING_REPOS_URL).execute();
-        setAdapter(languageSpinner,languageList);
-        setAdapter(sinceSpinner,timeList);
+        ux.setSpinnerAdapter(languageSpinner,languageList);
+        ux.setSpinnerAdapter(sinceSpinner,timeList);
 
         languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -162,12 +161,6 @@ public class FragmentTrendingRepositories extends Fragment {
         timeList.add("Weekly");
         timeList.add("Monthly");
         timeList.add("Yearly");
-    }
-
-    private void setAdapter(Spinner spinner, ArrayList<String> languageList) {
-        arrayAdapter = new ArrayAdapter<>(getContext(),R.layout.spinner_drop,languageList);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(arrayAdapter);
     }
 
     private void loadListView(){
