@@ -18,8 +18,7 @@ public class AllTopicAdapter extends RecyclerView.Adapter<AllTopicAdapter.ViewHo
     private int layoutRes;
     private Context context;
 
-    public AllTopicAdapter(ArrayList<Item> androidItemList, Context context, int layoutRes, onItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
+    public AllTopicAdapter(ArrayList<Item> androidItemList, Context context, int layoutRes) {
         this.androidItemList = androidItemList;
         this.context = context;
         this.layoutRes = layoutRes;
@@ -53,6 +52,10 @@ public class AllTopicAdapter extends RecyclerView.Adapter<AllTopicAdapter.ViewHo
     @Override
     public int getItemCount() {
         return androidItemList.size();
+    }
+
+    public void setOnItemClickListener(AllTopicAdapter.onItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

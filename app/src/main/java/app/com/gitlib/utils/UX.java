@@ -5,10 +5,13 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-
 import app.com.gitlib.R;
+import app.com.gitlib.adapters.AllTopicAdapter;
+import app.com.gitlib.models.alltopic.Item;
+
 
 public class UX {
     private Context context;
@@ -41,5 +44,13 @@ public class UX {
         arrayAdapter = new ArrayAdapter<>(context,R.layout.spinner_drop,spinnerItemList);
         arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
+    }
+
+    public AllTopicAdapter loadListView(ArrayList<Item> itemList, RecyclerView recyclerView , int layoutResId){
+        AllTopicAdapter allTopicAdapter = new AllTopicAdapter(itemList, context, layoutResId);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(allTopicAdapter);
+        allTopicAdapter.notifyDataSetChanged();
+        return allTopicAdapter;
     }
 }

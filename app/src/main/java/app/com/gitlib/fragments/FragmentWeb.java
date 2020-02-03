@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -113,17 +112,14 @@ public class FragmentWeb extends Fragment {
     }
 
     private void loadListView(){
-        AllTopicAdapter allTopicAdapter = new AllTopicAdapter(webTopicList, getContext(),R.layout.adapter_layout_web_topics, new AllTopicAdapter.onItemClickListener() {
+        ux.loadListView(webTopicList, webTopicRecyclerView, R.layout.adapter_layout_android_topics).setOnItemClickListener(new AllTopicAdapter.onItemClickListener() {
             @Override
-            public void respond(Item androidTopic) {
+            public void respond(Item androidItem) {
                 Intent intent = new Intent(getContext() , DetailsActivity.class);
-                intent.putExtra("item", androidTopic);
+                intent.putExtra("item", androidItem);
                 getContext().startActivity(intent);
             }
         });
-        webTopicRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        webTopicRecyclerView.setAdapter(allTopicAdapter);
-        allTopicAdapter.notifyDataSetChanged();
     }
 
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {

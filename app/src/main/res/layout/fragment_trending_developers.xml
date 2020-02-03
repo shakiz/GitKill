@@ -89,10 +89,12 @@
                 android:id="@+id/Search"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
+                android:layout_gravity="right"
                 android:background="@color/md_white_1000"
                 android:backgroundTint="@color/md_white_1000"
-                android:layout_margin="8dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp"
                 android:src="@drawable/ic_search"
                 app:fabSize="mini"/>
 

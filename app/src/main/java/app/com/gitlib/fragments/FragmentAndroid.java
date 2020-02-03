@@ -9,12 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -115,17 +113,14 @@ public class FragmentAndroid extends Fragment {
     }
 
     private void loadListView(){
-        AllTopicAdapter allTopicAdapter = new AllTopicAdapter(androidTopicList, getContext(), R.layout.adapter_layout_android_topics, new AllTopicAdapter.onItemClickListener() {
+        ux.loadListView(androidTopicList, androidTopicRecyclerView, R.layout.adapter_layout_android_topics).setOnItemClickListener(new AllTopicAdapter.onItemClickListener() {
             @Override
-            public void respond(Item androidTopic) {
+            public void respond(Item androidItem) {
                 Intent intent = new Intent(getContext() , DetailsActivity.class);
-                intent.putExtra("item", androidTopic);
+                intent.putExtra("item", androidItem);
                 getContext().startActivity(intent);
             }
         });
-        androidTopicRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        androidTopicRecyclerView.setAdapter(allTopicAdapter);
-        allTopicAdapter.notifyDataSetChanged();
     }
 
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {

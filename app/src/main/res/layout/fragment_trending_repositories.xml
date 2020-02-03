@@ -25,33 +25,33 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="2"
+                android:orientation="horizontal"
                 android:paddingBottom="8dp"
-                android:orientation="horizontal">
+                android:weightSum="2">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:padding="4dp"
                         android:text="@string/select_language"
                         android:textColor="@color/md_grey_800"
-                        android:padding="4dp"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
 
                     <Spinner
+                        android:id="@+id/LanguageSpinner"
                         style="@style/Base.TextAppearance.AppCompat.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="38dp"
                         android:layout_marginTop="5dp"
                         android:background="@drawable/edittext_back"
-                        android:id="@+id/LanguageSpinner"
                         android:padding="4dp"></Spinner>
 
                 </LinearLayout>
@@ -59,26 +59,26 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/md_grey_800"
-                        android:text="@string/since"
                         android:padding="4dp"
-                        android:textSize="16sp"/>
+                        android:text="@string/since"
+                        android:textColor="@color/md_grey_800"
+                        android:textSize="16sp" />
 
                     <Spinner
+                        android:id="@+id/SinceSpinner"
                         style="@style/Base.TextAppearance.AppCompat.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="38dp"
                         android:layout_marginTop="5dp"
                         android:background="@drawable/edittext_back"
-                        android:id="@+id/SinceSpinner"
                         android:padding="4dp"></Spinner>
 
                 </LinearLayout>
@@ -89,12 +89,14 @@
                 android:id="@+id/Search"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
+                android:layout_gravity="right"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="8dp"
                 android:background="@color/md_white_1000"
                 android:backgroundTint="@color/md_white_1000"
-                android:layout_margin="8dp"
                 android:src="@drawable/ic_search"
-                app:fabSize="mini"/>
+                app:fabSize="mini" />
 
         </LinearLayout>
 
@@ -103,9 +105,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
         app:cardBackgroundColor="@color/md_white_1000"
         app:cardCornerRadius="8dp"
-        android:layout_marginBottom="8dp"
         app:cardUseCompatPadding="true"
         app:elevation="4dp">
 
@@ -132,10 +134,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/labe1"
-                    android:layout_centerVertical="true"
                     android:gravity="center_vertical"
                     android:padding="4dp"
                     android:text="@string/trending_repos_heading"
@@ -146,20 +148,20 @@
                     android:id="@+id/RefreshList"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
-                    android:elevation="2dp"
-                    app:civ_border_width="1dp"
-                    app:civ_border_color="@color/md_green_400"
-                    android:layout_marginRight="8dp"
                     android:layout_alignParentRight="true"
-                    android:src="@drawable/ic_refresh"/>
+                    android:layout_marginRight="8dp"
+                    android:elevation="2dp"
+                    android:src="@drawable/ic_refresh"
+                    app:civ_border_color="@color/md_green_400"
+                    app:civ_border_width="1dp" />
 
             </RelativeLayout>
 
             <include
-                android:layout_below="@id/header_Layout"
-                android:layout_height="match_parent"
+                layout="@layout/generic_recycler_view_layout"
                 android:layout_width="match_parent"
-                layout="@layout/generic_recycler_view_layout"/>
+                android:layout_height="match_parent"
+                android:layout_below="@id/header_Layout" />
 
         </RelativeLayout>
 

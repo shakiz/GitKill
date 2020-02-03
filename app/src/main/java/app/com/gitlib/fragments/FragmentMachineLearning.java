@@ -9,12 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -113,24 +111,15 @@ public class FragmentMachineLearning extends Fragment {
         });
     }
 
-    private void setAdapter() {
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(),R.layout.spinner_drop,mlFilterList);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mlFilterSpinner.setAdapter(arrayAdapter);
-    }
-
     private void loadListView(){
-        AllTopicAdapter allTopicAdapter = new AllTopicAdapter(mlItemList, getContext(), R.layout.adapter_layout_trending_ml_repos, new AllTopicAdapter.onItemClickListener() {
+        ux.loadListView(mlItemList, androidTopicRecyclerView, R.layout.adapter_layout_trending_ml_repos).setOnItemClickListener(new AllTopicAdapter.onItemClickListener() {
             @Override
-            public void respond(Item androidTopic) {
+            public void respond(Item androidItem) {
                 Intent intent = new Intent(getContext() , DetailsActivity.class);
-                intent.putExtra("item", androidTopic);
+                intent.putExtra("item", androidItem);
                 getContext().startActivity(intent);
             }
         });
-        androidTopicRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        androidTopicRecyclerView.setAdapter(allTopicAdapter);
-        allTopicAdapter.notifyDataSetChanged();
     }
 
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
