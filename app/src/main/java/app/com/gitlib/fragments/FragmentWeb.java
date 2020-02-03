@@ -14,8 +14,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import app.com.gitlib.R;
 import app.com.gitlib.activities.s.details.DetailsActivity;
@@ -28,21 +26,15 @@ import app.com.gitlib.utils.UX;
 import app.com.gitlib.utils.UtilsManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class FragmentWeb extends Fragment {
     private static final FragmentWeb FRAGMENT_WEB = null;
     private RecyclerView webTopicRecyclerView;
-    private OkHttpClient.Builder builder;
     private UX ux;
     private ArrayList<Item> webTopicList;
-    private Retrofit retrofit;
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
     private TextView NoData;
@@ -172,21 +164,8 @@ public class FragmentWeb extends Fragment {
     private void loadRecord(String url , String queryString) {
         Log.v("URL",url);
         webTopicList.clear();
-        builder= new OkHttpClient.Builder();
-        utilsManager.loggingInterceptorForRetrofit(builder);
-        if (retrofit == null){
-            Gson gson = new GsonBuilder()
-                    .setLenient()
-                    .create();
-            retrofit=new Retrofit.Builder()
-                    .baseUrl(url)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .client(builder.build())
-                    .build();
-        }
         //Creating the instance for api service from AllApiService interface
-        apiService=retrofit.create(AllApiService.class);
+        apiService=utilsManager.getClient(url).create(AllApiService.class);
         final Call<TopicBase> androidTopicCall=apiService.getAllTopics(url+"repositories",queryString);
         //handling user requests and their interactions with the application.
         androidTopicCall.enqueue(new Callback<TopicBase>() {

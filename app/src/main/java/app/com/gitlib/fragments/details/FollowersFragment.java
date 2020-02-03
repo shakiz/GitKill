@@ -14,8 +14,6 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import app.com.gitlib.R;
 import app.com.gitlib.adapters.FollowersAndFollowingAdapter;
@@ -25,13 +23,9 @@ import app.com.gitlib.models.details.FollowersAndFollowing;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.utils.UtilsManager;
 import es.dmoral.toasty.Toasty;
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class FollowersFragment extends Fragment {
 
@@ -39,10 +33,8 @@ public class FollowersFragment extends Fragment {
     private static String UserName = "";
     private ArrayList<FollowersAndFollowing> followersList;
     private RecyclerView followersRecyclerView;
-    private Retrofit retrofit;
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
-    private OkHttpClient.Builder builder;
     private UX ux;
     private UtilsManager utilsManager;
     private TextView NoData;
@@ -150,21 +142,8 @@ public class FollowersFragment extends Fragment {
     private void loadRecord(String url) {
         Log.v("URL",url);
         followersList.clear();
-        builder= new OkHttpClient.Builder();
-        utilsManager.loggingInterceptorForRetrofit(builder);
-        if (retrofit == null){
-            Gson gson = new GsonBuilder()
-                    .setLenient()
-                    .create();
-            retrofit=new Retrofit.Builder()
-                    .baseUrl(url)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .client(builder.build())
-                    .build();
-        }
         //Creating the instance for api service from AllApiService interface
-        apiService=retrofit.create(AllApiService.class);
+        apiService=utilsManager.getClient(url).create(AllApiService.class);
         final Call<ArrayList<FollowersAndFollowing>> followersAndFollowingCall=apiService.getFollowersAndFollowing(url+UserName+"/followers");
         //handling user requests and their interactions with the application.
         followersAndFollowingCall.enqueue(new Callback<ArrayList<FollowersAndFollowing>>() {
