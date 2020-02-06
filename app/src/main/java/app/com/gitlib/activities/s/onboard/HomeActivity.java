@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
@@ -160,8 +161,13 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        exitApp();
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0){
+            Log.i("MainActivity", "Popping back stack fragments");
+            getSupportFragmentManager().popBackStack();
+        }
+        else {
+            Log.i("MainActivity", "Nothing on back stack, exiting app");
+            exitApp();
+        }
     }
-
 }
