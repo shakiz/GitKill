@@ -210,7 +210,6 @@ public class FragmentTrendingRepositories extends Fragment {
     }
 
     private void loadRecord(String url) {
-        Log.v("URL",url);
         trendingRepoList.clear();
         //Creating the instance for api service from AllApiService interface
         apiService=utilsManager.getClient(url).create(AllApiService.class);

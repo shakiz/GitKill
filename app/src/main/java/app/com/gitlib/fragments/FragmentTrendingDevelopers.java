@@ -208,9 +208,7 @@ public class FragmentTrendingDevelopers extends Fragment {
 
     }
 
-
     private void loadRecord(String url) {
-        Log.v("URL",url);
         trendingDevelopersList.clear();
         //Creating the instance for api service from AllApiService interface
         apiService=utilsManager.getClient(url).create(AllApiService.class);

@@ -75,7 +75,7 @@ public class FollowersFragment extends Fragment {
     }
 
     private void bindUIWithComponents(View view) {
-        new BackgroundDataLoad(view , allUrlClass.FOLLOWERS_AND_FOLLOWING).execute();
+        new BackgroundDataLoad(allUrlClass.FOLLOWERS_AND_FOLLOWING).execute();
     }
 
     private void loadListView(){
@@ -93,12 +93,9 @@ public class FollowersFragment extends Fragment {
     }
 
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
-
-        View view;
         String url ;
 
-        public BackgroundDataLoad(View view, String url) {
-            this.view = view;
+        public BackgroundDataLoad(String url) {
             this.url = url;
         }
 
@@ -140,7 +137,6 @@ public class FollowersFragment extends Fragment {
 
 
     private void loadRecord(String url) {
-        Log.v("URL",url);
         followersList.clear();
         //Creating the instance for api service from AllApiService interface
         apiService=utilsManager.getClient(url).create(AllApiService.class);
@@ -154,7 +150,6 @@ public class FollowersFragment extends Fragment {
                         FollowersAndFollowing followers = response.body().get(start);
                         followersList.add(followers);
                     }
-
                 }
                 catch (Exception e){
                     Log.v("Error::::",e.getMessage());

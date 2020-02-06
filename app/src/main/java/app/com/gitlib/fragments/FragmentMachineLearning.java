@@ -26,7 +26,6 @@ import app.com.gitlib.utils.UX;
 import app.com.gitlib.utils.UtilsManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -78,7 +77,6 @@ public class FragmentMachineLearning extends Fragment {
     }
 
     private void bindUIWithComponents(View view) {
-
         ux.setSpinnerAdapter(mlFilterSpinner,mlFilterList);
 
         new BackgroundDataLoad(view , allUrlClass.ALL_TOPICS_BASE_URL , "ml").execute();
@@ -162,9 +160,7 @@ public class FragmentMachineLearning extends Fragment {
 
     }
 
-
     private void loadRecord(String url , String queryString) {
-        Log.v("URL",url);
         mlItemList.clear();
         //Creating the instance for api service from AllApiService interface
         apiService=utilsManager.getClient(url).create(AllApiService.class);

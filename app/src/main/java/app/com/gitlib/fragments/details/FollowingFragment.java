@@ -99,7 +99,6 @@ public class FollowingFragment extends Fragment {
     }
 
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
-
         String url ;
 
         public BackgroundDataLoad( String url) {
@@ -144,7 +143,6 @@ public class FollowingFragment extends Fragment {
 
 
     private void loadRecord(String url) {
-        Log.v("URL",url);
         followingList.clear();
         //Creating the instance for api service from AllApiService interface
         apiService=utilsManager.getClient(url).create(AllApiService.class);
@@ -158,7 +156,6 @@ public class FollowingFragment extends Fragment {
                         FollowersAndFollowing followers = response.body().get(start);
                         followingList.add(followers);
                     }
-
                 }
                 catch (Exception e){
                     Log.v("Error::::",e.getMessage());

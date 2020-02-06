@@ -115,8 +115,6 @@ public class FragmentWeb extends Fragment {
     }
 
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
-
-
         String url , querySting;
 
         public BackgroundDataLoad(String url, String querySting) {
@@ -162,7 +160,6 @@ public class FragmentWeb extends Fragment {
 
 
     private void loadRecord(String url , String queryString) {
-        Log.v("URL",url);
         webTopicList.clear();
         //Creating the instance for api service from AllApiService interface
         apiService=utilsManager.getClient(url).create(AllApiService.class);
@@ -174,7 +171,6 @@ public class FragmentWeb extends Fragment {
                 try{
                     for (int start=0;start<response.body().getItems().size();start++) {
                         Item item=response.body().getItems().get(start);
-                        //License license = item.getLicense();
                         webTopicList.add(new Item(item.getFullName(),item.getAvatar_url(),item.getHtmlUrl(),item.getLanguage(),item.getStargazersCount(),item.getWatchersCount(),
                                 item.getForksCount(),item.getForks(),item.getWatchers()));
                     }

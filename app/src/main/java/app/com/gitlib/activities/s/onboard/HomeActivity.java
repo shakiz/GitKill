@@ -89,8 +89,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void bindUIWithComponents() {
-
-
         setAdapter();
         adapter.setListener(new DrawerAdapter.OnItemSelectedListener() {
             @Override

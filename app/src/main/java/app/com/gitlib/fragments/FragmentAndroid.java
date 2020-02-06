@@ -81,12 +81,12 @@ public class FragmentAndroid extends Fragment {
 
         ux.setSpinnerAdapter(androidFilterSpinner,androidFilterList);
 
-        new BackgroundDataLoad(view , allUrlClass.ALL_TOPICS_BASE_URL , "android").execute();
+        new BackgroundDataLoad(allUrlClass.ALL_TOPICS_BASE_URL , "android").execute();
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new BackgroundDataLoad(view , allUrlClass.ALL_TOPICS_BASE_URL , "android").execute();
+                new BackgroundDataLoad(allUrlClass.ALL_TOPICS_BASE_URL , "android").execute();
             }
         });
 
@@ -94,7 +94,7 @@ public class FragmentAndroid extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String queryString = adapterView.getItemAtPosition(position).toString();
-                new BackgroundDataLoad(view, allUrlClass.ALL_TOPICS_BASE_URL, "android"+queryString ).execute();
+                new BackgroundDataLoad(allUrlClass.ALL_TOPICS_BASE_URL, "android"+queryString ).execute();
             }
 
             @Override
@@ -117,11 +117,9 @@ public class FragmentAndroid extends Fragment {
 
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
 
-        View view;
         String url , querySting;
 
-        public BackgroundDataLoad(View view, String url, String querySting) {
-            this.view = view;
+        public BackgroundDataLoad( String url, String querySting) {
             this.url = url;
             this.querySting = querySting;
         }
@@ -162,9 +160,7 @@ public class FragmentAndroid extends Fragment {
 
     }
 
-
     private void loadRecord(String url , String queryString) {
-        Log.v("URL",url);
         androidTopicList.clear();
         //Creating the instance for api service from AllApiService interface
         apiService=utilsManager.getClient(url).create(AllApiService.class);
@@ -176,7 +172,6 @@ public class FragmentAndroid extends Fragment {
                 try{
                     for (int start=0;start<response.body().getItems().size();start++) {
                         Item item=response.body().getItems().get(start);
-                        //License license = item.getLicense();
                         androidTopicList.add(new Item(item.getFullName(),item.getAvatar_url(),item.getHtmlUrl(),item.getLanguage(),item.getStargazersCount(),item.getWatchersCount(),
                                 item.getForksCount(),item.getForks(),item.getWatchers()));
                     }

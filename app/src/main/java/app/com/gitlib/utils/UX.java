@@ -12,7 +12,6 @@ import app.com.gitlib.R;
 import app.com.gitlib.adapters.AllTopicAdapter;
 import app.com.gitlib.models.alltopic.Item;
 
-
 public class UX {
     private Context context;
     public Dialog loadingDialog;
