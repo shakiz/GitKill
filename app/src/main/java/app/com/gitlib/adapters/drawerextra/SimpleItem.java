@@ -1,4 +1,4 @@
-package app.com.gitlib.drawerextra;
+package app.com.gitlib.adapters.drawerextra;
 
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
