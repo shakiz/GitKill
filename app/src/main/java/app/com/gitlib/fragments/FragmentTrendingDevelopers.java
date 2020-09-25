@@ -20,6 +20,14 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import app.com.gitlib.R;
@@ -54,6 +62,7 @@ public class FragmentTrendingDevelopers extends Fragment {
     private ImageView NoDataIV;
     //Dialog components
     private TextView  UserName , RepoName , ProfileLink , RepoLink , Description;
+    private AdView adView;
 
     public static synchronized FragmentTrendingDevelopers getInstance(){
         if (FRAGMENT_TRENDING_DEVELOPERS == null) return new FragmentTrendingDevelopers();
@@ -117,6 +126,57 @@ public class FragmentTrendingDevelopers extends Fragment {
                 new BackgroundDataLoad(allUrlClass.TRENDING_DEVS_URL).execute();
             }
         });
+
+        //region adMob
+        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                Log.v("onInitComplete","InitializationComplete");
+            }
+        });
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+        adView.setAdListener(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                Log.v("onAdListener","AdlLoaded");
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+                // Code to be executed when an ad request fails.
+                Log.v("onAdListener","AdFailedToLoad");
+                Log.v("onAdListener","AdFailedToLoad Error "+adError.getMessage());
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+                Log.v("onAdListener","AdOpened");
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+                Log.v("onAdListener","AdClicked");
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+                Log.v("onAdListener","AdLeftApplication");
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+                Log.v("onAdListener","AdClosed");
+            }
+        });
+        //endregion
     }
 
     private void setData() {
@@ -154,6 +214,7 @@ public class FragmentTrendingDevelopers extends Fragment {
         recyclerViewDevelopers = view.findViewById(R.id.mRecyclerView);
         refreshListButton = view.findViewById(R.id.RefreshList);
         search = view.findViewById(R.id.Search);
+        adView = view.findViewById(R.id.adView);
         trendingDevelopersList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         languageList = new ArrayList<>();

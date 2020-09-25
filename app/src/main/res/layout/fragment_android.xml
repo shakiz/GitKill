@@ -5,16 +5,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:weightSum="2"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 
     <include
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".25"
         layout="@layout/generic_filter_layout"/>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.60"
         app:cardBackgroundColor="@color/md_white_1000"
         app:cardCornerRadius="4dp"
         android:layout_marginBottom="8dp"
@@ -77,6 +82,17 @@
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".15"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3017517613101119/6533321471"/>
 
 </LinearLayout>
 

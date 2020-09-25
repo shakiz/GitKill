@@ -12,40 +12,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight=".5"/>
-    <!--        <LinearLayout-->
-    <!--            android:layout_width="160dp"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:baselineAligned="false"-->
-    <!--            android:orientation="vertical"-->
-    <!--            android:paddingLeft="24dp"-->
-    <!--            android:paddingRight="24dp">-->
-
-    <!--            <com.github.florent37.shapeofview.shapes.CircleView-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_marginTop="4dp"-->
-    <!--                android:layout_gravity="center">-->
-
-    <!--                <ImageView-->
-    <!--                    android:layout_width="32dp"-->
-    <!--                    android:layout_height="32dp"-->
-    <!--                    android:layout_gravity="center"-->
-    <!--                    android:src="@drawable/user"/>-->
-
-    <!--            </com.github.florent37.shapeofview.shapes.CircleView>-->
-
-    <!--            <TextView-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_margin="4dp"-->
-    <!--                android:textSize="14sp"-->
-    <!--                android:textStyle="bold"-->
-    <!--                android:layout_gravity="center"-->
-    <!--                android:id="@+id/username"-->
-    <!--                android:text="@string/username" />-->
-
-    <!--        </LinearLayout>-->
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/nav_list_item"
@@ -69,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="16dp"
-            android:background="@drawable/menu_back"/>
+            android:src="@drawable/menu_back"/>
 
     </LinearLayout>
 

@@ -14,6 +14,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
 import java.util.ArrayList;
 import app.com.gitlib.R;
 import app.com.gitlib.activities.s.details.DetailsActivity;
@@ -44,6 +53,7 @@ public class FragmentWeb extends Fragment {
     private Spinner webFilterSpinner;
     private String[] webFilterList = new String[]{"Select Query","Javascript","Typescript",
             "Bootstrap","Laravel","Django","Vue Js","Angular"};
+    private AdView adView;
 
     public FragmentWeb() {
         // Required empty public constructor
@@ -70,7 +80,8 @@ public class FragmentWeb extends Fragment {
         refreshListButton = view.findViewById(R.id.RefreshList);
         NoData = view.findViewById(R.id.NoDataMessage);
         NoDataIV = view.findViewById(R.id.NoDataIV);
-        webFilterSpinner     = view.findViewById(R.id.FilterSpinner);
+        adView = view.findViewById(R.id.adView);
+        webFilterSpinner = view.findViewById(R.id.FilterSpinner);
         webTopicList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         ux = new UX(getContext());
@@ -101,6 +112,57 @@ public class FragmentWeb extends Fragment {
 
             }
         });
+
+        //region adMob
+        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                Log.v("onInitComplete","InitializationComplete");
+            }
+        });
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+        adView.setAdListener(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                Log.v("onAdListener","AdlLoaded");
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+                // Code to be executed when an ad request fails.
+                Log.v("onAdListener","AdFailedToLoad");
+                Log.v("onAdListener","AdFailedToLoad Error "+adError.getMessage());
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+                Log.v("onAdListener","AdOpened");
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+                Log.v("onAdListener","AdClicked");
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+                Log.v("onAdListener","AdLeftApplication");
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+                Log.v("onAdListener","AdClosed");
+            }
+        });
+        //endregion
     }
 
     private void loadListView(){

@@ -6,12 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
+    android:weightSum="2"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight=".4"
         android:background="@color/md_white_1000"
         app:cardCornerRadius="8dp"
         app:cardUseCompatPadding="true"
@@ -85,18 +87,28 @@
 
             </LinearLayout>
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/Search"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+            <LinearLayout
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="4dp"
                 android:layout_gravity="right"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="12dp"
-                android:layout_marginBottom="8dp"
-                android:background="@color/md_white_1000"
-                android:backgroundTint="@color/md_white_1000"
-                android:src="@drawable/ic_search"
-                app:fabSize="mini" />
+                android:elevation="6dp"
+                android:translationZ="3dp"
+                android:orientation="vertical"
+                android:background="@drawable/a_roundbg">
+
+                <ImageView
+                    android:id="@+id/Search"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_search_new"
+                    app:tint="@color/md_grey_800"
+                    android:padding="4dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -104,7 +116,8 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.45"
         android:layout_marginBottom="8dp"
         app:cardBackgroundColor="@color/md_white_1000"
         app:cardCornerRadius="8dp"
@@ -166,6 +179,17 @@
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".15"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3017517613101119/6533321471"/>
 
 </LinearLayout>
 

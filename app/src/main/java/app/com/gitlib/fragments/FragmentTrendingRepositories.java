@@ -20,7 +20,13 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import java.util.ArrayList;
 import app.com.gitlib.R;
 import app.com.gitlib.adapters.TrendingRepositoriesAdapter;
@@ -45,7 +51,7 @@ public class FragmentTrendingRepositories extends Fragment {
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
     private String TAG = "FragmentTrendingRepositories" , languageStr = "" , sinceStr = "";
-    private FloatingActionButton search;
+    private ImageView search;
     private CircleImageView refreshListButton;
     private Dialog itemDialog ;
     private RelativeLayout dialogLayout;
@@ -55,6 +61,7 @@ public class FragmentTrendingRepositories extends Fragment {
     private ImageView NoDataIV;
     //Dialog components
     private TextView RepoName , RepoLink , UserName , Language , NumberOfStars , NumberOfForks , Description;
+    private AdView adView;
 
     public static synchronized FragmentTrendingRepositories getInstance(){
         if (FRAGMENT_TRENDING_REPOSITORIES == null) return new FragmentTrendingRepositories();
@@ -82,6 +89,7 @@ public class FragmentTrendingRepositories extends Fragment {
         NoData = view.findViewById(R.id.NoDataMessage);
         NoDataIV = view.findViewById(R.id.NoDataIV);
         search = view.findViewById(R.id.Search);
+        adView = view.findViewById(R.id.adView);
         allUrlClass = new AllUrlClass();
         languageList = new ArrayList<>();
         timeList = new ArrayList<>();
@@ -135,6 +143,57 @@ public class FragmentTrendingRepositories extends Fragment {
                 new BackgroundDataLoad(allUrlClass.TRENDING_REPOS_URL).execute();
             }
         });
+
+        //region adMob
+        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                Log.v("onInitComplete","InitializationComplete");
+            }
+        });
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+        adView.setAdListener(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                Log.v("onAdListener","AdlLoaded");
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+                // Code to be executed when an ad request fails.
+                Log.v("onAdListener","AdFailedToLoad");
+                Log.v("onAdListener","AdFailedToLoad Error "+adError.getMessage());
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+                Log.v("onAdListener","AdOpened");
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+                Log.v("onAdListener","AdClicked");
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+                Log.v("onAdListener","AdLeftApplication");
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+                Log.v("onAdListener","AdClosed");
+            }
+        });
+        //endregion
     }
 
     private void setData() {
