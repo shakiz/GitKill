@@ -41,4 +41,9 @@
     <string name="popular_repo">Popular Repository</string>
     <string name="no_followers_found">No followers found</string>
     <string name="no_following_found">No following found</string>
+    <string name="android_list">Android Lists</string>
+    <string name="trending_repositories">Trending Repositories</string>
+    <string name="top_ml_libraries">Top ML Libraries</string>
+    <string name="trending_developers">Trending Developers</string>
+    <string name="web_repositories">Web Repositories</string>
 </resources>

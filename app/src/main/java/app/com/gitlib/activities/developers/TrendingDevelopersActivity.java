@@ -1,4 +1,4 @@
-package app.com.gitlib.fragments;
+package app.com.gitlib.activities.developers;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -7,9 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -17,9 +15,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import androidx.fragment.app.Fragment;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -29,10 +29,11 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import java.util.ArrayList;
 import app.com.gitlib.R;
-import app.com.gitlib.adapters.TrendingRepositoriesAdapter;
+import app.com.gitlib.activities.onboard.HomeActivity;
+import app.com.gitlib.adapters.TrendingDevelopersAdapter;
 import app.com.gitlib.apiutils.AllApiService;
 import app.com.gitlib.apiutils.AllUrlClass;
-import app.com.gitlib.models.repositories.TrendingRepositories;
+import app.com.gitlib.models.users.TrendingDevelopers;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.utils.UtilsManager;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -41,66 +42,66 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FragmentTrendingRepositories extends Fragment {
-    private static final FragmentTrendingRepositories FRAGMENT_TRENDING_REPOSITORIES = null;
+public class TrendingDevelopersActivity extends AppCompatActivity {
     private Spinner languageSpinner,sinceSpinner;
+    private RecyclerView recyclerViewDevelopers;
     private ArrayList<String> languageList, timeList;
-    private RecyclerView recyclerViewRepo;
-    private TrendingRepositoriesAdapter trendingRepositoriesAdapter;
-    private ArrayList<TrendingRepositories> trendingRepoList;
+    private ArrayList<TrendingDevelopers> trendingDevelopersList;
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
-    private String TAG = "FragmentTrendingRepositories" , languageStr = "" , sinceStr = "";
-    private ImageView search;
-    private CircleImageView refreshListButton;
-    private Dialog itemDialog ;
-    private RelativeLayout dialogLayout;
+    private String TAG = "TrendingDevelopersActivity" , languageStr = "" , sinceStr = "";
     private UX ux;
     private UtilsManager utilsManager;
+    private ImageView search;
+    private CircleImageView refreshListButton;
+    private Dialog itemDialog;
+    private RelativeLayout dialogLayout;
     private TextView NoData;
     private ImageView NoDataIV;
     //Dialog components
-    private TextView RepoName , RepoLink , UserName , Language , NumberOfStars , NumberOfForks , Description;
+    private TextView  UserName , RepoName , ProfileLink , RepoLink , Description;
     private AdView adView;
 
-    public static synchronized FragmentTrendingRepositories getInstance(){
-        if (FRAGMENT_TRENDING_REPOSITORIES == null) return new FragmentTrendingRepositories();
-        else return FRAGMENT_TRENDING_REPOSITORIES;
-    }
-
-
-    public FragmentTrendingRepositories() {
-    }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_trending_repositories, container, false);
-        init(view);
-        bindUiWithComponents();
-        return view;
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_trending_developers);
+
+        //region init and bin UI components
+        init();
+        bindUIWithComponents();
+        //endregion
     }
 
-    private void init(View view) {
-        recyclerViewRepo = view.findViewById(R.id.mRecyclerView);
-        languageSpinner = view.findViewById(R.id.LanguageSpinner);
-        sinceSpinner = view.findViewById(R.id.SinceSpinner);
-        refreshListButton = view.findViewById(R.id.RefreshList);
-        NoData = view.findViewById(R.id.NoDataMessage);
-        NoDataIV = view.findViewById(R.id.NoDataIV);
-        search = view.findViewById(R.id.Search);
-        adView = view.findViewById(R.id.adView);
+    private void init() {
+        languageSpinner = findViewById(R.id.LanguageSpinner);
+        sinceSpinner = findViewById(R.id.SinceSpinner);
+        recyclerViewDevelopers = findViewById(R.id.mRecyclerView);
+        refreshListButton = findViewById(R.id.RefreshList);
+        search = findViewById(R.id.Search);
+        adView = findViewById(R.id.adView);
+        trendingDevelopersList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         languageList = new ArrayList<>();
         timeList = new ArrayList<>();
-        ux = new UX(getContext());
-        utilsManager = new UtilsManager(getContext());
-        trendingRepoList = new ArrayList<>();
+        ux = new UX(this);
+        NoData = findViewById(R.id.NoDataMessage);
+        NoDataIV = findViewById(R.id.NoDataIV);
+        utilsManager = new UtilsManager(this);
     }
 
-    private void bindUiWithComponents() {
+    private void bindUIWithComponents() {
+        //region toolbar on back click listener
+        findViewById(R.id.BackButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(TrendingDevelopersActivity.this,HomeActivity.class));
+            }
+        });
+        //endregion
+
         setData();
-        new BackgroundDataLoad(allUrlClass.TRENDING_REPOS_URL).execute();
+        new BackgroundDataLoad(allUrlClass.TRENDING_DEVS_URL).execute();
         ux.setSpinnerAdapter(languageSpinner,languageList);
         ux.setSpinnerAdapter(sinceSpinner,timeList);
 
@@ -131,7 +132,7 @@ public class FragmentTrendingRepositories extends Fragment {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String newUrl = allUrlClass.BASE_URL+"repositories?"+"language="+languageStr+"&since="+sinceStr;
+                String newUrl = allUrlClass.BASE_URL+"developers?"+"language="+languageStr+"&since="+sinceStr;
                 Log.v("SpinnerURL",newUrl);
                 new BackgroundDataLoad(newUrl).execute();
             }
@@ -140,12 +141,12 @@ public class FragmentTrendingRepositories extends Fragment {
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new BackgroundDataLoad(allUrlClass.TRENDING_REPOS_URL).execute();
+                new BackgroundDataLoad(allUrlClass.TRENDING_DEVS_URL).execute();
             }
         });
 
         //region adMob
-        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
                 Log.v("onInitComplete","InitializationComplete");
@@ -214,22 +215,22 @@ public class FragmentTrendingRepositories extends Fragment {
     }
 
     private void loadListView(){
-        trendingRepositoriesAdapter = new TrendingRepositoriesAdapter(trendingRepoList, getContext(), new TrendingRepositoriesAdapter.onItemClickListener() {
+        TrendingDevelopersAdapter trendingDevelopersAdapter = new TrendingDevelopersAdapter(trendingDevelopersList, this, new TrendingDevelopersAdapter.onItemClickListener() {
             @Override
-            public void respond(TrendingRepositories trendingRepositories) {
-                showDialog(trendingRepositories);
+            public void respond(TrendingDevelopers trendingDevelopersPojo) {
+                showDialog(trendingDevelopersPojo);
             }
         });
-        recyclerViewRepo.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerViewRepo.setAdapter(trendingRepositoriesAdapter);
-        trendingRepositoriesAdapter.notifyDataSetChanged();
+        recyclerViewDevelopers.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewDevelopers.setAdapter(trendingDevelopersAdapter);
+        trendingDevelopersAdapter.notifyDataSetChanged();
     }
 
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
 
         String url;
 
-        public BackgroundDataLoad( String url) {
+        public BackgroundDataLoad(String url) {
             this.url = url;
         }
 
@@ -251,14 +252,15 @@ public class FragmentTrendingRepositories extends Fragment {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        if (trendingRepoList.size()>0){
-                            loadListView();NoData.setVisibility(View.GONE);
+                        if (trendingDevelopersList.size()>0){
+                            loadListView();
+                            NoData.setVisibility(View.GONE);
                             NoDataIV.setVisibility(View.GONE);
                         }
                         else {
                             NoData.setVisibility(View.VISIBLE);
                             NoDataIV.setVisibility(View.VISIBLE);
-                            Toasty.error(getContext(),R.string.no_data_message).show();
+                            Toasty.error(TrendingDevelopersActivity.this,R.string.no_data_message).show();
                         }
                         ux.removeLoadingView();
                     }
@@ -269,18 +271,18 @@ public class FragmentTrendingRepositories extends Fragment {
     }
 
     private void loadRecord(String url) {
-        trendingRepoList.clear();
+        trendingDevelopersList.clear();
         //Creating the instance for api service from AllApiService interface
         apiService=utilsManager.getClient(url).create(AllApiService.class);
-        final Call<ArrayList<TrendingRepositories>> userInformationCall=apiService.getTrendingRepos(url);
+        final Call<ArrayList<TrendingDevelopers>> userInformationCall=apiService.getTrendingUsers(url);
         //handling user requests and their interactions with the application.
-        userInformationCall.enqueue(new Callback<ArrayList<TrendingRepositories>>() {
+        userInformationCall.enqueue(new Callback<ArrayList<TrendingDevelopers>>() {
             @Override
-            public void onResponse(Call<ArrayList<TrendingRepositories>> call, Response<ArrayList<TrendingRepositories>> response) {
+            public void onResponse(Call<ArrayList<TrendingDevelopers>> call, Response<ArrayList<TrendingDevelopers>> response) {
                 try{
                     for(int start=0;start<response.body().size();start++){
-                        TrendingRepositories repoPojo=response.body().get(start);
-                        trendingRepoList.add(new TrendingRepositories(repoPojo.getAuthor(),repoPojo.getName(),repoPojo.getLanguage(),repoPojo.getStars(),repoPojo.getForks(),repoPojo.getUrl()));
+                        TrendingDevelopers userPojo=response.body().get(start);
+                        trendingDevelopersList.add(new TrendingDevelopers(userPojo.getUsername(),userPojo.getName(),userPojo.getType(),userPojo.getUrl(),userPojo.getAvatar(),userPojo.getRepo()));
                     }
                 }
                 catch (Exception e){
@@ -288,42 +290,48 @@ public class FragmentTrendingRepositories extends Fragment {
                 }
             }
             @Override
-            public void onFailure(Call<ArrayList<TrendingRepositories>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<TrendingDevelopers>> call, Throwable t) {
                 Log.v(TAG,""+t.getMessage());
             }
         });
     }
 
-    private void showDialog(TrendingRepositories trendingRepositories) {
-        itemDialog = new Dialog(getContext());
-        itemDialog.setContentView(R.layout.popup_trending_repo_items_details);
+    private void showDialog(TrendingDevelopers trendingDevelopers) {
+        itemDialog = new Dialog(TrendingDevelopersActivity.this);
+        itemDialog.setContentView(R.layout.popup_trending_developers_items_details);
         customViewInit(itemDialog);
         itemDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         Animation a = AnimationUtils.loadAnimation(itemDialog.getContext(), R.anim.push_up_in);
         dialogLayout.startAnimation(a);
-        setCustomDialogData(trendingRepositories);
+        setCustomDialogData(trendingDevelopers);
         itemDialog.show();
     }
 
-    private void setCustomDialogData(final TrendingRepositories trendingRepositories) {
-        UserName.setText(trendingRepositories.getAuthor());
-        RepoName.setText(trendingRepositories.getName());
+    private void setCustomDialogData(final TrendingDevelopers trendingDevelopers) {
+        UserName.setText(trendingDevelopers.getUsername());
+        ProfileLink.setText(trendingDevelopers.getUrl());
 
-        if (trendingRepositories.getDescription() == null) Description.setText("No description available for this repository");
-        else Description.setText(trendingRepositories.getDescription());
+        RepoName.setText(trendingDevelopers.getName());
 
-        if (trendingRepositories.getLanguage() == null) Language.setText("No language selected for this repository");
-        else Language.setText(trendingRepositories.getLanguage());
+        if (trendingDevelopers.getRepo().getDescription() == null) Description.setText("No description available for this repository");
+        else Description.setText(trendingDevelopers.getRepo().getDescription());
 
-        RepoLink.setText(trendingRepositories.getUrl());
-        NumberOfStars.setText("Stars : "+trendingRepositories.getStars());
-        NumberOfForks.setText("Forks : "+trendingRepositories.getForks());
+        RepoLink.setText(trendingDevelopers.getRepo().getUrl());
 
         RepoLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setData(Uri.parse(trendingRepositories.getUrl()));
+                browserIntent.setData(Uri.parse(trendingDevelopers.getRepo().getUrl()));
+                startActivity(browserIntent);
+            }
+        });
+
+        ProfileLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setData(Uri.parse(trendingDevelopers.getUrl()));
                 startActivity(browserIntent);
             }
         });
@@ -333,11 +341,15 @@ public class FragmentTrendingRepositories extends Fragment {
         UserName = itemDialog.findViewById(R.id.UserName);
         RepoName = itemDialog.findViewById(R.id.RepoName);
         RepoLink = itemDialog.findViewById(R.id.RepoLink);
+        ProfileLink = itemDialog.findViewById(R.id.ProfileLink);
         Description = itemDialog.findViewById(R.id.Description);
-        Language = itemDialog.findViewById(R.id.Language);
-        NumberOfStars = itemDialog.findViewById(R.id.NumberOfStars);
-        NumberOfForks = itemDialog.findViewById(R.id.NumberOfForks);
         dialogLayout = itemDialog.findViewById(R.id.dialogLayout);
     }
 
+    //region activity components
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(TrendingDevelopersActivity.this, HomeActivity.class));
+    }
+    //endregion
 }

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context=".activities.s.details.DetailsActivity">
+    tools:context=".activities.details.DetailsActivity">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"

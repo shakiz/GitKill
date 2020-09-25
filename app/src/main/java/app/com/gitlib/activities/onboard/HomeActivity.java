@@ -1,4 +1,4 @@
-package app.com.gitlib.activities.s.onboard;
+package app.com.gitlib.activities.onboard;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -8,8 +8,6 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.multidex.MultiDex;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,14 +17,14 @@ import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 import java.util.Arrays;
 import app.com.gitlib.R;
+import app.com.gitlib.activities.android.AndroidActivity;
+import app.com.gitlib.activities.developers.TrendingDevelopersActivity;
+import app.com.gitlib.activities.ml.MachineLearningActivity;
+import app.com.gitlib.activities.repositories.TrendingRepositoriesActivity;
+import app.com.gitlib.activities.web.WebActivity;
 import app.com.gitlib.adapters.drawerextra.DrawerAdapter;
 import app.com.gitlib.adapters.drawerextra.DrawerItem;
 import app.com.gitlib.adapters.drawerextra.SimpleItem;
-import app.com.gitlib.fragments.FragmentAndroid;
-import app.com.gitlib.fragments.FragmentMachineLearning;
-import app.com.gitlib.fragments.FragmentTrendingDevelopers;
-import app.com.gitlib.fragments.FragmentTrendingRepositories;
-import app.com.gitlib.fragments.FragmentWeb;
 
 public class HomeActivity extends AppCompatActivity {
     private SlidingRootNav slidingRootNav ;
@@ -78,13 +76,6 @@ public class HomeActivity extends AppCompatActivity {
         adapter.setSelected(POS_TRENDING_REPO);
     }
 
-    private void showFragment(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.fadein,R.anim.fadeout);
-        fragmentTransaction.replace(R.id.container, fragment)
-                .commit();
-    }
-
     private DrawerItem createItemFor(int position) {
         return new SimpleItem(screenIcons[position], screenTitles[position])
                 .withTextTint(getResources().getColor(R.color.md_blue_grey_700))
@@ -101,23 +92,23 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (pos == POS_TRENDING_REPO) {
-                            showFragment(FragmentTrendingRepositories.getInstance());
+                            startActivity(new Intent(HomeActivity.this, TrendingRepositoriesActivity.class));
                             return;
                         }
                         else if (pos == POS_TRENDING_DEVELOPERS){
-                            showFragment(FragmentTrendingDevelopers.getInstance());
+                            startActivity(new Intent(HomeActivity.this, TrendingDevelopersActivity.class));
                             return;
                         }
                         else if (pos == POS_TRENDING_ON_ANDROID){
-                            showFragment(FragmentAndroid.getInstance());
+                            startActivity(new Intent(HomeActivity.this, AndroidActivity.class));
                             return;
                         }
                         else if (pos == POS_TRENDING_ON_WEB){
-                            showFragment(FragmentWeb.getInstance());
+                            startActivity(new Intent(HomeActivity.this, WebActivity.class));
                             return;
                         }
                         else if (pos == POS_TRENDING_ML_LIBRARIES){
-                            showFragment(FragmentMachineLearning.getInstance());
+                            startActivity(new Intent(HomeActivity.this, MachineLearningActivity.class));
                             return;
                         }
                     }
@@ -127,9 +118,6 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-        FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container,new FragmentTrendingRepositories());
-        fragmentTransaction.commit();
     }
 
     private String[] loadScreenTitles() {

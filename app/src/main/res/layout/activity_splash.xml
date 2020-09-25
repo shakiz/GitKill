@@ -6,7 +6,7 @@
     android:focusable="true"
     android:background="@color/md_white_1000"
     android:focusableInTouchMode="true"
-    tools:context=".activities.s.onboard.SplashActivity"
+    tools:context=".activities.onboard.SplashActivity"
     android:orientation="vertical">
 
     <LinearLayout

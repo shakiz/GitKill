@@ -1,19 +1,18 @@
-package app.com.gitlib.fragments;
+package app.com.gitlib.activities.web;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -24,8 +23,11 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.util.ArrayList;
+
 import app.com.gitlib.R;
-import app.com.gitlib.activities.s.details.DetailsActivity;
+import app.com.gitlib.activities.details.DetailsActivity;
+import app.com.gitlib.activities.ml.MachineLearningActivity;
+import app.com.gitlib.activities.onboard.HomeActivity;
 import app.com.gitlib.adapters.AllTopicAdapter;
 import app.com.gitlib.apiutils.AllApiService;
 import app.com.gitlib.apiutils.AllUrlClass;
@@ -39,8 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FragmentWeb extends Fragment {
-    private static final FragmentWeb FRAGMENT_WEB = null;
+public class WebActivity extends AppCompatActivity {
     private RecyclerView webTopicRecyclerView;
     private UX ux;
     private ArrayList<Item> webTopicList;
@@ -55,40 +56,42 @@ public class FragmentWeb extends Fragment {
             "Bootstrap","Laravel","Django","Vue Js","Angular"};
     private AdView adView;
 
-    public FragmentWeb() {
-        // Required empty public constructor
-    }
-
-    public static FragmentWeb getInstance() {
-        if (FRAGMENT_WEB == null) return new FragmentWeb();
-        else return FRAGMENT_WEB;
-    }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_web, container, false);
-        init(view);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_web);
+
+        //region init and bin UI components
+        init();
         bindUIWithComponents();
-        return view;
+        //endregion
     }
 
-    private void init(View view) {
-        webTopicRecyclerView = view.findViewById(R.id.mRecyclerView);
-        refreshListButton = view.findViewById(R.id.RefreshList);
-        NoData = view.findViewById(R.id.NoDataMessage);
-        NoDataIV = view.findViewById(R.id.NoDataIV);
-        adView = view.findViewById(R.id.adView);
-        webFilterSpinner = view.findViewById(R.id.FilterSpinner);
+    //region init UI components
+    private void init() {
+        webTopicRecyclerView = findViewById(R.id.mRecyclerView);
+        refreshListButton = findViewById(R.id.RefreshList);
+        NoData = findViewById(R.id.NoDataMessage);
+        NoDataIV = findViewById(R.id.NoDataIV);
+        adView = findViewById(R.id.adView);
+        webFilterSpinner = findViewById(R.id.FilterSpinner);
         webTopicList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
-        ux = new UX(getContext());
-        utilsManager = new UtilsManager(getContext());
+        ux = new UX(this);
+        utilsManager = new UtilsManager(this);
     }
+    //endregion
 
     private void bindUIWithComponents() {
+        //region toolbar on back click listener
+        findViewById(R.id.BackButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(WebActivity.this,HomeActivity.class));
+            }
+        });
+        //endregion
+
         ux.setSpinnerAdapter(webFilterSpinner,webFilterList);
 
         new BackgroundDataLoad(allUrlClass.ALL_TOPICS_BASE_URL,"web").execute();
@@ -114,7 +117,7 @@ public class FragmentWeb extends Fragment {
         });
 
         //region adMob
-        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
                 Log.v("onInitComplete","InitializationComplete");
@@ -169,9 +172,10 @@ public class FragmentWeb extends Fragment {
         ux.loadListView(webTopicList, webTopicRecyclerView, R.layout.adapter_layout_android_topics).setOnItemClickListener(new AllTopicAdapter.onItemClickListener() {
             @Override
             public void respond(Item androidItem) {
-                Intent intent = new Intent(getContext() , DetailsActivity.class);
+                Intent intent = new Intent(WebActivity.this , DetailsActivity.class);
+                intent.putExtra("from", "web");
                 intent.putExtra("item", androidItem);
-                getContext().startActivity(intent);
+                startActivity(intent);
             }
         });
     }
@@ -210,7 +214,7 @@ public class FragmentWeb extends Fragment {
                         else {
                             NoData.setVisibility(View.VISIBLE);
                             NoDataIV.setVisibility(View.VISIBLE);
-                            Toasty.error(getContext(),R.string.no_data_message).show();
+                            Toasty.error(WebActivity.this,R.string.no_data_message).show();
                         }
                         ux.removeLoadingView();
                     }
@@ -249,4 +253,10 @@ public class FragmentWeb extends Fragment {
 
     }
 
+    //region activity components
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(WebActivity.this, HomeActivity.class));
+    }
+    //endregion
 }

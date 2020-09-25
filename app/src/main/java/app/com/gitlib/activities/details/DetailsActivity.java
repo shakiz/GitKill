@@ -1,5 +1,6 @@
-package app.com.gitlib.activities.s.details;
+package app.com.gitlib.activities.details;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -7,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 import app.com.gitlib.R;
+import app.com.gitlib.activities.android.AndroidActivity;
+import app.com.gitlib.activities.ml.MachineLearningActivity;
+import app.com.gitlib.activities.web.WebActivity;
 import app.com.gitlib.adapters.DetailsFragmentPagerAdapter;
 import app.com.gitlib.models.alltopic.Item;
 
@@ -81,5 +85,18 @@ public class DetailsActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getIntent().getStringExtra("from").equals("android")){
+            startActivity(new Intent(DetailsActivity.this, AndroidActivity.class));
+        }
+        else if (getIntent().getStringExtra("from").equals("ml")){
+            startActivity(new Intent(DetailsActivity.this, MachineLearningActivity.class));
+        }
+        else if (getIntent().getStringExtra("from").equals("web")){
+            startActivity(new Intent(DetailsActivity.this, WebActivity.class));
+        }
     }
 }

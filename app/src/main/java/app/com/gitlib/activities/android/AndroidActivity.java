@@ -1,20 +1,17 @@
-package app.com.gitlib.fragments;
+package app.com.gitlib.activities.android;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -22,15 +19,15 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-
 import java.util.ArrayList;
 import app.com.gitlib.R;
-import app.com.gitlib.activities.s.details.DetailsActivity;
+import app.com.gitlib.activities.details.DetailsActivity;
+import app.com.gitlib.activities.onboard.HomeActivity;
 import app.com.gitlib.adapters.AllTopicAdapter;
 import app.com.gitlib.apiutils.AllApiService;
 import app.com.gitlib.apiutils.AllUrlClass;
-import app.com.gitlib.models.alltopic.TopicBase;
 import app.com.gitlib.models.alltopic.Item;
+import app.com.gitlib.models.alltopic.TopicBase;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.utils.UtilsManager;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -39,8 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FragmentAndroid extends Fragment {
-    private static final FragmentAndroid FRAGMENT_ANDROID = null;
+public class AndroidActivity extends AppCompatActivity {
     private RecyclerView androidTopicRecyclerView;
     private UX ux;
     private UtilsManager utilsManager;
@@ -55,40 +51,42 @@ public class FragmentAndroid extends Fragment {
             "Navigation","Scanning","RecyclerView","ListView","Image Processing","Binding","Debugging"};
     private AdView adView;
 
-    public FragmentAndroid() {
-        // Required empty public constructor
-    }
-
-    public static FragmentAndroid getInstance() {
-        if (FRAGMENT_ANDROID == null) return new FragmentAndroid();
-        else return FRAGMENT_ANDROID;
-    }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_android, container, false);
-        init(view);
-        bindUIWithComponents(view);
-        return view;
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_android);
+
+        //region init and bin UI components
+        init();
+        bindUIWithComponents();
+        //endregion
     }
 
-    private void init(View view) {
-        androidTopicRecyclerView = view.findViewById(R.id.mRecyclerView);
-        refreshListButton = view.findViewById(R.id.RefreshList);
-        androidFilterSpinner = view.findViewById(R.id.FilterSpinner);
-        NoData = view.findViewById(R.id.NoDataMessage);
-        NoDataIV = view.findViewById(R.id.NoDataIV);
-        adView = view.findViewById(R.id.adView);
+    //region init UI components
+    private void init() {
+        androidTopicRecyclerView = findViewById(R.id.mRecyclerView);
+        refreshListButton = findViewById(R.id.RefreshList);
+        androidFilterSpinner = findViewById(R.id.FilterSpinner);
+        NoData = findViewById(R.id.NoDataMessage);
+        NoDataIV = findViewById(R.id.NoDataIV);
+        adView = findViewById(R.id.adView);
         androidTopicList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
-        ux = new UX(getContext());
-        utilsManager = new UtilsManager(getContext());
+        ux = new UX(this);
+        utilsManager = new UtilsManager(this);
     }
+    //endregion
 
-    private void bindUIWithComponents(View view) {
+    //region bind UI components
+    private void bindUIWithComponents() {
+        //region toolbar on back click listener
+        findViewById(R.id.BackButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AndroidActivity.this,HomeActivity.class));
+            }
+        });
+        //endregion
 
         ux.setSpinnerAdapter(androidFilterSpinner,androidFilterList);
 
@@ -115,7 +113,7 @@ public class FragmentAndroid extends Fragment {
         });
 
         //region adMob
-        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
                 Log.v("onInitComplete","InitializationComplete");
@@ -165,18 +163,23 @@ public class FragmentAndroid extends Fragment {
         });
         //endregion
     }
+    //endregion
 
+    //region load list data
     private void loadListView(){
         ux.loadListView(androidTopicList, androidTopicRecyclerView, R.layout.adapter_layout_android_topics).setOnItemClickListener(new AllTopicAdapter.onItemClickListener() {
             @Override
             public void respond(Item androidItem) {
-                Intent intent = new Intent(getContext() , DetailsActivity.class);
+                Intent intent = new Intent(AndroidActivity.this , DetailsActivity.class);
+                intent.putExtra("from","android");
                 intent.putExtra("item", androidItem);
-                getContext().startActivity(intent);
+                startActivity(intent);
             }
         });
     }
+    //endregion
 
+    //region asyncTask for calling server data
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
 
         String url , querySting;
@@ -212,16 +215,18 @@ public class FragmentAndroid extends Fragment {
                         else {
                             NoData.setVisibility(View.VISIBLE);
                             NoDataIV.setVisibility(View.VISIBLE);
-                            Toasty.error(getContext(),R.string.no_data_message).show();
+                            Toasty.error(AndroidActivity.this,R.string.no_data_message).show();
                         }
                         ux.removeLoadingView();
                     }
-                }, 6000);
+                }, 7000);
             }
         }
 
     }
+    //endregion
 
+    //region load data from server
     private void loadRecord(String url , String queryString) {
         androidTopicList.clear();
         //Creating the instance for api service from AllApiService interface
@@ -249,5 +254,12 @@ public class FragmentAndroid extends Fragment {
         });
 
     }
+    //endregion
 
+    //region activity components
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(AndroidActivity.this, HomeActivity.class));
+    }
+    //endregion
 }

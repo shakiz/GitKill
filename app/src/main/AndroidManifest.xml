@@ -13,9 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppThemeNoActionBar">
-
         <activity
-            android:name=".activities.s.onboard.SplashActivity"
+            android:name=".activities.onboard.SplashActivity"
             android:theme="@style/SplashAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,23 +23,46 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.s.onboard.HomeActivity"
+            android:name=".activities.web.WebActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".activities.repositories.TrendingRepositoriesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".activities.ml.MachineLearningActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".activities.developers.TrendingDevelopersActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".activities.android.AndroidActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".activities.onboard.HomeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar"
             android:windowSoftInputMode="adjustNothing" />
-
         <activity
-            android:name=".activities.s.details.DetailsActivity"
+            android:name=".activities.details.DetailsActivity"
             android:label="@string/item_details"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar"
-            android:windowSoftInputMode="adjustNothing"/>
+            android:windowSoftInputMode="adjustNothing" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3017517613101119~8854370665"/>
-
+            android:value="ca-app-pub-3017517613101119~8854370665" />
     </application>
 
 </manifest>

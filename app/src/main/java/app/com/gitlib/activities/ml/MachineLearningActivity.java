@@ -1,18 +1,17 @@
-package app.com.gitlib.fragments;
+package app.com.gitlib.activities.ml;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import androidx.fragment.app.Fragment;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.ads.AdListener;
@@ -24,8 +23,11 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.util.ArrayList;
+
 import app.com.gitlib.R;
-import app.com.gitlib.activities.s.details.DetailsActivity;
+import app.com.gitlib.activities.details.DetailsActivity;
+import app.com.gitlib.activities.onboard.HomeActivity;
+import app.com.gitlib.activities.repositories.TrendingRepositoriesActivity;
 import app.com.gitlib.adapters.AllTopicAdapter;
 import app.com.gitlib.apiutils.AllApiService;
 import app.com.gitlib.apiutils.AllUrlClass;
@@ -39,8 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FragmentMachineLearning extends Fragment {
-    private static final FragmentMachineLearning FRAGMENT_MACHINE_LEARNING = null;
+public class MachineLearningActivity extends AppCompatActivity {
     private RecyclerView androidTopicRecyclerView;
     private UX ux;
     private UtilsManager utilsManager;
@@ -55,47 +56,48 @@ public class FragmentMachineLearning extends Fragment {
             "Natural Language Processing","Neural Network","Deep Learning"};
     private AdView adView;
 
-    public FragmentMachineLearning() {
-        // Required empty public constructor
-    }
-
-    public static FragmentMachineLearning getInstance() {
-        if (FRAGMENT_MACHINE_LEARNING == null) return new FragmentMachineLearning();
-        else return FRAGMENT_MACHINE_LEARNING;
-    }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_machine_learning, container, false);
-        init(view);
-        bindUIWithComponents(view);
-        return view;
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_machine_learning);
+
+        //region init and bin UI components
+        init();
+        bindUIWithComponents();
+        //endregion
     }
 
-    private void init(View view) {
-        androidTopicRecyclerView = view.findViewById(R.id.mRecyclerView);
-        refreshListButton = view.findViewById(R.id.RefreshList);
-        NoData = view.findViewById(R.id.NoDataMessage);
-        NoDataIV = view.findViewById(R.id.NoDataIV);
-        mlFilterSpinner = view.findViewById(R.id.FilterSpinner);
-        adView = view.findViewById(R.id.adView);
+    private void init() {
+        androidTopicRecyclerView = findViewById(R.id.mRecyclerView);
+        refreshListButton = findViewById(R.id.RefreshList);
+        NoData = findViewById(R.id.NoDataMessage);
+        NoDataIV = findViewById(R.id.NoDataIV);
+        mlFilterSpinner = findViewById(R.id.FilterSpinner);
+        adView = findViewById(R.id.adView);
         allUrlClass = new AllUrlClass();
         mlItemList = new ArrayList<>();
-        ux = new UX(getContext());
-        utilsManager = new UtilsManager(getContext());
+        ux = new UX(this);
+        utilsManager = new UtilsManager(this);
     }
 
-    private void bindUIWithComponents(View view) {
+    private void bindUIWithComponents() {
+        //region toolbar on back click listener
+        findViewById(R.id.BackButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MachineLearningActivity.this,HomeActivity.class));
+            }
+        });
+        //endregion
+
         ux.setSpinnerAdapter(mlFilterSpinner,mlFilterList);
 
-        new BackgroundDataLoad(view , allUrlClass.ALL_TOPICS_BASE_URL , "ml").execute();
+        new BackgroundDataLoad(allUrlClass.ALL_TOPICS_BASE_URL , "ml").execute();
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new BackgroundDataLoad(view , allUrlClass.ALL_TOPICS_BASE_URL , "ml").execute();
+                new BackgroundDataLoad(allUrlClass.ALL_TOPICS_BASE_URL , "ml").execute();
             }
         });
 
@@ -103,7 +105,7 @@ public class FragmentMachineLearning extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String queryString = adapterView.getItemAtPosition(position).toString();
-                new BackgroundDataLoad(view, allUrlClass.ALL_TOPICS_BASE_URL, "" + queryString).execute();
+                new BackgroundDataLoad(allUrlClass.ALL_TOPICS_BASE_URL, "" + queryString).execute();
             }
 
             @Override
@@ -113,7 +115,7 @@ public class FragmentMachineLearning extends Fragment {
         });
 
         //region adMob
-        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
                 Log.v("onInitComplete","InitializationComplete");
@@ -168,20 +170,18 @@ public class FragmentMachineLearning extends Fragment {
         ux.loadListView(mlItemList, androidTopicRecyclerView, R.layout.adapter_layout_trending_ml_repos).setOnItemClickListener(new AllTopicAdapter.onItemClickListener() {
             @Override
             public void respond(Item androidItem) {
-                Intent intent = new Intent(getContext() , DetailsActivity.class);
+                Intent intent = new Intent(MachineLearningActivity.this , DetailsActivity.class);
+                intent.putExtra("from", "ml");
                 intent.putExtra("item", androidItem);
-                getContext().startActivity(intent);
+                startActivity(intent);
             }
         });
     }
 
     private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
-
-        View view;
         String url , querySting;
 
-        public BackgroundDataLoad(View view, String url, String querySting) {
-            this.view = view;
+        public BackgroundDataLoad(String url, String querySting) {
             this.url = url;
             this.querySting = querySting;
         }
@@ -212,7 +212,7 @@ public class FragmentMachineLearning extends Fragment {
                         else {
                             NoData.setVisibility(View.VISIBLE);
                             NoDataIV.setVisibility(View.VISIBLE);
-                            Toasty.error(getContext(),R.string.no_data_message).show();
+                            Toasty.error(MachineLearningActivity.this,R.string.no_data_message).show();
                         }
                         ux.removeLoadingView();
                     }
@@ -250,4 +250,11 @@ public class FragmentMachineLearning extends Fragment {
         });
 
     }
+
+    //region activity components
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(MachineLearningActivity.this, HomeActivity.class));
+    }
+    //endregion
 }

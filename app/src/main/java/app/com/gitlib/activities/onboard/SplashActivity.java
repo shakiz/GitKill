@@ -1,4 +1,4 @@
-package app.com.gitlib.activities.s.onboard;
+package app.com.gitlib.activities.onboard;
 
 import android.content.Intent;
 import android.os.Handler;
