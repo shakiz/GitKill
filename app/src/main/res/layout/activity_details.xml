@@ -9,8 +9,44 @@
     android:focusableInTouchMode="true"
     tools:context=".activities.details.DetailsActivity">
 
+    <LinearLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:elevation="1dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/BackButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="16dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_left_arrow_new"
+            app:tint="@color/md_grey_800"
+            android:padding="8dp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/repo_details"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/md_grey_800"/>
+
+    </LinearLayout>
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
+        android:layout_below="@id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -98,8 +134,8 @@
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/UserIcon"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            android:layout_width="42dp"
+                            android:layout_height="43dp"
                             android:layout_marginRight="8dp"
                             android:layout_marginTop="6dp"
                             app:civ_border_width="2px"
@@ -343,7 +379,7 @@
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
                                 android:layout_gravity="center"
-                                android:src="@drawable/ic_language_new"/>
+                                android:src="@drawable/ic_language_new_1"/>
 
                             <TextView
                                 android:id="@+id/Language"
@@ -362,28 +398,6 @@
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="72dp"-->
-<!--                android:layout_marginTop="-30dp"-->
-<!--                android:layout_marginBottom="-30dp"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:gravity="center"-->
-<!--                android:orientation="horizontal">-->
-
-<!--                <View-->
-<!--                    android:layout_width="10dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginRight="16dp"-->
-<!--                    android:background="@drawable/curve_back"/>-->
-<!--                <View-->
-<!--                    android:layout_width="10dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:rotation="180"-->
-<!--                    android:background="@drawable/curve_back"/>-->
-
-<!--            </LinearLayout>-->
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -415,7 +429,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@android:color/white" />
-
 
                 </RelativeLayout>
 

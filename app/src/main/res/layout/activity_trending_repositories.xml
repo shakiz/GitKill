@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/md_white_1000"
-    android:weightSum="2"
     android:focusable="true"
+    android:weightSum="2"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 
@@ -42,7 +42,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/top_ml_libraries"
+                android:text="@string/trending_repositories"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
                 android:layout_gravity="center"
@@ -52,12 +52,110 @@
 
         </LinearLayout>
 
-        <include
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/md_white_1000"
+            app:cardCornerRadius="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            layout="@layout/generic_filter_layout"/>
+            app:cardUseCompatPadding="true"
+            app:elevation="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="8dp"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:text="@string/select_language"
+                            android:textColor="@color/md_grey_800"
+                            android:textSize="16sp" />
+
+                        <Spinner
+                            android:id="@+id/LanguageSpinner"
+                            style="@style/Base.TextAppearance.AppCompat.Medium"
+                            android:layout_width="match_parent"
+                            android:layout_height="38dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/edittext_back"
+                            android:padding="4dp"></Spinner>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:text="@string/since"
+                            android:textColor="@color/md_grey_800"
+                            android:textSize="16sp" />
+
+                        <Spinner
+                            android:id="@+id/SinceSpinner"
+                            style="@style/Base.TextAppearance.AppCompat.Medium"
+                            android:layout_width="match_parent"
+                            android:layout_height="38dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/edittext_back"
+                            android:padding="4dp"></Spinner>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_gravity="right"
+                    android:elevation="6dp"
+                    android:translationZ="3dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/a_roundbg">
+
+                    <ImageView
+                        android:id="@+id/Search"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_search_new"
+                        app:tint="@color/md_grey_800"
+                        android:padding="4dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -95,13 +193,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="5dp"
                         android:layout_toRightOf="@+id/labe1"
-                        android:layout_centerVertical="true"
                         android:gravity="center_vertical"
                         android:padding="4dp"
-                        android:text="@string/trending_machine_learning_libraries_heading"
+                        android:text="@string/trending_repos_heading"
                         android:textColor="@color/md_grey_800"
                         android:textSize="16sp" />
 
@@ -119,10 +217,10 @@
                 </RelativeLayout>
 
                 <include
-                    android:layout_below="@id/header_Layout"
-                    android:layout_height="match_parent"
+                    layout="@layout/generic_recycler_view_layout"
                     android:layout_width="match_parent"
-                    layout="@layout/generic_recycler_view_layout"/>
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/header_Layout" />
 
             </RelativeLayout>
 
@@ -142,3 +240,4 @@
         ads:adUnitId="ca-app-pub-3017517613101119/6533321471"/>
 
 </LinearLayout>
+

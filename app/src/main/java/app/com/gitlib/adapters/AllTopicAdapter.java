@@ -1,6 +1,7 @@
 package app.com.gitlib.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +37,11 @@ public class AllTopicAdapter extends RecyclerView.Adapter<AllTopicAdapter.ViewHo
         final Item androidItem = androidItemList.get(i);
         viewHolder.FullName.setText(androidItem.getFullName());
         viewHolder.RepoLink.setText(androidItem.getHtmlUrl());
-        viewHolder.Language.setText(androidItem.getLanguage());
-        //viewHolder.License.setText(androidItem.getLicense().getName());
+        if (!TextUtils.isEmpty(androidItem.getLanguage())) {
+            viewHolder.Language.setText(androidItem.getLanguage());
+        } else {
+            viewHolder.Language.setText("No Language Found");
+        }
         viewHolder.NumberOfStars.setText(""+androidItem.getStargazersCount());
         viewHolder.NumberOfForks.setText(""+androidItem.getForksCount());
         viewHolder.NumberOfWatch.setText(""+androidItem.getWatchersCount());

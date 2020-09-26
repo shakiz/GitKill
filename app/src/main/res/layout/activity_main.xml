@@ -1,48 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/md_white_1000"
     android:focusable="true"
     android:focusableInTouchMode="true"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:id="@+id/app_bar">
-
-        <androidx.appcompat.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/tool_bar"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            style="@style/TextAppearance.Widget.Event.Toolbar.Title"
-            app:title="@string/home"
-            app:titleTextColor="@color/white_transparent">
-
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
     <LinearLayout
-        android:layout_below="@id/app_bar"
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="1dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:elevation="8dp"
+            android:orientation="vertical"
+            android:background="@drawable/a_roundbg">
+
+            <ImageView
+                android:id="@+id/DrawerButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_menu_new"
+                android:padding="8dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/toolbarTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/home"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="4dp"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/md_grey_800"/>
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/mainLayout"
-        android:layout_gravity=""
-        android:orientation="vertical">
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="8dp"
             android:orientation="vertical">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:background="@drawable/top_bg">
 
+                <TextView
+                    android:id="@+id/GreetingsText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="80dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="24dp"
+                    android:text="Good Evening"
+                    android:textColor="@color/md_grey_800"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:typeface="monospace" />
+
+                <TextView
+                    android:id="@+id/DateTimeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/GreetingsText"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:text="Feb 10,2020 || Saturday"
+                    android:textColor="@color/md_grey_800"
+                    android:textSize="14sp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="20dp"
+                    app:cardUseCompatPadding="true"
+                    app:cardElevation="4dp"
+                    app:cardCornerRadius="8dp"
+                    android:translationZ="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="4dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="4dp"
+                            android:padding="8dp"
+                            android:tint="@color/md_grey_600"
+                            android:src="@drawable/ic_user_material_icon"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center|left"
+                            android:layout_margin="4dp"
+                            android:padding="4dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:text="@string/welcome_"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:text="@string/the_futures"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/learn_new_facts_in_it_with_us"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:textColor="@color/md_green_800"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp"
+                tools:listitem="@layout/adapter_layout_it_question_answer_list"/>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

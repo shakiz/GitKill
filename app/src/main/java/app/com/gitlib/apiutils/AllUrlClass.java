@@ -7,4 +7,5 @@ public class AllUrlClass {
     public String TRENDING_LANGUAGES_URL = BASE_URL+"languages/";
     public String ALL_TOPICS_BASE_URL = "https://api.github.com/search/";
     public String FOLLOWERS_AND_FOLLOWING = "https://api.github.com/users/";
+    public static String QUESTION_BANK = "https://opentdb.com/";
 }

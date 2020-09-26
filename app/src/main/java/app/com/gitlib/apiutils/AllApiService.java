@@ -1,10 +1,10 @@
 package app.com.gitlib.apiutils;
 
 import java.util.ArrayList;
-
 import app.com.gitlib.models.alltopic.TopicBase;
 import app.com.gitlib.models.details.FollowersAndFollowing;
 import app.com.gitlib.models.languages.TrendingLanguage;
+import app.com.gitlib.models.questionbank.QuestionBank;
 import app.com.gitlib.models.repositories.TrendingRepositories;
 import app.com.gitlib.models.users.TrendingDevelopers;
 import retrofit2.Call;
@@ -32,4 +32,8 @@ public interface AllApiService {
     //Call for followers and following list
     @GET
     Call<ArrayList<FollowersAndFollowing>> getFollowersAndFollowing(@Url String url);
+
+    //Call for followers and following list
+    @GET
+    Call<QuestionBank> getAllQuestionAndAnswer(@Url String url);
 }

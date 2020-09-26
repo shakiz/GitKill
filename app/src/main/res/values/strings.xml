@@ -46,4 +46,9 @@
     <string name="top_ml_libraries">Top ML Libraries</string>
     <string name="trending_developers">Trending Developers</string>
     <string name="web_repositories">Web Repositories</string>
+    <string name="repo_details">Repo Details</string>
+    <string name="the_futures">The Future Leader</string>
+    <string name="question_one">Question 1</string>
+    <string name="asnwer_one">Answer 1</string>
+    <string name="learn_new_facts_in_it_with_us">Learn new facts about IT with us</string>
 </resources>

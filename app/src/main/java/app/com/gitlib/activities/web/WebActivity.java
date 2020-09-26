@@ -2,7 +2,6 @@ package app.com.gitlib.activities.web;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -21,12 +19,9 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-
 import java.util.ArrayList;
-
 import app.com.gitlib.R;
 import app.com.gitlib.activities.details.DetailsActivity;
-import app.com.gitlib.activities.ml.MachineLearningActivity;
 import app.com.gitlib.activities.onboard.HomeActivity;
 import app.com.gitlib.adapters.AllTopicAdapter;
 import app.com.gitlib.apiutils.AllApiService;
