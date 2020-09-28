@@ -3,7 +3,6 @@ package app.com.gitlib.activities.onboard;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
@@ -123,15 +122,15 @@ public class HomeActivity extends AppCompatActivity {
 
     //region bind UI components
     private void bindUIWithComponents() {
-        //region load question bank data on async task
-        new BackgroundDataLoad().execute();
+        //region load question bank data
+        loadRecord();
         //endregion
 
         //region load question bank data on async task while click on try again textView
         tryAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new BackgroundDataLoad().execute();
+                loadRecord();
             }
         });
         //endregion
@@ -257,49 +256,9 @@ public class HomeActivity extends AppCompatActivity {
         this.startActivity(exitIntent);
     }
 
-    //region asyncTask for calling server data
-    private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
-        @Override
-        protected void onPreExecute() {
-            ux.getLoadingView();
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            loadRecord();
-            return "done";
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if (result.equals("done")){
-                Log.v("result async task :: ",result);
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        if (resultList.size()>0){
-                            setQuestionBankAdapter();
-                            NoData.setVisibility(View.GONE);
-                            NoDataIV.setVisibility(View.GONE);
-                            tryAgain.setVisibility(View.GONE);
-                        }
-                        else {
-                            NoData.setVisibility(View.VISIBLE);
-                            NoDataIV.setVisibility(View.VISIBLE);
-                            tryAgain.setVisibility(View.VISIBLE);
-                            Toasty.error(HomeActivity.this,R.string.no_data_message).show();
-                        }
-                        ux.removeLoadingView();
-                    }
-                }, 7000);
-            }
-        }
-
-    }
-    //endregion
-
     //region load data from server
     private void loadRecord() {
+        ux.getLoadingView();
         resultList.clear();
         //Creating the instance for api service from AllApiService interface
         apiService=utilsManager.getClient(QUESTION_BANK).create(AllApiService.class);
@@ -317,6 +276,19 @@ public class HomeActivity extends AppCompatActivity {
                                     Log.v(TAG, "onResponse: Response : Question "+start+" = "+response.body().getResults().get(start).getQuestion());
                                     resultList.add(new Result(response.body().getResults().get(start).getQuestion(),response.body().getResults().get(start).getCorrectAnswer()));
                                 }
+                                if (resultList.size()>0){
+                                    setQuestionBankAdapter();
+                                    NoData.setVisibility(View.GONE);
+                                    NoDataIV.setVisibility(View.GONE);
+                                    tryAgain.setVisibility(View.GONE);
+                                }
+                                else {
+                                    NoData.setVisibility(View.VISIBLE);
+                                    NoDataIV.setVisibility(View.VISIBLE);
+                                    tryAgain.setVisibility(View.VISIBLE);
+                                    Toasty.error(HomeActivity.this,R.string.no_data_message).show();
+                                }
+                                ux.removeLoadingView();
                             }
                         }
                     }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Git Lib</string>
+    <string name="app_name">GitHub Lib</string>
 
     <string name="select_language">Select Language</string>
     <string name="trending_developers_heading">List of Trending Developers</string>

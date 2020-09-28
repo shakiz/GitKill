@@ -3,9 +3,7 @@ package app.com.gitlib.activities.repositories;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -103,7 +101,7 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
         //endregion
 
         setData();
-        new BackgroundDataLoad(allUrlClass.TRENDING_REPOS_URL).execute();
+        loadRecord(allUrlClass.TRENDING_REPOS_URL);
         ux.setSpinnerAdapter(languageSpinner,languageList);
         ux.setSpinnerAdapter(sinceSpinner,timeList);
 
@@ -136,14 +134,14 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String newUrl = allUrlClass.BASE_URL+"repositories?"+"language="+languageStr+"&since="+sinceStr;
                 Log.v("SpinnerURL",newUrl);
-                new BackgroundDataLoad(newUrl).execute();
+                loadRecord(newUrl);
             }
         });
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new BackgroundDataLoad(allUrlClass.TRENDING_REPOS_URL).execute();
+                loadRecord(allUrlClass.TRENDING_REPOS_URL);
             }
         });
 
@@ -229,52 +227,11 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
         trendingRepositoriesAdapter.notifyDataSetChanged();
     }
 
-    private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
-        String url;
-
-        public BackgroundDataLoad( String url) {
-            this.url = url;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            ux.getLoadingView();
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            loadRecord(url);
-            return "done";
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if (result.equals("done")){
-                Log.v("result async task :: ",result);
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        if (trendingRepoList.size()>0){
-                            loadListView();NoData.setVisibility(View.GONE);
-                            NoDataIV.setVisibility(View.GONE);
-                        }
-                        else {
-                            NoData.setVisibility(View.VISIBLE);
-                            NoDataIV.setVisibility(View.VISIBLE);
-                            Toasty.error(TrendingRepositoriesActivity.this,R.string.no_data_message).show();
-                        }
-                        ux.removeLoadingView();
-                    }
-                }, 6000);
-            }
-        }
-
-    }
-
     private void loadRecord(String url) {
+        ux.getLoadingView();
         trendingRepoList.clear();
         //Creating the instance for api service from AllApiService interface
-        apiService=utilsManager.getClient(url).create(AllApiService.class);
+        apiService=utilsManager.getClient(allUrlClass.TRENDING_REPOS_URL).create(AllApiService.class);
         final Call<ArrayList<TrendingRepositories>> userInformationCall=apiService.getTrendingRepos(url);
         //handling user requests and their interactions with the application.
         userInformationCall.enqueue(new Callback<ArrayList<TrendingRepositories>>() {
@@ -285,6 +242,17 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
                         TrendingRepositories repoPojo=response.body().get(start);
                         trendingRepoList.add(new TrendingRepositories(repoPojo.getAuthor(),repoPojo.getName(),repoPojo.getLanguage(),repoPojo.getStars(),repoPojo.getForks(),repoPojo.getUrl()));
                     }
+
+                    if (trendingRepoList.size()>0){
+                        loadListView();NoData.setVisibility(View.GONE);
+                        NoDataIV.setVisibility(View.GONE);
+                    }
+                    else {
+                        NoData.setVisibility(View.VISIBLE);
+                        NoDataIV.setVisibility(View.VISIBLE);
+                        Toasty.error(TrendingRepositoriesActivity.this,R.string.no_data_message).show();
+                    }
+                    ux.removeLoadingView();
                 }
                 catch (Exception e){
                     Log.v("EXCEPTION : ",""+e.getMessage());

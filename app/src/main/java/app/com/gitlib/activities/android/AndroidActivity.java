@@ -3,9 +3,7 @@ package app.com.gitlib.activities.android;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,6 +35,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AndroidActivity extends AppCompatActivity {
+    private static final String TAG = "Shakil::AndroidActivity";
     private RecyclerView androidTopicRecyclerView;
     private UX ux;
     private UtilsManager utilsManager;
@@ -90,12 +89,12 @@ public class AndroidActivity extends AppCompatActivity {
 
         ux.setSpinnerAdapter(androidFilterSpinner,androidFilterList);
 
-        new BackgroundDataLoad(allUrlClass.ALL_TOPICS_BASE_URL , "android").execute();
+        loadRecord(allUrlClass.ALL_TOPICS_BASE_URL , "android");
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new BackgroundDataLoad(allUrlClass.ALL_TOPICS_BASE_URL , "android").execute();
+                loadRecord(allUrlClass.ALL_TOPICS_BASE_URL , "android");
             }
         });
 
@@ -103,7 +102,7 @@ public class AndroidActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String queryString = adapterView.getItemAtPosition(position).toString();
-                new BackgroundDataLoad(allUrlClass.ALL_TOPICS_BASE_URL, "android"+queryString ).execute();
+                loadRecord(allUrlClass.ALL_TOPICS_BASE_URL, "android"+queryString );
             }
 
             @Override
@@ -179,55 +178,9 @@ public class AndroidActivity extends AppCompatActivity {
     }
     //endregion
 
-    //region asyncTask for calling server data
-    private class BackgroundDataLoad extends AsyncTask<String, Void, String> {
-
-        String url , querySting;
-
-        public BackgroundDataLoad( String url, String querySting) {
-            this.url = url;
-            this.querySting = querySting;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            ux.getLoadingView();
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            loadRecord(url , querySting);
-            return "done";
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if (result.equals("done")){
-                Log.v("result async task :: ",result);
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        if (androidTopicList.size()>0){
-                            loadListView();
-                            NoData.setVisibility(View.GONE);
-                            NoDataIV.setVisibility(View.GONE);
-                        }
-                        else {
-                            NoData.setVisibility(View.VISIBLE);
-                            NoDataIV.setVisibility(View.VISIBLE);
-                            Toasty.error(AndroidActivity.this,R.string.no_data_message).show();
-                        }
-                        ux.removeLoadingView();
-                    }
-                }, 7000);
-            }
-        }
-
-    }
-    //endregion
-
     //region load data from server
     private void loadRecord(String url , String queryString) {
+        ux.getLoadingView();
         androidTopicList.clear();
         //Creating the instance for api service from AllApiService interface
         apiService=utilsManager.getClient(url).create(AllApiService.class);
@@ -242,6 +195,17 @@ public class AndroidActivity extends AppCompatActivity {
                         androidTopicList.add(new Item(item.getFullName(),item.getAvatar_url(),item.getHtmlUrl(),item.getLanguage(),item.getStargazersCount(),item.getWatchersCount(),
                                 item.getForksCount(),item.getForks(),item.getWatchers()));
                     }
+                    if (androidTopicList.size()>0){
+                        loadListView();
+                        NoData.setVisibility(View.GONE);
+                        NoDataIV.setVisibility(View.GONE);
+                    }
+                    else {
+                        NoData.setVisibility(View.VISIBLE);
+                        NoDataIV.setVisibility(View.VISIBLE);
+                        Toasty.error(AndroidActivity.this,R.string.no_data_message).show();
+                    }
+                    ux.removeLoadingView();
                 }
                 catch (Exception e){
                     Log.v("EXCEPTION : ",""+e.getMessage());
