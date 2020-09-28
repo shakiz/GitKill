@@ -160,6 +160,42 @@
                 android:textStyle="bold"
                 android:layout_marginTop="8dp"/>
 
+            <TextView
+                android:id="@+id/NoDataMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:visibility="gone"
+                android:textColor="@color/md_red_400"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:padding="4dp"
+                android:layout_margin="4dp"
+                android:text="@string/nodata"/>
+
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/NoDataIV"
+                android:layout_width="112dp"
+                android:layout_height="112dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:padding="8dp"
+                android:src="@drawable/no_data_found_gif_new"/>
+
+            <TextView
+                android:id="@+id/TryAgain"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/try_again"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/md_grey_800"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:src="@drawable/ic_refresh"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/mRecyclerView"
                 android:layout_width="match_parent"

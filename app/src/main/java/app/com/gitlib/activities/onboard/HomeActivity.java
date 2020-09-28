@@ -7,28 +7,23 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.multidex.MultiDex;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-
 import app.com.gitlib.R;
 import app.com.gitlib.activities.android.AndroidActivity;
 import app.com.gitlib.activities.developers.TrendingDevelopersActivity;
@@ -40,9 +35,6 @@ import app.com.gitlib.adapters.drawerextra.DrawerAdapter;
 import app.com.gitlib.adapters.drawerextra.DrawerItem;
 import app.com.gitlib.adapters.drawerextra.SimpleItem;
 import app.com.gitlib.apiutils.AllApiService;
-import app.com.gitlib.apiutils.AllUrlClass;
-import app.com.gitlib.models.alltopic.Item;
-import app.com.gitlib.models.alltopic.TopicBase;
 import app.com.gitlib.models.questionbank.QuestionBank;
 import app.com.gitlib.models.questionbank.Result;
 import app.com.gitlib.utils.UX;
@@ -51,27 +43,21 @@ import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 import static app.com.gitlib.apiutils.AllUrlClass.QUESTION_BANK;
 
 public class HomeActivity extends AppCompatActivity {
     private static String TAG = "Shakil::HomeActivity";
-    private SlidingRootNav slidingRootNav ;
+    private SlidingRootNav slidingRootNav;
     private DrawerAdapter adapter;
     private String[] screenTitles;
     private Drawable[] screenIcons;
-    private RecyclerView list;
-    private static final int POS_TRENDING_REPO = 0;
-    private static final int POS_TRENDING_DEVELOPERS = 1;
-    private static final int POS_TRENDING_ON_ANDROID = 2;
-    private static final int POS_TRENDING_ON_WEB = 3;
-    private static final int POS_TRENDING_ML_LIBRARIES = 4;
-    private TextView greetingsText, dateTimeText;
+    private RecyclerView drawerRecycler, questionBankRecycler;
+    private static final int POS_TRENDING_REPO = 0,POS_TRENDING_DEVELOPERS = 1,POS_TRENDING_ON_ANDROID = 2,POS_TRENDING_ON_WEB = 3,POS_TRENDING_ML_LIBRARIES = 4;
+    private TextView greetingsText, dateTimeText, NoData, tryAgain;
     private UX ux;
     private AllApiService apiService;
     private UtilsManager utilsManager;
-    private ImageView drawerButton;
-    private RecyclerView recyclerView;
+    private ImageView drawerButton, NoDataIV;
     private ArrayList<Result> resultList;
 
     @Override
@@ -101,7 +87,10 @@ public class HomeActivity extends AppCompatActivity {
         drawerButton = findViewById(R.id.DrawerButton);
         greetingsText = findViewById(R.id.GreetingsText);
         dateTimeText = findViewById(R.id.DateTimeText);
-        recyclerView = findViewById(R.id.mRecyclerView);
+        questionBankRecycler = findViewById(R.id.mRecyclerView);
+        NoData = findViewById(R.id.NoDataMessage);
+        tryAgain = findViewById(R.id.TryAgain);
+        NoDataIV = findViewById(R.id.NoDataIV);
         resultList = new ArrayList<>();
         ux = new UX(this);
         utilsManager = new UtilsManager(this);
@@ -110,30 +99,41 @@ public class HomeActivity extends AppCompatActivity {
 
     //region set drawer adapter
     private void setAdapter() {
-        list = findViewById(R.id.nav_list_item);
+        drawerRecycler = findViewById(R.id.nav_list_item);
         adapter = new DrawerAdapter(Arrays.asList(
                 createItemFor(POS_TRENDING_REPO).setChecked(true),
                 createItemFor(POS_TRENDING_DEVELOPERS),
                 createItemFor(POS_TRENDING_ON_ANDROID),
                 createItemFor(POS_TRENDING_ON_WEB),
                 createItemFor(POS_TRENDING_ML_LIBRARIES)));
-        list.setNestedScrollingEnabled(false);
-        list.setLayoutManager(new LinearLayoutManager(this));
-        list.setAdapter(adapter);
+        drawerRecycler.setNestedScrollingEnabled(false);
+        drawerRecycler.setLayoutManager(new LinearLayoutManager(this));
+        drawerRecycler.setAdapter(adapter);
         adapter.setSelected(POS_TRENDING_REPO);
     }
     //endregion
 
+    //region create drawer item
     private DrawerItem createItemFor(int position) {
         return new SimpleItem(screenIcons[position], screenTitles[position])
                 .withTextTint(getResources().getColor(R.color.md_blue_grey_700))
                 .withSelectedTextTint(getResources().getColor(R.color.md_grey_900));
     }
+    //endregion
 
     //region bind UI components
     private void bindUIWithComponents() {
         //region load question bank data on async task
         new BackgroundDataLoad().execute();
+        //endregion
+
+        //region load question bank data on async task while click on try again textView
+        tryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new BackgroundDataLoad().execute();
+            }
+        });
         //endregion
 
         //region set greetings, name, nav drawer texts and dateTime text
@@ -201,8 +201,8 @@ public class HomeActivity extends AppCompatActivity {
     //region set question bank and result adapter
     private void setQuestionBankAdapter(){
         QuestionBankAndResultAdapter resultAdapter = new QuestionBankAndResultAdapter(resultList, this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(resultAdapter);
+        questionBankRecycler.setLayoutManager(new LinearLayoutManager(this));
+        questionBankRecycler.setAdapter(resultAdapter);
         resultAdapter.notifyDataSetChanged();
     }
     //endregion
@@ -279,12 +279,14 @@ public class HomeActivity extends AppCompatActivity {
                     public void run() {
                         if (resultList.size()>0){
                             setQuestionBankAdapter();
-                            //NoData.setVisibility(View.GONE);
-                            ///NoDataIV.setVisibility(View.GONE);
+                            NoData.setVisibility(View.GONE);
+                            NoDataIV.setVisibility(View.GONE);
+                            tryAgain.setVisibility(View.GONE);
                         }
                         else {
-                            //NoData.setVisibility(View.VISIBLE);
-                            //NoDataIV.setVisibility(View.VISIBLE);
+                            NoData.setVisibility(View.VISIBLE);
+                            NoDataIV.setVisibility(View.VISIBLE);
+                            tryAgain.setVisibility(View.VISIBLE);
                             Toasty.error(HomeActivity.this,R.string.no_data_message).show();
                         }
                         ux.removeLoadingView();
