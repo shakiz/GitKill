@@ -1,7 +1,5 @@
 package app.com.gitlib.activities.android;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +8,12 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -18,6 +22,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import java.util.ArrayList;
+import java.util.List;
 import app.com.gitlib.R;
 import app.com.gitlib.activities.details.DetailsActivity;
 import app.com.gitlib.activities.onboard.HomeActivity;
@@ -25,14 +30,10 @@ import app.com.gitlib.adapters.AllTopicAdapter;
 import app.com.gitlib.apiutils.AllApiService;
 import app.com.gitlib.apiutils.AllUrlClass;
 import app.com.gitlib.models.alltopic.Item;
-import app.com.gitlib.models.alltopic.TopicBase;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.utils.UtilsManager;
+import app.com.gitlib.viewmodels.AndroidRepoViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
-import es.dmoral.toasty.Toasty;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class AndroidActivity extends AppCompatActivity {
     private static final String TAG = "Shakil::AndroidActivity";
@@ -49,6 +50,8 @@ public class AndroidActivity extends AppCompatActivity {
     private String[] androidFilterList = new String[]{"Select Query","Layouts","Drawing",
             "Navigation","Scanning","RecyclerView","ListView","Image Processing","Binding","Debugging"};
     private AdView adView;
+    private AndroidRepoViewModel androidRepoViewModel;
+    private AllTopicAdapter allTopicAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +76,40 @@ public class AndroidActivity extends AppCompatActivity {
         allUrlClass = new AllUrlClass();
         ux = new UX(this);
         utilsManager = new UtilsManager(this);
+        androidRepoViewModel = ViewModelProviders.of(this).get(AndroidRepoViewModel.class);
     }
     //endregion
 
     //region bind UI components
     private void bindUIWithComponents() {
+        //region load first time data
+        performServerOperation("android");
+        //endregion
+
+        loadListView();
+
+        //region refresh and spinner filter
+        refreshListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                performServerOperation("android");
+            }
+        });
+
+        androidFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                String queryString = adapterView.getItemAtPosition(position).toString();
+                performServerOperation("android"+queryString);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        //endregion
+
         //region toolbar on back click listener
         findViewById(R.id.BackButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,28 +120,6 @@ public class AndroidActivity extends AppCompatActivity {
         //endregion
 
         ux.setSpinnerAdapter(androidFilterSpinner,androidFilterList);
-
-        loadRecord(allUrlClass.ALL_TOPICS_BASE_URL , "android");
-
-        refreshListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadRecord(allUrlClass.ALL_TOPICS_BASE_URL , "android");
-            }
-        });
-
-        androidFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                String queryString = adapterView.getItemAtPosition(position).toString();
-                loadRecord(allUrlClass.ALL_TOPICS_BASE_URL, "android"+queryString );
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
 
         //region adMob
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -166,7 +176,12 @@ public class AndroidActivity extends AppCompatActivity {
 
     //region load list data
     private void loadListView(){
-        ux.loadListView(androidTopicList, androidTopicRecyclerView, R.layout.adapter_layout_android_topics).setOnItemClickListener(new AllTopicAdapter.onItemClickListener() {
+        allTopicAdapter = new AllTopicAdapter(androidTopicList, this, R.layout.adapter_layout_android_topics);
+        androidTopicRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        androidTopicRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        androidTopicRecyclerView.setAdapter(allTopicAdapter);
+        allTopicAdapter.notifyDataSetChanged();
+        allTopicAdapter.setOnItemClickListener(new AllTopicAdapter.onItemClickListener() {
             @Override
             public void respond(Item androidItem) {
                 Intent intent = new Intent(AndroidActivity.this , DetailsActivity.class);
@@ -178,45 +193,19 @@ public class AndroidActivity extends AppCompatActivity {
     }
     //endregion
 
-    //region load data from server
-    private void loadRecord(String url , String queryString) {
+    //region perform mvvm server fetch
+    private void performServerOperation(String queryString){
         ux.getLoadingView();
-        androidTopicList.clear();
-        //Creating the instance for api service from AllApiService interface
-        apiService=utilsManager.getClient(url).create(AllApiService.class);
-        final Call<TopicBase> androidTopicCall=apiService.getAllTopics(url+"repositories",queryString);
-        //handling user requests and their interactions with the application.
-        androidTopicCall.enqueue(new Callback<TopicBase>() {
+        androidRepoViewModel.getData(this,allUrlClass.ALL_TOPICS_BASE_URL , queryString);
+        androidRepoViewModel.getAndroidRepos().observe(this, new Observer<List<Item>>() {
             @Override
-            public void onResponse(Call<TopicBase> call, Response<TopicBase> response) {
-                try{
-                    for (int start=0;start<response.body().getItems().size();start++) {
-                        Item item=response.body().getItems().get(start);
-                        androidTopicList.add(new Item(item.getFullName(),item.getAvatar_url(),item.getHtmlUrl(),item.getLanguage(),item.getStargazersCount(),item.getWatchersCount(),
-                                item.getForksCount(),item.getForks(),item.getWatchers()));
-                    }
-                    if (androidTopicList.size()>0){
-                        loadListView();
-                        NoData.setVisibility(View.GONE);
-                        NoDataIV.setVisibility(View.GONE);
-                    }
-                    else {
-                        NoData.setVisibility(View.VISIBLE);
-                        NoDataIV.setVisibility(View.VISIBLE);
-                        Toasty.error(AndroidActivity.this,R.string.no_data_message).show();
-                    }
-                    ux.removeLoadingView();
-                }
-                catch (Exception e){
-                    Log.v("EXCEPTION : ",""+e.getMessage());
-                }
-            }
-            @Override
-            public void onFailure(Call<TopicBase> call, Throwable t) {
-                Log.v("Android fragment",""+t.getMessage());
+            public void onChanged(List<Item> items) {
+                androidTopicList = new ArrayList<>(items);
+                loadListView();
+                allTopicAdapter.notifyDataSetChanged();
+                ux.removeLoadingView();
             }
         });
-
     }
     //endregion
 

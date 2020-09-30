@@ -45,7 +45,7 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
     private ArrayList<TrendingDevelopers> trendingDevelopersList;
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
-    private String TAG = "TrendingDevelopersActivity" , languageStr = "" , sinceStr = "";
+    private String TAG = "Shakil::TrendingDevelopersActivity" , languageStr = "" , sinceStr = "";
     private UX ux;
     private UtilsManager utilsManager;
     private ImageView search;

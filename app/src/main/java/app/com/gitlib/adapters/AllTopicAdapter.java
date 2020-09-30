@@ -58,7 +58,7 @@ public class AllTopicAdapter extends RecyclerView.Adapter<AllTopicAdapter.ViewHo
         return androidItemList.size();
     }
 
-    public void setOnItemClickListener(AllTopicAdapter.onItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(onItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
