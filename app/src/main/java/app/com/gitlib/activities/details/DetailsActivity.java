@@ -2,7 +2,6 @@ package app.com.gitlib.activities.details;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -16,7 +15,6 @@ import app.com.gitlib.models.alltopic.Item;
 
 public class DetailsActivity extends AppCompatActivity {
     private TextView UserName , RepoLink ,Description , NumberOfForks , NumberOfStars , NumberOfWatch , NumberOfIssues , Language , CreatedAt , UpdatedAt;
-    private ImageView UserIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +28,6 @@ public class DetailsActivity extends AppCompatActivity {
     private void init() {
         UserName = findViewById(R.id.UserName);
         RepoLink = findViewById(R.id.RepoLink);
-        UserIcon = findViewById(R.id.UserIcon);
         Description = findViewById(R.id.Description);
         NumberOfForks = findViewById(R.id.NumberOfForks);
         NumberOfStars = findViewById(R.id.NumberOfStars);

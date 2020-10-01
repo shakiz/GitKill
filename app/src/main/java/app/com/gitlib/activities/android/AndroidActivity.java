@@ -34,6 +34,7 @@ import app.com.gitlib.utils.UX;
 import app.com.gitlib.utils.UtilsManager;
 import app.com.gitlib.viewmodels.AndroidRepoViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
+import es.dmoral.toasty.Toasty;
 
 public class AndroidActivity extends AppCompatActivity {
     private static final String TAG = "Shakil::AndroidActivity";
@@ -201,6 +202,11 @@ public class AndroidActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Item> items) {
                 androidTopicList = new ArrayList<>(items);
+                if (androidTopicList.size() <= 0){
+                    NoData.setVisibility(View.VISIBLE);
+                    NoDataIV.setVisibility(View.VISIBLE);
+                    Toasty.error(AndroidActivity.this,R.string.no_data_message).show();
+                }
                 loadListView();
                 allTopicAdapter.notifyDataSetChanged();
                 ux.removeLoadingView();

@@ -14,6 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.ads.AdListener;
@@ -24,19 +26,16 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import java.util.ArrayList;
+import java.util.List;
 import app.com.gitlib.R;
 import app.com.gitlib.activities.onboard.HomeActivity;
 import app.com.gitlib.adapters.TrendingRepositoriesAdapter;
-import app.com.gitlib.apiutils.AllApiService;
-import app.com.gitlib.apiutils.AllUrlClass;
 import app.com.gitlib.models.repositories.TrendingRepositories;
 import app.com.gitlib.utils.UX;
-import app.com.gitlib.utils.UtilsManager;
+import app.com.gitlib.viewmodels.TrendingRepositoriesViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import static app.com.gitlib.apiutils.AllUrlClass.BASE_URL;
 
 public class TrendingRepositoriesActivity extends AppCompatActivity {
     private Spinner languageSpinner,sinceSpinner;
@@ -44,20 +43,18 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
     private RecyclerView recyclerViewRepo;
     private TrendingRepositoriesAdapter trendingRepositoriesAdapter;
     private ArrayList<TrendingRepositories> trendingRepoList;
-    private AllUrlClass allUrlClass;
-    private AllApiService apiService;
     private String TAG = "TrendingRepositoriesActivity" , languageStr = "" , sinceStr = "";
     private ImageView search;
     private CircleImageView refreshListButton;
     private Dialog itemDialog ;
     private RelativeLayout dialogLayout;
     private UX ux;
-    private UtilsManager utilsManager;
     private TextView NoData;
     private ImageView NoDataIV;
     //Dialog components
     private TextView RepoName , RepoLink , UserName , Language , NumberOfStars , NumberOfForks , Description;
     private AdView adView;
+    private TrendingRepositoriesViewModel repositoriesViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +77,11 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
         NoDataIV = findViewById(R.id.NoDataIV);
         search = findViewById(R.id.Search);
         adView = findViewById(R.id.adView);
-        allUrlClass = new AllUrlClass();
         languageList = new ArrayList<>();
         timeList = new ArrayList<>();
         ux = new UX(this);
-        utilsManager = new UtilsManager(this);
         trendingRepoList = new ArrayList<>();
+        repositoriesViewModel = ViewModelProviders.of(this).get(TrendingRepositoriesViewModel.class);
     }
     //endregion
 
@@ -101,7 +97,12 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
         //endregion
 
         setData();
-        loadRecord(allUrlClass.TRENDING_REPOS_URL);
+
+        //region load first time data
+        performServerOperation("");
+        //endregion
+
+        loadListView();
         ux.setSpinnerAdapter(languageSpinner,languageList);
         ux.setSpinnerAdapter(sinceSpinner,timeList);
 
@@ -132,16 +133,16 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String newUrl = allUrlClass.BASE_URL+"repositories?"+"language="+languageStr+"&since="+sinceStr;
+                String newUrl = BASE_URL+"repositories?"+"language="+languageStr+"&since="+sinceStr;
                 Log.v("SpinnerURL",newUrl);
-                loadRecord(newUrl);
+                performServerOperation(newUrl);
             }
         });
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadRecord(allUrlClass.TRENDING_REPOS_URL);
+                performServerOperation("");
             }
         });
 
@@ -200,7 +201,6 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
 
     private void setData() {
         //Adding the language list
-        languageList.add("Select Language");
         languageList.add("Java");
         languageList.add("Python");
         languageList.add("C");
@@ -208,61 +208,10 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
         languageList.add("C#");
         languageList.add("PHP");
         //Adding data to time list
-        timeList.add("Select");
         timeList.add("Daily");
         timeList.add("Weekly");
         timeList.add("Monthly");
         timeList.add("Yearly");
-    }
-
-    private void loadListView(){
-        trendingRepositoriesAdapter = new TrendingRepositoriesAdapter(trendingRepoList, this, new TrendingRepositoriesAdapter.onItemClickListener() {
-            @Override
-            public void respond(TrendingRepositories trendingRepositories) {
-                showDialog(trendingRepositories);
-            }
-        });
-        recyclerViewRepo.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewRepo.setAdapter(trendingRepositoriesAdapter);
-        trendingRepositoriesAdapter.notifyDataSetChanged();
-    }
-
-    private void loadRecord(String url) {
-        ux.getLoadingView();
-        trendingRepoList.clear();
-        //Creating the instance for api service from AllApiService interface
-        apiService=utilsManager.getClient(allUrlClass.TRENDING_REPOS_URL).create(AllApiService.class);
-        final Call<ArrayList<TrendingRepositories>> userInformationCall=apiService.getTrendingRepos(url);
-        //handling user requests and their interactions with the application.
-        userInformationCall.enqueue(new Callback<ArrayList<TrendingRepositories>>() {
-            @Override
-            public void onResponse(Call<ArrayList<TrendingRepositories>> call, Response<ArrayList<TrendingRepositories>> response) {
-                try{
-                    for(int start=0;start<response.body().size();start++){
-                        TrendingRepositories repoPojo=response.body().get(start);
-                        trendingRepoList.add(new TrendingRepositories(repoPojo.getAuthor(),repoPojo.getName(),repoPojo.getLanguage(),repoPojo.getStars(),repoPojo.getForks(),repoPojo.getUrl()));
-                    }
-
-                    if (trendingRepoList.size()>0){
-                        loadListView();NoData.setVisibility(View.GONE);
-                        NoDataIV.setVisibility(View.GONE);
-                    }
-                    else {
-                        NoData.setVisibility(View.VISIBLE);
-                        NoDataIV.setVisibility(View.VISIBLE);
-                        Toasty.error(TrendingRepositoriesActivity.this,R.string.no_data_message).show();
-                    }
-                    ux.removeLoadingView();
-                }
-                catch (Exception e){
-                    Log.v("EXCEPTION : ",""+e.getMessage());
-                }
-            }
-            @Override
-            public void onFailure(Call<ArrayList<TrendingRepositories>> call, Throwable t) {
-                Log.v(TAG,""+t.getMessage());
-            }
-        });
     }
 
     private void showDialog(TrendingRepositories trendingRepositories) {
@@ -309,6 +258,39 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
         NumberOfStars = itemDialog.findViewById(R.id.NumberOfStars);
         NumberOfForks = itemDialog.findViewById(R.id.NumberOfForks);
         dialogLayout = itemDialog.findViewById(R.id.dialogLayout);
+    }
+
+    //region perform mvvm server fetch
+    private void performServerOperation(String url){
+        ux.getLoadingView();
+        repositoriesViewModel.getData(this,url);
+        repositoriesViewModel.getAndroidRepos().observe(this, new Observer<List<TrendingRepositories>>() {
+            @Override
+            public void onChanged(List<TrendingRepositories> items) {
+                trendingRepoList = new ArrayList<>(items);
+                if (trendingRepoList.size() <= 0){
+                    NoData.setVisibility(View.VISIBLE);
+                    NoDataIV.setVisibility(View.VISIBLE);
+                    Toasty.error(TrendingRepositoriesActivity.this,R.string.no_data_message).show();
+                }
+                loadListView();
+                trendingRepositoriesAdapter.notifyDataSetChanged();
+                ux.removeLoadingView();
+            }
+        });
+    }
+    //endregion
+
+    private void loadListView(){
+        trendingRepositoriesAdapter = new TrendingRepositoriesAdapter(trendingRepoList, this, new TrendingRepositoriesAdapter.onItemClickListener() {
+            @Override
+            public void respond(TrendingRepositories trendingRepositories) {
+                showDialog(trendingRepositories);
+            }
+        });
+        recyclerViewRepo.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewRepo.setAdapter(trendingRepositoriesAdapter);
+        trendingRepositoriesAdapter.notifyDataSetChanged();
     }
 
     //region activity components

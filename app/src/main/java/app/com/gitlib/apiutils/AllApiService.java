@@ -1,6 +1,8 @@
 package app.com.gitlib.apiutils;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import app.com.gitlib.models.alltopic.TopicBase;
 import app.com.gitlib.models.details.FollowersAndFollowing;
 import app.com.gitlib.models.languages.TrendingLanguage;
@@ -15,7 +17,7 @@ import retrofit2.http.Url;
 public interface AllApiService {
     //Call for trending repositories
     @GET
-    Call<ArrayList<TrendingRepositories>> getTrendingRepos(@Url String url);
+    Call<List<TrendingRepositories>> getTrendingRepos(@Url String url);
 
     //Call for trending languages
     @GET
