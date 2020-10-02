@@ -12,32 +12,32 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import static app.com.gitlib.apiutils.AllUrlClass.ALL_TOPICS_BASE_URL;
 
-public class WebRepository {
+public class MachineLearningRepository {
     private AllApiService apiService;
     private UtilsManager utilsManager;
     //region singleton instance
-    private static WebRepository instance = null;
+    private static MachineLearningRepository instance = null;
 
-    public static WebRepository getInstance(){
+    public static MachineLearningRepository getInstance(){
         if (instance == null){
-            instance = new WebRepository();
+            instance = new MachineLearningRepository();
         }
         return instance;
     }
     //endregion
 
-    public MutableLiveData<List<Item>> getWebRepos(Context context, String url, String queryString){
-        final MutableLiveData<List<Item>> webRepos = new MutableLiveData<>();
+    public MutableLiveData<List<Item>> getMLRepos(Context context, String url, String queryString){
+        final MutableLiveData<List<Item>> mlRepos = new MutableLiveData<>();
         utilsManager = new UtilsManager(context);
         apiService = utilsManager.getClient(ALL_TOPICS_BASE_URL).create(AllApiService.class);
-        final Call<TopicBase> webTopicCall=apiService.getAllTopics(url+"repositories",queryString);
-        webTopicCall.enqueue(new Callback<TopicBase>() {
+        final Call<TopicBase> mlTopicCall=apiService.getAllTopics(url+"repositories",queryString);
+        mlTopicCall.enqueue(new Callback<TopicBase>() {
             @Override
             public void onResponse(Call<TopicBase> call, Response<TopicBase> response) {
                 if (response.isSuccessful()){
                     if (response.body().getItems() != null){
                         if (response.body().getItems().size() > 0){
-                            webRepos.setValue(response.body().getItems());
+                            mlRepos.setValue(response.body().getItems());
                         }
                     }
                 }
@@ -45,9 +45,9 @@ public class WebRepository {
 
             @Override
             public void onFailure(Call<TopicBase> call, Throwable t) {
-                webRepos.setValue(null);
+                mlRepos.setValue(null);
             }
         });
-        return webRepos;
+        return mlRepos;
     }
 }

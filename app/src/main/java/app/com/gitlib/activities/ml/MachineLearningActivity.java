@@ -9,6 +9,10 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -18,9 +22,12 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import java.util.ArrayList;
+import java.util.List;
+
 import app.com.gitlib.R;
 import app.com.gitlib.activities.details.DetailsActivity;
 import app.com.gitlib.activities.onboard.HomeActivity;
+import app.com.gitlib.activities.web.WebActivity;
 import app.com.gitlib.adapters.AllTopicAdapter;
 import app.com.gitlib.apiutils.AllApiService;
 import app.com.gitlib.apiutils.AllUrlClass;
@@ -28,26 +35,28 @@ import app.com.gitlib.models.alltopic.Item;
 import app.com.gitlib.models.alltopic.TopicBase;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.utils.UtilsManager;
+import app.com.gitlib.viewmodels.MachineLearningViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static app.com.gitlib.apiutils.AllUrlClass.ALL_TOPICS_BASE_URL;
+
 public class MachineLearningActivity extends AppCompatActivity {
-    private RecyclerView androidTopicRecyclerView;
+    private RecyclerView mlRecyclerView;
+    private AllTopicAdapter allTopicAdapter;
     private UX ux;
-    private UtilsManager utilsManager;
     private ArrayList<Item> mlItemList;
     private Spinner mlFilterSpinner;
-    private AllUrlClass allUrlClass;
-    private AllApiService apiService;
     private CircleImageView refreshListButton;
     private TextView NoData;
     private ImageView NoDataIV;
     private String[] mlFilterList = new String[]{"Select Query","Big Data","Data Science",
             "Natural Language Processing","Neural Network","Deep Learning"};
     private AdView adView;
+    private MachineLearningViewModel machineLearningViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,16 +70,15 @@ public class MachineLearningActivity extends AppCompatActivity {
     }
 
     private void init() {
-        androidTopicRecyclerView = findViewById(R.id.mRecyclerView);
+        mlRecyclerView = findViewById(R.id.mRecyclerView);
         refreshListButton = findViewById(R.id.RefreshList);
         NoData = findViewById(R.id.NoDataMessage);
         NoDataIV = findViewById(R.id.NoDataIV);
         mlFilterSpinner = findViewById(R.id.FilterSpinner);
         adView = findViewById(R.id.adView);
-        allUrlClass = new AllUrlClass();
         mlItemList = new ArrayList<>();
         ux = new UX(this);
-        utilsManager = new UtilsManager(this);
+        machineLearningViewModel = ViewModelProviders.of(this).get(MachineLearningViewModel.class);
     }
 
     private void bindUIWithComponents() {
@@ -85,12 +93,12 @@ public class MachineLearningActivity extends AppCompatActivity {
 
         ux.setSpinnerAdapter(mlFilterSpinner,mlFilterList);
 
-        loadRecord(allUrlClass.ALL_TOPICS_BASE_URL , "ml");
+        performServerOperation("ml");
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadRecord(allUrlClass.ALL_TOPICS_BASE_URL , "ml");
+                performServerOperation("ml");
             }
         });
 
@@ -98,7 +106,7 @@ public class MachineLearningActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String queryString = adapterView.getItemAtPosition(position).toString();
-                loadRecord(allUrlClass.ALL_TOPICS_BASE_URL, "" + queryString);
+                performServerOperation("ml"+queryString);
             }
 
             @Override
@@ -160,7 +168,12 @@ public class MachineLearningActivity extends AppCompatActivity {
     }
 
     private void loadListView(){
-        ux.loadListView(mlItemList, androidTopicRecyclerView, R.layout.adapter_layout_trending_ml_repos).setOnItemClickListener(new AllTopicAdapter.onItemClickListener() {
+        allTopicAdapter = new AllTopicAdapter(mlItemList, this, R.layout.adapter_layout_android_topics);
+        mlRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mlRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mlRecyclerView.setAdapter(allTopicAdapter);
+        allTopicAdapter.notifyDataSetChanged();
+        allTopicAdapter.setOnItemClickListener(new AllTopicAdapter.onItemClickListener() {
             @Override
             public void respond(Item androidItem) {
                 Intent intent = new Intent(MachineLearningActivity.this , DetailsActivity.class);
@@ -171,46 +184,26 @@ public class MachineLearningActivity extends AppCompatActivity {
         });
     }
 
-    private void loadRecord(String url , String queryString) {
+    //region perform mvvm server fetch
+    private void performServerOperation(String queryString){
         ux.getLoadingView();
-        mlItemList.clear();
-        //Creating the instance for api service from AllApiService interface
-        apiService=utilsManager.getClient(url).create(AllApiService.class);
-        final Call<TopicBase> androidTopicCall=apiService.getAllTopics(url+"repositories",queryString);
-        //handling user requests and their interactions with the application.
-        androidTopicCall.enqueue(new Callback<TopicBase>() {
+        machineLearningViewModel.getData(this,ALL_TOPICS_BASE_URL , queryString);
+        machineLearningViewModel.getMLRepos().observe(this, new Observer<List<Item>>() {
             @Override
-            public void onResponse(Call<TopicBase> call, Response<TopicBase> response) {
-                try{
-                    for (int start=0;start<response.body().getItems().size();start++) {
-                        Item item=response.body().getItems().get(start);
-                        //License license = item.getLicense();
-                        mlItemList.add(new Item(item.getFullName(),item.getAvatar_url(),item.getHtmlUrl(),item.getLanguage(),item.getStargazersCount(),item.getWatchersCount(),
-                                item.getForksCount(),item.getForks(),item.getWatchers()));
-                    }
-                    if (mlItemList.size()>0){
-                        loadListView();
-                        NoData.setVisibility(View.GONE);
-                        NoDataIV.setVisibility(View.GONE);
-                    }
-                    else {
-                        NoData.setVisibility(View.VISIBLE);
-                        NoDataIV.setVisibility(View.VISIBLE);
-                        Toasty.error(MachineLearningActivity.this,R.string.no_data_message).show();
-                    }
-                    ux.removeLoadingView();
+            public void onChanged(List<Item> items) {
+                mlItemList = new ArrayList<>(items);
+                if (mlItemList.size() <= 0){
+                    NoData.setVisibility(View.VISIBLE);
+                    NoDataIV.setVisibility(View.VISIBLE);
+                    Toasty.error(MachineLearningActivity.this,R.string.no_data_message).show();
                 }
-                catch (Exception e){
-                    Log.v("EXCEPTION : ",""+e.getMessage());
-                }
-            }
-            @Override
-            public void onFailure(Call<TopicBase> call, Throwable t) {
-                Log.v("ML fragment",""+t.getMessage());
+                loadListView();
+                allTopicAdapter.notifyDataSetChanged();
+                ux.removeLoadingView();
             }
         });
-
     }
+    //endregion
 
     //region activity components
     @Override
