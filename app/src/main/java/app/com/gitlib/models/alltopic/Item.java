@@ -3,7 +3,6 @@ package app.com.gitlib.models.alltopic;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import java.io.Serializable;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)

@@ -25,7 +25,7 @@ public interface AllApiService {
 
     //Call for trending developers
     @GET
-    Call<ArrayList<TrendingDevelopers>> getTrendingUsers(@Url String url);
+    Call<List<TrendingDevelopers>> getTrendingDevelopers(@Url String url);
 
     //Call for topics android
     @GET

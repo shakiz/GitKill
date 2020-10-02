@@ -14,6 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.ads.AdListener;
@@ -24,19 +26,16 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import java.util.ArrayList;
+import java.util.List;
 import app.com.gitlib.R;
 import app.com.gitlib.activities.onboard.HomeActivity;
 import app.com.gitlib.adapters.TrendingDevelopersAdapter;
-import app.com.gitlib.apiutils.AllApiService;
 import app.com.gitlib.apiutils.AllUrlClass;
 import app.com.gitlib.models.users.TrendingDevelopers;
 import app.com.gitlib.utils.UX;
-import app.com.gitlib.utils.UtilsManager;
+import app.com.gitlib.viewmodels.TrendingDevelopersViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class TrendingDevelopersActivity extends AppCompatActivity {
     private Spinner languageSpinner,sinceSpinner;
@@ -44,10 +43,8 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
     private ArrayList<String> languageList, timeList;
     private ArrayList<TrendingDevelopers> trendingDevelopersList;
     private AllUrlClass allUrlClass;
-    private AllApiService apiService;
     private String TAG = "Shakil::TrendingDevelopersActivity" , languageStr = "" , sinceStr = "";
     private UX ux;
-    private UtilsManager utilsManager;
     private ImageView search;
     private CircleImageView refreshListButton;
     private Dialog itemDialog;
@@ -57,6 +54,8 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
     //Dialog components
     private TextView  UserName , RepoName , ProfileLink , RepoLink , Description;
     private AdView adView;
+    private TrendingDevelopersAdapter trendingDevelopersAdapter;
+    private TrendingDevelopersViewModel trendingDevelopersViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +82,7 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
         ux = new UX(this);
         NoData = findViewById(R.id.NoDataMessage);
         NoDataIV = findViewById(R.id.NoDataIV);
-        utilsManager = new UtilsManager(this);
+        trendingDevelopersViewModel = ViewModelProviders.of(this).get(TrendingDevelopersViewModel.class);
     }
 
     private void bindUIWithComponents() {
@@ -97,7 +96,7 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
         //endregion
 
         setData();
-        loadRecord(allUrlClass.TRENDING_DEVS_URL);
+        performServerOperation("");
         ux.setSpinnerAdapter(languageSpinner,languageList);
         ux.setSpinnerAdapter(sinceSpinner,timeList);
 
@@ -130,14 +129,14 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String newUrl = allUrlClass.BASE_URL+"developers?"+"language="+languageStr+"&since="+sinceStr;
                 Log.v("SpinnerURL",newUrl);
-                loadRecord(newUrl);
+                performServerOperation(newUrl);
             }
         });
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadRecord(allUrlClass.TRENDING_DEVS_URL);
+                performServerOperation("");
             }
         });
 
@@ -195,7 +194,6 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
 
     private void setData() {
         //Adding the language list
-        languageList.add("Select Language");
         languageList.add("Java");
         languageList.add("Python");
         languageList.add("C");
@@ -203,7 +201,6 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
         languageList.add("C#");
         languageList.add("PHP");
         //Adding data to time list
-        timeList.add("Select");
         timeList.add("Daily");
         timeList.add("Weekly");
         timeList.add("Monthly");
@@ -211,54 +208,16 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
     }
 
     private void loadListView(){
-        TrendingDevelopersAdapter trendingDevelopersAdapter = new TrendingDevelopersAdapter(trendingDevelopersList, this, new TrendingDevelopersAdapter.onItemClickListener() {
+        trendingDevelopersAdapter= new TrendingDevelopersAdapter(trendingDevelopersList, this);
+        trendingDevelopersAdapter.setOnItemClickListener(new TrendingDevelopersAdapter.onItemClickListener() {
             @Override
-            public void respond(TrendingDevelopers trendingDevelopersPojo) {
-                showDialog(trendingDevelopersPojo);
+            public void respond(TrendingDevelopers trendingDevelopers) {
+                showDialog(trendingDevelopers);
             }
         });
         recyclerViewDevelopers.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewDevelopers.setAdapter(trendingDevelopersAdapter);
         trendingDevelopersAdapter.notifyDataSetChanged();
-    }
-
-
-    private void loadRecord(String url) {
-        ux.getLoadingView();
-        trendingDevelopersList.clear();
-        //Creating the instance for api service from AllApiService interface
-        apiService=utilsManager.getClient(allUrlClass.TRENDING_DEVS_URL).create(AllApiService.class);
-        final Call<ArrayList<TrendingDevelopers>> userInformationCall=apiService.getTrendingUsers(url);
-        //handling user requests and their interactions with the application.
-        userInformationCall.enqueue(new Callback<ArrayList<TrendingDevelopers>>() {
-            @Override
-            public void onResponse(Call<ArrayList<TrendingDevelopers>> call, Response<ArrayList<TrendingDevelopers>> response) {
-                try{
-                    for(int start=0;start<response.body().size();start++){
-                        TrendingDevelopers userPojo=response.body().get(start);
-                        trendingDevelopersList.add(new TrendingDevelopers(userPojo.getUsername(),userPojo.getName(),userPojo.getType(),userPojo.getUrl(),userPojo.getAvatar(),userPojo.getRepo()));
-                    }
-                    if (trendingDevelopersList.size()>0){
-                        loadListView();
-                        NoData.setVisibility(View.GONE);
-                        NoDataIV.setVisibility(View.GONE);
-                    }
-                    else {
-                        NoData.setVisibility(View.VISIBLE);
-                        NoDataIV.setVisibility(View.VISIBLE);
-                        Toasty.error(TrendingDevelopersActivity.this,R.string.no_data_message).show();
-                    }
-                    ux.removeLoadingView();
-                }
-                catch (Exception e){
-                    Log.v("EXCEPTION : ",""+e.getMessage());
-                }
-            }
-            @Override
-            public void onFailure(Call<ArrayList<TrendingDevelopers>> call, Throwable t) {
-                Log.v(TAG,""+t.getMessage());
-            }
-        });
     }
 
     private void showDialog(TrendingDevelopers trendingDevelopers) {
@@ -310,6 +269,27 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
         Description = itemDialog.findViewById(R.id.Description);
         dialogLayout = itemDialog.findViewById(R.id.dialogLayout);
     }
+
+    //region perform mvvm server fetch
+    private void performServerOperation(String url){
+        ux.getLoadingView();
+        trendingDevelopersViewModel.getData(this,url);
+        trendingDevelopersViewModel.getDevelopersList().observe(this, new Observer<List<TrendingDevelopers>>() {
+            @Override
+            public void onChanged(List<TrendingDevelopers> items) {
+                trendingDevelopersList = new ArrayList<>(items);
+                if (trendingDevelopersList.size() <= 0){
+                    NoData.setVisibility(View.VISIBLE);
+                    NoDataIV.setVisibility(View.VISIBLE);
+                    Toasty.error(TrendingDevelopersActivity.this,R.string.no_data_message).show();
+                }
+                loadListView();
+                trendingDevelopersAdapter.notifyDataSetChanged();
+                ux.removeLoadingView();
+            }
+        });
+    }
+    //endregion
 
     //region activity components
     @Override

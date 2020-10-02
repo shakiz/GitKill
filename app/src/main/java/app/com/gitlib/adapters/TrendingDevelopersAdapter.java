@@ -19,9 +19,12 @@ public class TrendingDevelopersAdapter extends RecyclerView.Adapter<TrendingDeve
     private Context context;
     private onItemClickListener onItemClickListener;
 
-    public TrendingDevelopersAdapter(ArrayList<TrendingDevelopers> trendingDevelopersList, Context context, onItemClickListener onItemClickListener) {
+    public TrendingDevelopersAdapter(ArrayList<TrendingDevelopers> trendingDevelopersList, Context context) {
         this.trendingDevelopersList = trendingDevelopersList;
         this.context = context;
+    }
+
+    public void setOnItemClickListener(onItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
