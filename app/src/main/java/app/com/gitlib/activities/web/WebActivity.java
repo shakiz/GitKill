@@ -1,7 +1,5 @@
 package app.com.gitlib.activities.web;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +8,12 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -18,36 +22,32 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import java.util.ArrayList;
+import java.util.List;
 import app.com.gitlib.R;
 import app.com.gitlib.activities.details.DetailsActivity;
 import app.com.gitlib.activities.onboard.HomeActivity;
 import app.com.gitlib.adapters.AllTopicAdapter;
-import app.com.gitlib.apiutils.AllApiService;
 import app.com.gitlib.apiutils.AllUrlClass;
 import app.com.gitlib.models.alltopic.Item;
-import app.com.gitlib.models.alltopic.TopicBase;
 import app.com.gitlib.utils.UX;
-import app.com.gitlib.utils.UtilsManager;
+import app.com.gitlib.viewmodels.WebViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class WebActivity extends AppCompatActivity {
     private RecyclerView webTopicRecyclerView;
+    private AllTopicAdapter allTopicAdapter;
     private UX ux;
     private ArrayList<Item> webTopicList;
     private AllUrlClass allUrlClass;
-    private AllApiService apiService;
     private TextView NoData;
     private ImageView NoDataIV;
     private CircleImageView refreshListButton;
-    private UtilsManager utilsManager;
     private Spinner webFilterSpinner;
     private String[] webFilterList = new String[]{"Select Query","Javascript","Typescript",
             "Bootstrap","Laravel","Django","Vue Js","Angular"};
     private AdView adView;
+    private WebViewModel webViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,7 @@ public class WebActivity extends AppCompatActivity {
         webTopicList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         ux = new UX(this);
-        utilsManager = new UtilsManager(this);
+        webViewModel = ViewModelProviders.of(this).get(WebViewModel.class);
     }
     //endregion
 
@@ -87,12 +87,12 @@ public class WebActivity extends AppCompatActivity {
 
         ux.setSpinnerAdapter(webFilterSpinner,webFilterList);
 
-        loadRecord(allUrlClass.ALL_TOPICS_BASE_URL,"web");
+        performServerOperation("web");
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadRecord(allUrlClass.ALL_TOPICS_BASE_URL,"web");
+                performServerOperation("web");
             }
         });
 
@@ -100,7 +100,7 @@ public class WebActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String queryString = adapterView.getItemAtPosition(position).toString();
-                loadRecord(allUrlClass.ALL_TOPICS_BASE_URL, "web"+queryString );
+                performServerOperation("web"+queryString);
             }
 
             @Override
@@ -162,7 +162,12 @@ public class WebActivity extends AppCompatActivity {
     }
 
     private void loadListView(){
-        ux.loadListView(webTopicList, webTopicRecyclerView, R.layout.adapter_layout_android_topics).setOnItemClickListener(new AllTopicAdapter.onItemClickListener() {
+        allTopicAdapter = new AllTopicAdapter(webTopicList, this, R.layout.adapter_layout_android_topics);
+        webTopicRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        webTopicRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        webTopicRecyclerView.setAdapter(allTopicAdapter);
+        allTopicAdapter.notifyDataSetChanged();
+        allTopicAdapter.setOnItemClickListener(new AllTopicAdapter.onItemClickListener() {
             @Override
             public void respond(Item androidItem) {
                 Intent intent = new Intent(WebActivity.this , DetailsActivity.class);
@@ -173,45 +178,26 @@ public class WebActivity extends AppCompatActivity {
         });
     }
 
-    private void loadRecord(String url , String queryString) {
+    //region perform mvvm server fetch
+    private void performServerOperation(String queryString){
         ux.getLoadingView();
-        webTopicList.clear();
-        //Creating the instance for api service from AllApiService interface
-        apiService=utilsManager.getClient(url).create(AllApiService.class);
-        final Call<TopicBase> androidTopicCall=apiService.getAllTopics(url+"repositories",queryString);
-        //handling user requests and their interactions with the application.
-        androidTopicCall.enqueue(new Callback<TopicBase>() {
+        webViewModel.getData(this,allUrlClass.ALL_TOPICS_BASE_URL , queryString);
+        webViewModel.getWebRepos().observe(this, new Observer<List<Item>>() {
             @Override
-            public void onResponse(Call<TopicBase> call, Response<TopicBase> response) {
-                try{
-                    for (int start=0;start<response.body().getItems().size();start++) {
-                        Item item=response.body().getItems().get(start);
-                        webTopicList.add(new Item(item.getFullName(),item.getAvatar_url(),item.getHtmlUrl(),item.getLanguage(),item.getStargazersCount(),item.getWatchersCount(),
-                                item.getForksCount(),item.getForks(),item.getWatchers()));
-                    }
-                    if (webTopicList.size()>0){
-                        loadListView();
-                        NoData.setVisibility(View.GONE);
-                        NoDataIV.setVisibility(View.GONE);
-                    }
-                    else {
-                        NoData.setVisibility(View.VISIBLE);
-                        NoDataIV.setVisibility(View.VISIBLE);
-                        Toasty.error(WebActivity.this,R.string.no_data_message).show();
-                    }
-                    ux.removeLoadingView();
+            public void onChanged(List<Item> items) {
+                webTopicList = new ArrayList<>(items);
+                if (webTopicList.size() <= 0){
+                    NoData.setVisibility(View.VISIBLE);
+                    NoDataIV.setVisibility(View.VISIBLE);
+                    Toasty.error(WebActivity.this,R.string.no_data_message).show();
                 }
-                catch (Exception e){
-                    Log.v("EXCEPTION : ",""+e.getMessage());
-                }
-            }
-            @Override
-            public void onFailure(Call<TopicBase> call, Throwable t) {
-                Log.v("Web Fragment",""+t.getMessage());
+                loadListView();
+                allTopicAdapter.notifyDataSetChanged();
+                ux.removeLoadingView();
             }
         });
-
     }
+    //endregion
 
     //region activity components
     @Override

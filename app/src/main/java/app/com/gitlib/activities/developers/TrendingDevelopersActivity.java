@@ -36,6 +36,7 @@ import app.com.gitlib.utils.UX;
 import app.com.gitlib.viewmodels.TrendingDevelopersViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
+import static app.com.gitlib.apiutils.AllUrlClass.BASE_URL;
 
 public class TrendingDevelopersActivity extends AppCompatActivity {
     private Spinner languageSpinner,sinceSpinner;
@@ -62,12 +63,13 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trending_developers);
 
-        //region init and bin UI components
+        //region init and bind UI components
         init();
         bindUIWithComponents();
         //endregion
     }
 
+    //region init UI components
     private void init() {
         languageSpinner = findViewById(R.id.LanguageSpinner);
         sinceSpinner = findViewById(R.id.SinceSpinner);
@@ -76,7 +78,6 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
         search = findViewById(R.id.Search);
         adView = findViewById(R.id.adView);
         trendingDevelopersList = new ArrayList<>();
-        allUrlClass = new AllUrlClass();
         languageList = new ArrayList<>();
         timeList = new ArrayList<>();
         ux = new UX(this);
@@ -84,7 +85,9 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
         NoDataIV = findViewById(R.id.NoDataIV);
         trendingDevelopersViewModel = ViewModelProviders.of(this).get(TrendingDevelopersViewModel.class);
     }
+    //endregion
 
+    //region bind UI components
     private void bindUIWithComponents() {
         //region toolbar on back click listener
         findViewById(R.id.BackButton).setOnClickListener(new View.OnClickListener() {
@@ -95,7 +98,7 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
         });
         //endregion
 
-        setData();
+        setSpinnerData();
         performServerOperation("");
         ux.setSpinnerAdapter(languageSpinner,languageList);
         ux.setSpinnerAdapter(sinceSpinner,timeList);
@@ -127,7 +130,7 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String newUrl = allUrlClass.BASE_URL+"developers?"+"language="+languageStr+"&since="+sinceStr;
+                String newUrl = BASE_URL+"developers?"+"language="+languageStr+"&since="+sinceStr;
                 Log.v("SpinnerURL",newUrl);
                 performServerOperation(newUrl);
             }
@@ -191,8 +194,10 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
         });
         //endregion
     }
+    //endregion
 
-    private void setData() {
+    //region set spinner data
+    private void setSpinnerData() {
         //Adding the language list
         languageList.add("Java");
         languageList.add("Python");
@@ -206,7 +211,9 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
         timeList.add("Monthly");
         timeList.add("Yearly");
     }
+    //endregion
 
+    //region load list data and set adapter
     private void loadListView(){
         trendingDevelopersAdapter= new TrendingDevelopersAdapter(trendingDevelopersList, this);
         trendingDevelopersAdapter.setOnItemClickListener(new TrendingDevelopersAdapter.onItemClickListener() {
@@ -219,7 +226,9 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
         recyclerViewDevelopers.setAdapter(trendingDevelopersAdapter);
         trendingDevelopersAdapter.notifyDataSetChanged();
     }
+    //endregion
 
+    //region show dialog
     private void showDialog(TrendingDevelopers trendingDevelopers) {
         itemDialog = new Dialog(TrendingDevelopersActivity.this);
         itemDialog.setContentView(R.layout.popup_trending_developers_items_details);
@@ -230,7 +239,20 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
         setCustomDialogData(trendingDevelopers);
         itemDialog.show();
     }
+    //endregion
 
+    //region init dialog components
+    private void customViewInit(Dialog itemDialog) {
+        UserName = itemDialog.findViewById(R.id.UserName);
+        RepoName = itemDialog.findViewById(R.id.RepoName);
+        RepoLink = itemDialog.findViewById(R.id.RepoLink);
+        ProfileLink = itemDialog.findViewById(R.id.ProfileLink);
+        Description = itemDialog.findViewById(R.id.Description);
+        dialogLayout = itemDialog.findViewById(R.id.dialogLayout);
+    }
+    //endregion
+
+    //region set custom dialog data
     private void setCustomDialogData(final TrendingDevelopers trendingDevelopers) {
         UserName.setText(trendingDevelopers.getUsername());
         ProfileLink.setText(trendingDevelopers.getUrl());
@@ -260,15 +282,7 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void customViewInit(Dialog itemDialog) {
-        UserName = itemDialog.findViewById(R.id.UserName);
-        RepoName = itemDialog.findViewById(R.id.RepoName);
-        RepoLink = itemDialog.findViewById(R.id.RepoLink);
-        ProfileLink = itemDialog.findViewById(R.id.ProfileLink);
-        Description = itemDialog.findViewById(R.id.Description);
-        dialogLayout = itemDialog.findViewById(R.id.dialogLayout);
-    }
+    //endregion
 
     //region perform mvvm server fetch
     private void performServerOperation(String url){
