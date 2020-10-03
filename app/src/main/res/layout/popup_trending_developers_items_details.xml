@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:drawableLeft="@drawable/ic_link"
+                android:drawableLeft="@drawable/ic_link_new_1"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:drawablePadding="4dp"
                 android:padding="4dp"
@@ -57,6 +57,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="4dp"
+                    android:background="@drawable/rectangle_back_grey"
                     android:paddingBottom="4dp">
 
                     <View
@@ -91,7 +92,7 @@
                         android:id="@+id/RepoName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_bucket_or_repo_material_icon"
+                        android:drawableLeft="@drawable/ic_repo_new_1"
                         android:drawablePadding="4dp"
                         android:layout_marginTop="4dp"
                         android:padding="4dp"
@@ -104,7 +105,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:drawableLeft="@drawable/ic_description"
+                        android:drawableLeft="@drawable/ic_description_new_1"
                         android:drawablePadding="4dp"
                         android:padding="4dp"
                         android:textSize="14sp"
@@ -117,7 +118,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:drawableLeft="@drawable/ic_link"
+                        android:drawableLeft="@drawable/ic_link_new_1"
                         android:foreground="?attr/selectableItemBackgroundBorderless"
                         android:drawablePadding="4dp"
                         android:padding="4dp"

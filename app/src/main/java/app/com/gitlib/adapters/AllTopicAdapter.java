@@ -35,16 +35,16 @@ public class AllTopicAdapter extends RecyclerView.Adapter<AllTopicAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         final Item androidItem = androidItemList.get(i);
-        viewHolder.FullName.setText(androidItem.getFullName());
-        viewHolder.RepoLink.setText(androidItem.getHtmlUrl());
+        viewHolder.FullName.setText(androidItem.getFull_name());
+        viewHolder.RepoLink.setText(androidItem.getHtml_url());
         if (!TextUtils.isEmpty(androidItem.getLanguage())) {
             viewHolder.Language.setText(androidItem.getLanguage());
         } else {
             viewHolder.Language.setText("No Language Found");
         }
-        viewHolder.NumberOfStars.setText(""+androidItem.getStargazersCount());
-        viewHolder.NumberOfForks.setText(""+androidItem.getForksCount());
-        viewHolder.NumberOfWatch.setText(""+androidItem.getWatchersCount());
+        viewHolder.NumberOfStars.setText(""+androidItem.getStargazers_count());
+        viewHolder.NumberOfForks.setText(""+androidItem.getForks_count());
+        viewHolder.NumberOfWatch.setText(""+androidItem.getWatchers_count());
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

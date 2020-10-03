@@ -122,6 +122,15 @@ public class HomeActivity extends AppCompatActivity {
 
     //region bind UI components
     private void bindUIWithComponents() {
+        //region refresh button click
+        findViewById(R.id.RefreshList).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadRecord();
+            }
+        });
+        //endregion
+
         //region load question bank data
         loadRecord();
         //endregion

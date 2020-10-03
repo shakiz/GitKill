@@ -19,7 +19,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:elevation="8dp"
             android:orientation="vertical"
@@ -34,20 +34,6 @@
                 android:padding="8dp" />
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/toolbarTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/home"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="4dp"
-            android:layout_gravity="center"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/md_grey_800"/>
 
     </LinearLayout>
 
@@ -71,12 +57,25 @@
                     android:id="@+id/GreetingsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="80dp"
+                    android:layout_marginTop="64dp"
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="24dp"
                     android:text="Good Evening"
                     android:textColor="@color/md_grey_800"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:typeface="monospace" />
+
+                <TextView
+                    android:id="@+id/WelcomeText"
+                    android:layout_below="@id/GreetingsText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="24dp"
+                    android:text="Welcome to GitHub Lib"
+                    android:textColor="@color/md_grey_800"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     android:typeface="monospace" />
 
@@ -84,7 +83,7 @@
                     android:id="@+id/DateTimeText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/GreetingsText"
+                    android:layout_below="@id/WelcomeText"
                     android:layout_marginLeft="25dp"
                     android:layout_marginTop="4dp"
                     android:layout_gravity="center"
@@ -98,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="16dp"
                     app:cardUseCompatPadding="true"
                     app:cardElevation="4dp"
                     app:cardCornerRadius="8dp"
@@ -149,16 +148,33 @@
 
             </RelativeLayout>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/learn_new_facts_in_it_with_us"
+                android:orientation="horizontal"
+                android:weightSum="1"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:textColor="@color/md_green_800"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginRight="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/learn_new_facts_in_it_with_us"
+                    android:textColor="@color/md_green_800"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"/>
+
+                <ImageView
+                    android:id="@+id/RefreshList"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center|right"
+                    app:tint="@color/md_green_800"
+                    android:src="@drawable/ic_refresh"/>
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/NoDataMessage"

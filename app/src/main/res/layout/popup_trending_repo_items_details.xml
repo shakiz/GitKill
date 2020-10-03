@@ -17,6 +17,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="4dp"
             android:orientation="vertical">
 
             <TextView
@@ -35,7 +36,7 @@
                 android:id="@+id/RepoName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_bucket_or_repo_material_icon"
+                android:drawableLeft="@drawable/ic_repo_new_1"
                 android:drawablePadding="4dp"
                 android:layout_marginTop="4dp"
                 android:padding="4dp"
@@ -49,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:drawableLeft="@drawable/ic_link"
+                android:drawableLeft="@drawable/ic_link_new_1"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:drawablePadding="4dp"
                 android:padding="4dp"
@@ -63,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:drawableLeft="@drawable/ic_description"
+                android:drawableLeft="@drawable/ic_description_new_1"
                 android:drawablePadding="4dp"
                 android:padding="4dp"
                 android:textSize="14sp"
@@ -75,7 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:drawableLeft="@drawable/ic_language_new"
+                android:drawableLeft="@drawable/ic_language_new_1"
                 android:padding="4dp"
                 android:drawablePadding="4dp"
                 android:clickable="true"
@@ -122,15 +123,16 @@
                         android:gravity="center"
                         android:orientation="vertical">
 
-                        <de.hdodenhof.circleimageview.CircleImageView
+                        <ImageView
                             android:layout_width="28dp"
                             android:layout_height="28dp"
-                            android:src="@drawable/ic_git_fork_new" />
+                            android:src="@drawable/ic_code_fork_symbol" />
 
                         <TextView
                             android:id="@+id/NumberOfForks"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="124"
@@ -172,15 +174,16 @@
                         android:gravity="center"
                         android:orientation="vertical">
 
-                        <de.hdodenhof.circleimageview.CircleImageView
+                        <ImageView
                             android:layout_width="28dp"
                             android:layout_height="28dp"
-                            android:src="@drawable/ic_star_latest" />
+                            android:src="@drawable/ic_star_new" />
 
                         <TextView
                             android:id="@+id/NumberOfStars"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="253"

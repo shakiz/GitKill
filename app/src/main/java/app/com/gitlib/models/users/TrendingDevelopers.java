@@ -16,6 +16,7 @@ import java.util.Map;
     "username",
     "name",
     "type",
+    "sponsorUrl",
     "url",
     "avatar",
     "repo"
@@ -30,6 +31,8 @@ public class TrendingDevelopers {
     private String type;
     @JsonProperty("url")
     private String url;
+    @JsonProperty("sponsorUrl")
+    private String sponsorUrl;
     @JsonProperty("avatar")
     private String avatar;
     @JsonProperty("repo")
@@ -38,13 +41,14 @@ public class TrendingDevelopers {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 
-    public TrendingDevelopers(String username, String name, String type, String url, String avatar, Repo repo) {
+    public TrendingDevelopers(String username, String name, String type, String url, String avatar, Repo repo, String sponsorUrl) {
         this.username = username;
         this.name = name;
         this.type = type;
         this.url = url;
         this.avatar = avatar;
         this.repo = repo;
+        this.sponsorUrl = sponsorUrl;
     }
 
     @JsonProperty("username")
@@ -117,4 +121,13 @@ public class TrendingDevelopers {
         this.additionalProperties.put(name, value);
     }
 
+    @JsonProperty("sponsorUrl")
+    public String getSponsorUrl() {
+        return sponsorUrl;
+    }
+
+    @JsonProperty("sponsorUrl")
+    public void setSponsorUrl(String sponsorUrl) {
+        this.sponsorUrl = sponsorUrl;
+    }
 }

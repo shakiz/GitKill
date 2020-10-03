@@ -87,6 +87,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/repo_link"
+                        android:autoLink="web"
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:textColor="@color/md_grey_800"

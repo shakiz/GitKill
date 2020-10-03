@@ -24,7 +24,7 @@
             android:id="@+id/BackButton"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="10dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_left_arrow_new"
             app:tint="@color/md_grey_800"
@@ -35,8 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/repo_details"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_gravity="center"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -401,6 +401,37 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="2dp">
+
+                    <LinearLayout
+                        android:id="@+id/noDataLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/NoDataMessage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textColor="@color/md_red_400"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:padding="8dp"
+                            android:layout_margin="4dp"
+                            android:text="@string/nodata"/>
+
+                        <pl.droidsonroids.gif.GifImageView
+                            android:id="@+id/NoDataIV"
+                            android:layout_width="112dp"
+                            android:layout_height="112dp"
+                            android:layout_gravity="center"
+                            android:padding="8dp"
+                            android:src="@drawable/no_data_found_gif_new"/>
+
+                    </LinearLayout>
 
                     <!--Details top layout-->
                     <com.google.android.material.tabs.TabLayout

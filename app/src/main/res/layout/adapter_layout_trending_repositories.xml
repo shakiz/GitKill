@@ -1,220 +1,244 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.cardview.widget.CardView
+    android:id="@+id/item_card_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginLeft="8dp"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
+    app:cardCornerRadius="10dp"
+    android:elevation="12dp"
+    app:cardBackgroundColor="@color/md_white_1000"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/item_card_view"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="24dp"
-        android:clickable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        app:cardCornerRadius="10dp"
-        android:elevation="12dp"
-        app:cardBackgroundColor="@color/md_white_1000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:padding="4dp"
+        android:weightSum="6"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:weightSum="6"
-            android:orientation="horizontal">
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:paddingTop="4dp"
+            android:layout_weight="4.4"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="24dp"
-                android:layout_weight="4.4"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="4dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:gravity="center|left"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="4dp"
-                    android:gravity="center|left"
-                    android:orientation="horizontal">
+                    android:src="@drawable/ic_repo_new"/>
 
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_repo_new"/>
-
-                    <TextView
-                        android:id="@+id/RepoName"
-                        android:layout_marginLeft="8dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/repo_name"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:textColor="@color/md_grey_800"
-                        android:textStyle="normal"
-                        android:textSize="14sp"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/RepoName"
+                    android:layout_marginLeft="8dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center|left"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_user_material_icon"/>
-
-                    <TextView
-                        android:id="@+id/RepoOwner"
-                        android:layout_marginLeft="8dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/owner_name"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:textColor="@color/md_grey_800"
-                        android:textStyle="normal"
-                        android:textSize="14sp"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center|left"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="4dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_link_new"/>
-
-                    <TextView
-                        android:id="@+id/RepoLink"
-                        android:layout_marginLeft="8dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/repo_link"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:textColor="@color/md_grey_800"
-                        android:textStyle="normal"
-                        android:textSize="14sp"/>
-
-                </LinearLayout>
+                    android:text="@string/repo_name"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/md_grey_800"
+                    android:textStyle="normal"
+                    android:textSize="14sp"/>
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center|left"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_user_material_icon"/>
+
+                <TextView
+                    android:id="@+id/RepoOwner"
+                    android:layout_marginLeft="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/owner_name"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/md_grey_800"
+                    android:textStyle="normal"
+                    android:textSize="14sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center|left"
+                android:layout_marginBottom="4dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_link_new"/>
+
+                <TextView
+                    android:id="@+id/RepoLink"
+                    android:layout_marginLeft="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:text="@string/repo_link"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/md_grey_800"
+                    android:textStyle="normal"
+                    android:textSize="14sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="4dp"
-                android:layout_weight="1.6"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:weightSum="3"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:gravity="center|left"
-                    android:layout_marginTop="4dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="4dp"
+                    android:gravity="center"
+                    android:background="@drawable/rectangle_back_cyan"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_gravity="center"
+                        android:tint="@color/md_white_1000"
                         android:src="@drawable/ic_star_new"/>
 
                     <TextView
                         android:id="@+id/NumberOfStars"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center|left"
-                        android:gravity="center|left"
+                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:text="@string/number_of_stars"
                         android:layout_marginLeft="8dp"
                         android:maxLines="1"
                         android:ellipsize="end"
-                        android:textColor="@color/md_grey_800" />
+                        android:textColor="@color/md_white_1000" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:gravity="center|left"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="4dp"
+                    android:background="@drawable/rectangle_back_orange"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_gravity="center"
+                        android:tint="@color/md_white_1000"
                         android:src="@drawable/ic_code_fork_symbol"/>
 
                     <TextView
                         android:id="@+id/NumberOfForks"
-                        android:layout_gravity="center|left"
-                        android:gravity="center|left"
-                        android:layout_width="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:text="@string/number_of_forks"
-                        android:textColor="@color/md_grey_800" />
+                        android:textColor="@color/md_white_1000" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:gravity="center|left"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="4dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="4dp"
+                    android:gravity="center"
+                    android:background="@drawable/rectangle_back_green"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_gravity="center"
+                        android:tint="@color/md_white_1000"
                         android:src="@drawable/ic_language_new_1"/>
 
                     <TextView
                         android:id="@+id/Language"
-                        android:layout_gravity="left"
-                        android:layout_width="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
                         android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:layout_height="wrap_content"
                         android:text="@string/language"
-                        android:textColor="@color/md_grey_800" />
+                        android:textColor="@color/md_white_1000" />
 
                 </LinearLayout>
 
@@ -222,19 +246,6 @@
 
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    </LinearLayout>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:elevation="2dp"
-        android:padding="4dp"
-        android:layout_marginLeft="4dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:src="@drawable/ic_repository"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

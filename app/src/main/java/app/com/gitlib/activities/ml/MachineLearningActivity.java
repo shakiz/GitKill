@@ -23,25 +23,15 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import java.util.ArrayList;
 import java.util.List;
-
 import app.com.gitlib.R;
 import app.com.gitlib.activities.details.DetailsActivity;
 import app.com.gitlib.activities.onboard.HomeActivity;
-import app.com.gitlib.activities.web.WebActivity;
 import app.com.gitlib.adapters.AllTopicAdapter;
-import app.com.gitlib.apiutils.AllApiService;
-import app.com.gitlib.apiutils.AllUrlClass;
 import app.com.gitlib.models.alltopic.Item;
-import app.com.gitlib.models.alltopic.TopicBase;
 import app.com.gitlib.utils.UX;
-import app.com.gitlib.utils.UtilsManager;
 import app.com.gitlib.viewmodels.MachineLearningViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import static app.com.gitlib.apiutils.AllUrlClass.ALL_TOPICS_BASE_URL;
 
 public class MachineLearningActivity extends AppCompatActivity {
@@ -106,7 +96,7 @@ public class MachineLearningActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String queryString = adapterView.getItemAtPosition(position).toString();
-                performServerOperation("ml"+queryString);
+                performServerOperation(""+queryString);
             }
 
             @Override

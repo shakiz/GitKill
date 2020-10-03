@@ -1,5 +1,8 @@
 package app.com.gitlib.models.alltopic;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -15,27 +18,16 @@ import java.io.Serializable;
     "updated_at",
     "pushed_at",
     "clone_url",
-    "svn_url",
     "stargazers_count",
     "watchers_count",
     "language",
-    "has_issues",
-    "has_projects",
-    "has_downloads",
-    "has_wiki",
-    "has_pages",
     "forks_count",
-    "mirror_url",
-    "disabled",
-    "open_issues_count",
     "license",
     "forks",
     "open_issues",
-    "watchers",
-    "default_branch",
-    "score"
+    "watchers"
 })
-public class Item implements Serializable {
+public class Item implements Parcelable {
 
     @JsonProperty("full_name")
     private String full_name;
@@ -53,32 +45,14 @@ public class Item implements Serializable {
     private String pushed_at;
     @JsonProperty("clone_url")
     private String clone_url;
-    @JsonProperty("svn_url")
-    private String svn_url;
     @JsonProperty("stargazers_count")
     private Integer stargazers_count;
     @JsonProperty("watchers_count")
     private Integer watchers_count;
     @JsonProperty("language")
     private String language;
-    @JsonProperty("has_issues")
-    private Boolean has_issues;
-    @JsonProperty("has_projects")
-    private Boolean has_projects;
-    @JsonProperty("has_downloads")
-    private Boolean has_downloads;
-    @JsonProperty("has_wiki")
-    private Boolean has_wiki;
-    @JsonProperty("has_pages")
-    private Boolean has_pages;
     @JsonProperty("forks_count")
     private Integer forks_count;
-    @JsonProperty("mirror_url")
-    private Object mirror_url;
-    @JsonProperty("disabled")
-    private Boolean disabled;
-    @JsonProperty("open_issues_count")
-    private Integer open_issues_count;
     @JsonProperty("license")
     private License license;
     @JsonProperty("forks")
@@ -87,10 +61,6 @@ public class Item implements Serializable {
     private Integer open_issues;
     @JsonProperty("watchers")
     private Integer watchers;
-    @JsonProperty("default_branch")
-    private String default_branch;
-    @JsonProperty("score")
-    private Double score;
 
     public Item(String full_name,String avatar_url, String html_url, String language, Integer stargazers_count, Integer watchers_count, Integer forks_count, Integer forks, Integer watchers) {
         this.full_name = full_name;
@@ -104,272 +74,171 @@ public class Item implements Serializable {
         this.watchers = watchers;
     }
 
-    @JsonProperty("full_name")
-    public String getFullName() {
+    public String getFull_name() {
         return full_name;
     }
 
-    @JsonProperty("full_name")
-    public void setFullName(String full_name) {
+    public void setFull_name(String full_name) {
         this.full_name = full_name;
     }
 
-    @JsonProperty("html_url")
-    public String getHtmlUrl() {
+    public String getHtml_url() {
         return html_url;
     }
 
-    @JsonProperty("html_url")
-    public void setHtmlUrl(String html_url) {
+    public void setHtml_url(String html_url) {
         this.html_url = html_url;
     }
 
-    @JsonProperty("description")
+    public String getAvatar_url() {
+        return avatar_url;
+    }
+
+    public void setAvatar_url(String avatar_url) {
+        this.avatar_url = avatar_url;
+    }
+
     public String getDescription() {
         return description;
     }
 
-    @JsonProperty("description")
     public void setDescription(String description) {
         this.description = description;
     }
 
-    @JsonProperty("created_at")
-    public String getCreatedAt() {
+    public String getCreated_at() {
         return created_at;
     }
 
-    @JsonProperty("created_at")
-    public void setCreatedAt(String created_at) {
+    public void setCreated_at(String created_at) {
         this.created_at = created_at;
     }
 
-    @JsonProperty("updated_at")
-    public String getUpdatedAt() {
+    public String getUpdated_at() {
         return updated_at;
     }
 
-    @JsonProperty("updated_at")
-    public void setUpdatedAt(String updated_at) {
+    public void setUpdated_at(String updated_at) {
         this.updated_at = updated_at;
     }
 
-    @JsonProperty("pushed_at")
-    public String getPushedAt() {
+    public String getPushed_at() {
         return pushed_at;
     }
 
-    @JsonProperty("pushed_at")
-    public void setPushedAt(String pushed_at) {
+    public void setPushed_at(String pushed_at) {
         this.pushed_at = pushed_at;
     }
 
-    @JsonProperty("clone_url")
-    public String getCloneUrl() {
+    public String getClone_url() {
         return clone_url;
     }
 
-    @JsonProperty("clone_url")
-    public void setCloneUrl(String clone_url) {
+    public void setClone_url(String clone_url) {
         this.clone_url = clone_url;
     }
 
-    @JsonProperty("svn_url")
-    public String getSvnUrl() {
-        return svn_url;
-    }
-
-    @JsonProperty("svn_url")
-    public void setSvnUrl(String svn_url) {
-        this.svn_url = svn_url;
-    }
-
-    @JsonProperty("stargazers_count")
-    public Integer getStargazersCount() {
+    public Integer getStargazers_count() {
         return stargazers_count;
     }
 
-    @JsonProperty("stargazers_count")
-    public void setStargazersCount(Integer stargazers_count) {
+    public void setStargazers_count(Integer stargazers_count) {
         this.stargazers_count = stargazers_count;
     }
 
-    @JsonProperty("watchers_count")
-    public Integer getWatchersCount() {
+    public Integer getWatchers_count() {
         return watchers_count;
     }
 
-    @JsonProperty("watchers_count")
-    public void setWatchersCount(Integer watchers_count) {
+    public void setWatchers_count(Integer watchers_count) {
         this.watchers_count = watchers_count;
     }
 
-    @JsonProperty("language")
     public String getLanguage() {
         return language;
     }
 
-    @JsonProperty("language")
     public void setLanguage(String language) {
         this.language = language;
     }
 
-    @JsonProperty("has_issues")
-    public Boolean getHasIssues() {
-        return has_issues;
-    }
-
-    @JsonProperty("has_issues")
-    public void setHasIssues(Boolean has_issues) {
-        this.has_issues = has_issues;
-    }
-
-    @JsonProperty("has_projects")
-    public Boolean getHasProjects() {
-        return has_projects;
-    }
-
-    @JsonProperty("has_projects")
-    public void setHasProjects(Boolean has_projects) {
-        this.has_projects = has_projects;
-    }
-
-    @JsonProperty("has_downloads")
-    public Boolean getHasDownloads() {
-        return has_downloads;
-    }
-
-    @JsonProperty("has_downloads")
-    public void setHasDownloads(Boolean has_downloads) {
-        this.has_downloads = has_downloads;
-    }
-
-    @JsonProperty("has_wiki")
-    public Boolean getHasWiki() {
-        return has_wiki;
-    }
-
-    @JsonProperty("has_wiki")
-    public void setHasWiki(Boolean has_wiki) {
-        this.has_wiki = has_wiki;
-    }
-
-    @JsonProperty("has_pages")
-    public Boolean getHasPages() {
-        return has_pages;
-    }
-
-    @JsonProperty("has_pages")
-    public void setHasPages(Boolean has_pages) {
-        this.has_pages = has_pages;
-    }
-
-    @JsonProperty("forks_count")
-    public Integer getForksCount() {
+    public Integer getForks_count() {
         return forks_count;
     }
 
-    @JsonProperty("forks_count")
-    public void setForksCount(Integer forks_count) {
+    public void setForks_count(Integer forks_count) {
         this.forks_count = forks_count;
     }
 
-    @JsonProperty("mirror_url")
-    public Object getMirrorUrl() {
-        return mirror_url;
-    }
-
-    @JsonProperty("mirror_url")
-    public void setMirrorUrl(Object mirror_url) {
-        this.mirror_url = mirror_url;
-    }
-
-    @JsonProperty("disabled")
-    public Boolean getDisabled() {
-        return disabled;
-    }
-
-    @JsonProperty("disabled")
-    public void setDisabled(Boolean disabled) {
-        this.disabled = disabled;
-    }
-
-    @JsonProperty("open_issues_count")
-    public Integer getOpenIssuesCount() {
-        return open_issues_count;
-    }
-
-    @JsonProperty("open_issues_count")
-    public void setopen_issuesCount(Integer open_issues_count) {
-        this.open_issues_count = open_issues_count;
-    }
-
-    @JsonProperty("license")
     public License getLicense() {
         return license;
     }
 
-    @JsonProperty("license")
     public void setLicense(License license) {
         this.license = license;
     }
 
-    @JsonProperty("forks")
     public Integer getForks() {
         return forks;
     }
 
-    @JsonProperty("forks")
     public void setForks(Integer forks) {
         this.forks = forks;
     }
 
-    @JsonProperty("open_issues")
-    public Integer getOpenIssues() {
+    public Integer getOpen_issues() {
         return open_issues;
     }
 
-    @JsonProperty("open_issues")
-    public void setOpenIssues(Integer open_issues) {
+    public void setOpen_issues(Integer open_issues) {
         this.open_issues = open_issues;
     }
 
-    @JsonProperty("watchers")
     public Integer getWatchers() {
         return watchers;
     }
 
-    @JsonProperty("watchers")
     public void setWatchers(Integer watchers) {
         this.watchers = watchers;
     }
 
-    @JsonProperty("default_branch")
-    public String getDefaultBranch() {
-        return default_branch;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    @JsonProperty("default_branch")
-    public void setDefaultBranch(String default_branch) {
-        this.default_branch = default_branch;
+    protected Item(Parcel in) {
+        full_name = in.readString();
+        avatar_url = in.readString();
+        html_url = in.readString();
+        language = in.readString();
+        stargazers_count = in.readInt();
+        watchers_count = in.readInt();
+        forks_count = in.readInt();
+        forks = in.readInt();
     }
 
-    @JsonProperty("score")
-    public Double getScore() {
-        return score;
-    }
+    public static final Creator<Item> CREATOR = new Creator<Item>() {
+        @Override
+        public Item createFromParcel(Parcel in) {
+            return new Item(in);
+        }
 
-    @JsonProperty("score")
-    public void setScore(Double score) {
-        this.score = score;
-    }
+        @Override
+        public Item[] newArray(int size) {
+            return new Item[size];
+        }
+    };
 
-    @JsonProperty("avatar_url")
-    public String getAvatar_url() {
-        return avatar_url;
-    }
-    @JsonProperty("avatar_url")
-    public void setAvatar_url(String avatar_url) {
-        this.avatar_url = avatar_url;
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeString(this.full_name);
+        parcel.writeString(this.avatar_url);
+        parcel.writeString(this.html_url);
+        parcel.writeString(this.language);
+        parcel.writeInt(this.stargazers_count);
+        parcel.writeInt(this.watchers_count);
+        parcel.writeInt(this.forks_count);
+        parcel.writeInt(this.forks);
     }
 }

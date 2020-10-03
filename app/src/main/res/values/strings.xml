@@ -38,7 +38,7 @@
     <string name="followers">Followers</string>
     <string name="following">Following</string>
     <string name="welcome_">Welcome ,</string>
-    <string name="popular_repo">Popular Repository</string>
+    <string name="popular_repo">Popular Repository Details</string>
     <string name="no_followers_found">No followers found</string>
     <string name="no_following_found">No following found</string>
     <string name="android_list">Android Lists</string>
@@ -52,4 +52,6 @@
     <string name="asnwer_one">Answer 1</string>
     <string name="learn_new_facts_in_it_with_us">Learn new facts about IT with us</string>
     <string name="try_again">Try Again</string>
+    <string name="name">Name</string>
+    <string name="sponsor_link">Sponsor Link</string>
 </resources>
