@@ -36,6 +36,8 @@ import app.com.gitlib.viewmodels.TrendingRepositoriesViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
 import static app.com.gitlib.apiutils.AllUrlClass.BASE_URL;
+import static app.com.gitlib.utils.UtilsManager.hasConnection;
+import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class TrendingRepositoriesActivity extends AppCompatActivity {
     private Spinner languageSpinner,sinceSpinner;
@@ -262,25 +264,31 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
 
     //region perform mvvm server fetch
     private void performServerOperation(String url){
-        ux.getLoadingView();
-        repositoriesViewModel.getData(this,url);
-        repositoriesViewModel.getAndroidRepos().observe(this, new Observer<List<TrendingRepositories>>() {
-            @Override
-            public void onChanged(List<TrendingRepositories> items) {
-                trendingRepoList = new ArrayList<>(items);
-                if (trendingRepoList.size() <= 0){
-                    NoData.setVisibility(View.VISIBLE);
-                    NoDataIV.setVisibility(View.VISIBLE);
-                    Toasty.error(TrendingRepositoriesActivity.this,R.string.no_data_message).show();
+        if (hasConnection(TrendingRepositoriesActivity.this)) {
+            ux.getLoadingView();
+            repositoriesViewModel.getData(this,url);
+            repositoriesViewModel.getAndroidRepos().observe(this, new Observer<List<TrendingRepositories>>() {
+                @Override
+                public void onChanged(List<TrendingRepositories> items) {
+                    trendingRepoList = new ArrayList<>(items);
+                    if (trendingRepoList.size() <= 0){
+                        noDataVisibility(true);
+                        Toasty.error(TrendingRepositoriesActivity.this,R.string.no_data_message).show();
+                    }
+                    loadListView();
+                    trendingRepositoriesAdapter.notifyDataSetChanged();
+                    ux.removeLoadingView();
                 }
-                loadListView();
-                trendingRepositoriesAdapter.notifyDataSetChanged();
-                ux.removeLoadingView();
-            }
-        });
+            });
+        }
+        else{
+            noDataVisibility(true);
+            internetErrorDialog(TrendingRepositoriesActivity.this);
+        }
     }
     //endregion
 
+    //region load list data with adapter
     private void loadListView(){
         trendingRepositoriesAdapter = new TrendingRepositoriesAdapter(trendingRepoList, this, new TrendingRepositoriesAdapter.onItemClickListener() {
             @Override
@@ -292,6 +300,19 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
         recyclerViewRepo.setAdapter(trendingRepositoriesAdapter);
         trendingRepositoriesAdapter.notifyDataSetChanged();
     }
+    //endregion
+
+    //region set no data related components visible
+    private void noDataVisibility(boolean shouldVisible){
+        if (shouldVisible) {
+            NoData.setVisibility(View.VISIBLE);
+            NoDataIV.setVisibility(View.VISIBLE);
+        } else {
+            NoData.setVisibility(View.GONE);
+            NoDataIV.setVisibility(View.GONE);
+        }
+    }
+    //endregion
 
     //region activity components
     @Override

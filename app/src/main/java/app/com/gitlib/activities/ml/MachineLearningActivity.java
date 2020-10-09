@@ -33,6 +33,8 @@ import app.com.gitlib.viewmodels.MachineLearningViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
 import static app.com.gitlib.apiutils.AllUrlClass.ALL_TOPICS_BASE_URL;
+import static app.com.gitlib.utils.UtilsManager.hasConnection;
+import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class MachineLearningActivity extends AppCompatActivity {
     private RecyclerView mlRecyclerView;
@@ -83,12 +85,26 @@ public class MachineLearningActivity extends AppCompatActivity {
 
         ux.setSpinnerAdapter(mlFilterSpinner,mlFilterList);
 
-        performServerOperation("ml");
+        //region load first time data
+        if (hasConnection(MachineLearningActivity.this)) {
+            performServerOperation("ml");
+        }
+        else{
+            noDataVisibility(true);
+            internetErrorDialog(MachineLearningActivity.this);
+        }
+        //endregion
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                performServerOperation("ml");
+                if (hasConnection(MachineLearningActivity.this)) {
+                    performServerOperation("ml");
+                }
+                else{
+                    noDataVisibility(true);
+                    internetErrorDialog(MachineLearningActivity.this);
+                }
             }
         });
 
@@ -183,8 +199,7 @@ public class MachineLearningActivity extends AppCompatActivity {
             public void onChanged(List<Item> items) {
                 mlItemList = new ArrayList<>(items);
                 if (mlItemList.size() <= 0){
-                    NoData.setVisibility(View.VISIBLE);
-                    NoDataIV.setVisibility(View.VISIBLE);
+                    noDataVisibility(true);
                     Toasty.error(MachineLearningActivity.this,R.string.no_data_message).show();
                 }
                 loadListView();
@@ -192,6 +207,18 @@ public class MachineLearningActivity extends AppCompatActivity {
                 ux.removeLoadingView();
             }
         });
+    }
+    //endregion
+
+    //region set no data related components visible
+    private void noDataVisibility(boolean shouldVisible){
+        if (shouldVisible) {
+            NoData.setVisibility(View.VISIBLE);
+            NoDataIV.setVisibility(View.VISIBLE);
+        } else {
+            NoData.setVisibility(View.GONE);
+            NoDataIV.setVisibility(View.GONE);
+        }
     }
     //endregion
 

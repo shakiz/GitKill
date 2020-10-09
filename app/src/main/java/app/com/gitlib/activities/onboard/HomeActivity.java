@@ -43,6 +43,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import static app.com.gitlib.apiutils.AllUrlClass.QUESTION_BANK;
+import static app.com.gitlib.utils.UtilsManager.hasConnection;
+import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class HomeActivity extends AppCompatActivity {
     private static String TAG = "Shakil::HomeActivity";
@@ -126,20 +128,37 @@ public class HomeActivity extends AppCompatActivity {
         findViewById(R.id.RefreshList).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadRecord();
+                if (hasConnection(HomeActivity.this)) {
+                    loadRecord();
+                }
+                else{
+                    noDataVisibility(true);
+                    internetErrorDialog(HomeActivity.this);
+                }
             }
         });
         //endregion
 
-        //region load question bank data
-        loadRecord();
+        //region check internet connection and load question bank data
+        if (hasConnection(this)) {
+            loadRecord();
+        } else {
+            noDataVisibility(true);
+            internetErrorDialog(HomeActivity.this);
+        }
         //endregion
 
         //region load question bank data on async task while click on try again textView
         tryAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadRecord();
+                if (hasConnection(HomeActivity.this)) {
+                    loadRecord();
+                }
+                else{
+                    noDataVisibility(true);
+                    internetErrorDialog(HomeActivity.this);
+                }
             }
         });
         //endregion
@@ -287,14 +306,10 @@ public class HomeActivity extends AppCompatActivity {
                                 }
                                 if (resultList.size()>0){
                                     setQuestionBankAdapter();
-                                    NoData.setVisibility(View.GONE);
-                                    NoDataIV.setVisibility(View.GONE);
-                                    tryAgain.setVisibility(View.GONE);
+                                    noDataVisibility(false);
                                 }
                                 else {
-                                    NoData.setVisibility(View.VISIBLE);
-                                    NoDataIV.setVisibility(View.VISIBLE);
-                                    tryAgain.setVisibility(View.VISIBLE);
+                                    noDataVisibility(true);
                                     Toasty.error(HomeActivity.this,R.string.no_data_message).show();
                                 }
                                 ux.removeLoadingView();
@@ -310,6 +325,20 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+    }
+    //endregion
+
+    //region set no data related components visible
+    private void noDataVisibility(boolean shouldVisible){
+        if (shouldVisible) {
+            NoData.setVisibility(View.VISIBLE);
+            NoDataIV.setVisibility(View.VISIBLE);
+            tryAgain.setVisibility(View.VISIBLE);
+        } else {
+            NoData.setVisibility(View.GONE);
+            NoDataIV.setVisibility(View.GONE);
+            tryAgain.setVisibility(View.GONE);
+        }
     }
     //endregion
 

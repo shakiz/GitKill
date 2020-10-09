@@ -27,23 +27,22 @@ import app.com.gitlib.R;
 import app.com.gitlib.activities.details.DetailsActivity;
 import app.com.gitlib.activities.onboard.HomeActivity;
 import app.com.gitlib.adapters.AllTopicAdapter;
-import app.com.gitlib.apiutils.AllApiService;
 import app.com.gitlib.apiutils.AllUrlClass;
 import app.com.gitlib.models.alltopic.Item;
 import app.com.gitlib.utils.UX;
-import app.com.gitlib.utils.UtilsManager;
 import app.com.gitlib.viewmodels.AndroidRepoViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
+
+import static app.com.gitlib.utils.UtilsManager.hasConnection;
+import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class AndroidActivity extends AppCompatActivity {
     private static final String TAG = "Shakil::AndroidActivity";
     private RecyclerView androidTopicRecyclerView;
     private UX ux;
-    private UtilsManager utilsManager;
     private ArrayList<Item> androidTopicList;
     private AllUrlClass allUrlClass;
-    private AllApiService apiService;
     private CircleImageView refreshListButton;
     private Spinner androidFilterSpinner;
     private TextView NoData;
@@ -76,7 +75,6 @@ public class AndroidActivity extends AppCompatActivity {
         androidTopicList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
         ux = new UX(this);
-        utilsManager = new UtilsManager(this);
         androidRepoViewModel = ViewModelProviders.of(this).get(AndroidRepoViewModel.class);
     }
     //endregion
@@ -84,7 +82,14 @@ public class AndroidActivity extends AppCompatActivity {
     //region bind UI components
     private void bindUIWithComponents() {
         //region load first time data
-        performServerOperation("android");
+        if (hasConnection(AndroidActivity.this)) {
+            performServerOperation("android");
+        }
+
+        else{
+            noDataVisibility(true);
+            internetErrorDialog(AndroidActivity.this);
+        }
         //endregion
 
         loadListView();
@@ -93,7 +98,14 @@ public class AndroidActivity extends AppCompatActivity {
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                performServerOperation("android");
+                if (hasConnection(AndroidActivity.this)) {
+                    performServerOperation("android");
+                }
+
+                else{
+                    noDataVisibility(true);
+                    internetErrorDialog(AndroidActivity.this);
+                }
             }
         });
 
@@ -203,8 +215,7 @@ public class AndroidActivity extends AppCompatActivity {
             public void onChanged(List<Item> items) {
                 androidTopicList = new ArrayList<>(items);
                 if (androidTopicList.size() <= 0){
-                    NoData.setVisibility(View.VISIBLE);
-                    NoDataIV.setVisibility(View.VISIBLE);
+                    noDataVisibility(true);
                     Toasty.error(AndroidActivity.this,R.string.no_data_message).show();
                 }
                 loadListView();
@@ -212,6 +223,18 @@ public class AndroidActivity extends AppCompatActivity {
                 ux.removeLoadingView();
             }
         });
+    }
+    //endregion
+
+    //region set no data related components visible
+    private void noDataVisibility(boolean shouldVisible){
+        if (shouldVisible) {
+            NoData.setVisibility(View.VISIBLE);
+            NoDataIV.setVisibility(View.VISIBLE);
+        } else {
+            NoData.setVisibility(View.GONE);
+            NoDataIV.setVisibility(View.GONE);
+        }
     }
     //endregion
 

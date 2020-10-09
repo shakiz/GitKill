@@ -5,6 +5,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
+
+import app.com.gitlib.R;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -17,19 +20,6 @@ public class UtilsManager {
 
     public UtilsManager(Context context) {
         this.context = context;
-    }
-
-    public boolean checkNetworkConnectivity(){
-
-        boolean connected = false;
-        ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-            connected = true;
-        }
-        else connected = false;
-
-        return connected;
     }
 
     public Retrofit getClient(String url) {
@@ -47,5 +37,36 @@ public class UtilsManager {
                 .client(builder.build())
                 .build();
         return retrofit;
+    }
+
+    //region check internet connection availability
+    public static boolean hasConnection(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifiNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (wifiNetwork != null && wifiNetwork.isConnected()) {
+            return true;
+        }
+        NetworkInfo mobileNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if (mobileNetwork != null && mobileNetwork.isConnected()) {
+            return true;
+        }
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null && activeNetwork.isConnected()) {
+            return true;
+        }
+        return false;
+    }
+    //endregion
+
+    //region get internet connection alert
+    public static void internetErrorDialog(Context context){
+        SweetAlertDialog alert = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+        alert.setCancelable(false);
+        alert.setCanceledOnTouchOutside(false);
+        alert.showCancelButton(false);
+        alert.setTitleText(context.getString(R.string.no_internet_title));
+        alert.setContentText(context.getString(R.string.no_internet_message));
+        alert.setConfirmText(context.getString(R.string.dialog_ok));
+        alert.show();
     }
 }

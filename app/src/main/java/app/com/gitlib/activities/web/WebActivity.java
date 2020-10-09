@@ -34,6 +34,9 @@ import app.com.gitlib.viewmodels.WebViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
 
+import static app.com.gitlib.utils.UtilsManager.hasConnection;
+import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
+
 public class WebActivity extends AppCompatActivity {
     private RecyclerView webTopicRecyclerView;
     private AllTopicAdapter allTopicAdapter;
@@ -87,12 +90,28 @@ public class WebActivity extends AppCompatActivity {
 
         ux.setSpinnerAdapter(webFilterSpinner,webFilterList);
 
+        //region load data and before loading data check internet availability
+        if (hasConnection(WebActivity.this)) {
+            performServerOperation("web");
+        }
+        else{
+            noDataVisibility(true);
+            internetErrorDialog(WebActivity.this);
+        }
+        //endregion
+
         performServerOperation("web");
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                performServerOperation("web");
+                if (hasConnection(WebActivity.this)) {
+                    performServerOperation("web");
+                }
+                else{
+                    noDataVisibility(true);
+                    internetErrorDialog(WebActivity.this);
+                }
             }
         });
 
@@ -187,8 +206,7 @@ public class WebActivity extends AppCompatActivity {
             public void onChanged(List<Item> items) {
                 webTopicList = new ArrayList<>(items);
                 if (webTopicList.size() <= 0){
-                    NoData.setVisibility(View.VISIBLE);
-                    NoDataIV.setVisibility(View.VISIBLE);
+                    noDataVisibility(true);
                     Toasty.error(WebActivity.this,R.string.no_data_message).show();
                 }
                 loadListView();
@@ -196,6 +214,18 @@ public class WebActivity extends AppCompatActivity {
                 ux.removeLoadingView();
             }
         });
+    }
+    //endregion
+
+    //region set no data related components visible
+    private void noDataVisibility(boolean shouldVisible){
+        if (shouldVisible) {
+            NoData.setVisibility(View.VISIBLE);
+            NoDataIV.setVisibility(View.VISIBLE);
+        } else {
+            NoData.setVisibility(View.GONE);
+            NoDataIV.setVisibility(View.GONE);
+        }
     }
     //endregion
 

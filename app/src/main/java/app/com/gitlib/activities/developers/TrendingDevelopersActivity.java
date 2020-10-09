@@ -29,22 +29,23 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import java.util.ArrayList;
 import java.util.List;
 import app.com.gitlib.R;
+import app.com.gitlib.activities.android.AndroidActivity;
 import app.com.gitlib.activities.onboard.HomeActivity;
 import app.com.gitlib.adapters.TrendingDevelopersAdapter;
-import app.com.gitlib.apiutils.AllUrlClass;
 import app.com.gitlib.models.users.TrendingDevelopers;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.viewmodels.TrendingDevelopersViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
 import static app.com.gitlib.apiutils.AllUrlClass.BASE_URL;
+import static app.com.gitlib.utils.UtilsManager.hasConnection;
+import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class TrendingDevelopersActivity extends AppCompatActivity {
     private Spinner languageSpinner,sinceSpinner;
     private RecyclerView recyclerViewDevelopers;
     private ArrayList<String> languageList, timeList;
     private ArrayList<TrendingDevelopers> trendingDevelopersList;
-    private AllUrlClass allUrlClass;
     private String TAG = "Shakil::TrendingDevelopersActivity" , languageStr = "" , sinceStr = "";
     private UX ux;
     private ImageView search;
@@ -287,22 +288,39 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
 
     //region perform mvvm server fetch
     private void performServerOperation(String url){
-        ux.getLoadingView();
-        trendingDevelopersViewModel.getData(this,url);
-        trendingDevelopersViewModel.getDevelopersList().observe(this, new Observer<List<TrendingDevelopers>>() {
-            @Override
-            public void onChanged(List<TrendingDevelopers> items) {
-                trendingDevelopersList = new ArrayList<>(items);
-                if (trendingDevelopersList.size() <= 0){
-                    NoData.setVisibility(View.VISIBLE);
-                    NoDataIV.setVisibility(View.VISIBLE);
-                    Toasty.error(TrendingDevelopersActivity.this,R.string.no_data_message).show();
+        if (hasConnection(TrendingDevelopersActivity.this)) {
+            ux.getLoadingView();
+            trendingDevelopersViewModel.getData(this,url);
+            trendingDevelopersViewModel.getDevelopersList().observe(this, new Observer<List<TrendingDevelopers>>() {
+                @Override
+                public void onChanged(List<TrendingDevelopers> items) {
+                    trendingDevelopersList = new ArrayList<>(items);
+                    if (trendingDevelopersList.size() <= 0){
+                        noDataVisibility(true);
+                        Toasty.error(TrendingDevelopersActivity.this,R.string.no_data_message).show();
+                    }
+                    loadListView();
+                    trendingDevelopersAdapter.notifyDataSetChanged();
+                    ux.removeLoadingView();
                 }
-                loadListView();
-                trendingDevelopersAdapter.notifyDataSetChanged();
-                ux.removeLoadingView();
-            }
-        });
+            });
+        }
+        else{
+            noDataVisibility(true);
+            internetErrorDialog(TrendingDevelopersActivity.this);
+        }
+    }
+    //endregion
+
+    //region set no data related components visible
+    private void noDataVisibility(boolean shouldVisible){
+        if (shouldVisible) {
+            NoData.setVisibility(View.VISIBLE);
+            NoDataIV.setVisibility(View.VISIBLE);
+        } else {
+            NoData.setVisibility(View.GONE);
+            NoDataIV.setVisibility(View.GONE);
+        }
     }
     //endregion
 
