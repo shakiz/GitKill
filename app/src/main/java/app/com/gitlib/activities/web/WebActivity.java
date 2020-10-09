@@ -119,7 +119,13 @@ public class WebActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String queryString = adapterView.getItemAtPosition(position).toString();
-                performServerOperation("web"+queryString);
+                if (hasConnection(WebActivity.this)) {
+                    performServerOperation("web"+queryString);
+                }
+                else{
+                    noDataVisibility(true);
+                    internetErrorDialog(WebActivity.this);
+                }
             }
 
             @Override

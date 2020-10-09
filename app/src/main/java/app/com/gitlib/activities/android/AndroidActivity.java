@@ -113,7 +113,14 @@ public class AndroidActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String queryString = adapterView.getItemAtPosition(position).toString();
-                performServerOperation("android"+queryString);
+                if (hasConnection(AndroidActivity.this)) {
+                    performServerOperation("android"+queryString);
+                }
+
+                else{
+                    noDataVisibility(true);
+                    internetErrorDialog(AndroidActivity.this);
+                }
             }
 
             @Override

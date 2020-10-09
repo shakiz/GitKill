@@ -112,7 +112,13 @@ public class MachineLearningActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String queryString = adapterView.getItemAtPosition(position).toString();
-                performServerOperation(""+queryString);
+                if (hasConnection(MachineLearningActivity.this)) {
+                    performServerOperation(""+queryString);
+                }
+                else{
+                    noDataVisibility(true);
+                    internetErrorDialog(MachineLearningActivity.this);
+                }
             }
 
             @Override
