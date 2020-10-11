@@ -25,7 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import app.com.gitlib.R;
 import app.com.gitlib.activities.android.AndroidActivity;
-import app.com.gitlib.activities.developers.TrendingDevelopersActivity;
+import app.com.gitlib.activities.developers.TrendingDevelopersListActivity;
 import app.com.gitlib.activities.ml.MachineLearningActivity;
 import app.com.gitlib.activities.repositories.TrendingRepositoriesActivity;
 import app.com.gitlib.activities.web.WebActivity;
@@ -200,7 +200,7 @@ public class HomeActivity extends AppCompatActivity {
                             return;
                         }
                         else if (pos == POS_TRENDING_DEVELOPERS){
-                            startActivity(new Intent(HomeActivity.this, TrendingDevelopersActivity.class));
+                            startActivity(new Intent(HomeActivity.this, TrendingDevelopersListActivity.class));
                             return;
                         }
                         else if (pos == POS_TRENDING_ON_ANDROID){

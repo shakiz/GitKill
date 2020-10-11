@@ -38,7 +38,7 @@
             android:theme="@style/AppThemeNoActionBar"
             android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:name=".activities.developers.TrendingDevelopersActivity"
+            android:name=".activities.developers.TrendingDevelopersListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar"
             android:windowSoftInputMode="adjustNothing" />

@@ -1,20 +1,14 @@
 package app.com.gitlib.activities.developers;
 
-import android.app.Dialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -37,23 +31,20 @@ import app.com.gitlib.utils.UX;
 import app.com.gitlib.viewmodels.TrendingDevelopersViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
-import static app.com.gitlib.apiutils.AllUrlClass.BASE_URL;
 import static app.com.gitlib.utils.UtilsManager.hasConnection;
 import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
-public class TrendingDevelopersActivity extends AppCompatActivity {
+public class TrendingDevelopersListActivity extends AppCompatActivity {
     private RecyclerView recyclerViewDevelopers;
     private ArrayList<TrendingDevelopersNew> trendingDevelopersList;
-    private String TAG = "Shakil::TrendingDevelopersActivity" , languageStr = "" , sinceStr = "";
+    private EditText userNameSearch;
+    private String TAG = "Shakil::TrendingDevelopersListActivity" , languageStr = "" , sinceStr = "";
     private UX ux;
     private ImageView search;
     private CircleImageView refreshListButton;
-    private Dialog itemDialog;
-    private RelativeLayout dialogLayout;
     private TextView NoData;
     private ImageView NoDataIV;
     //Dialog components
-    private TextView  UserName , RepoName , ProfileLink , RepoLink , Description;
     private AdView adView;
     private TrendingDevelopersAdapter trendingDevelopersAdapter;
     private TrendingDevelopersViewModel trendingDevelopersViewModel;
@@ -73,6 +64,7 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
     private void init() {
         recyclerViewDevelopers = findViewById(R.id.mRecyclerView);
         refreshListButton = findViewById(R.id.RefreshList);
+        userNameSearch = findViewById(R.id.editTextSearch);
         search = findViewById(R.id.Search);
         adView = findViewById(R.id.adView);
         trendingDevelopersList = new ArrayList<>();
@@ -89,7 +81,7 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
         findViewById(R.id.BackButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(TrendingDevelopersActivity.this,HomeActivity.class));
+                startActivity(new Intent(TrendingDevelopersListActivity.this,HomeActivity.class));
             }
         });
         //endregion
@@ -99,15 +91,21 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String newUrl = BASE_URL+"developers?"+"language="+languageStr+"&since="+sinceStr;
-                Log.v("newUrl",newUrl);
-                performServerOperation(newUrl);
+                if (!TextUtils.isEmpty(userNameSearch.getText().toString())){
+                    String newUrl = userNameSearch.getText().toString();
+                    Log.v("newUrl",newUrl);
+                    performServerOperation(newUrl);
+                }
+                else{
+                    Toast.makeText(TrendingDevelopersListActivity.this, "Please enter username", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                userNameSearch.setText("");
                 performServerOperation("tom");
             }
         });
@@ -179,20 +177,9 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
     }
     //endregion
 
-    //region init dialog components
-    private void customViewInit(Dialog itemDialog) {
-        UserName = itemDialog.findViewById(R.id.UserName);
-        RepoName = itemDialog.findViewById(R.id.RepoName);
-        RepoLink = itemDialog.findViewById(R.id.RepoLink);
-        ProfileLink = itemDialog.findViewById(R.id.ProfileLink);
-        Description = itemDialog.findViewById(R.id.Description);
-        dialogLayout = itemDialog.findViewById(R.id.dialogLayout);
-    }
-    //endregion
-
     //region perform mvvm server fetch
     private void performServerOperation(String url){
-        if (hasConnection(TrendingDevelopersActivity.this)) {
+        if (hasConnection(TrendingDevelopersListActivity.this)) {
             ux.getLoadingView();
             trendingDevelopersViewModel.getData(this,url);
             trendingDevelopersViewModel.getDevelopersList().observe(this, new Observer<List<TrendingDevelopersNew>>() {
@@ -202,12 +189,12 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
                         trendingDevelopersList = new ArrayList<>(items);
                         if (trendingDevelopersList.size() <= 0){
                             noDataVisibility(true);
-                            Toasty.error(TrendingDevelopersActivity.this,R.string.no_data_message).show();
+                            Toasty.error(TrendingDevelopersListActivity.this,R.string.no_data_message).show();
                         }
                         loadListView();
                         trendingDevelopersAdapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(TrendingDevelopersActivity.this, "No data found", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TrendingDevelopersListActivity.this, "No data found", Toast.LENGTH_SHORT).show();
                     }
                     ux.removeLoadingView();
                 }
@@ -215,7 +202,7 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
         }
         else{
             noDataVisibility(true);
-            internetErrorDialog(TrendingDevelopersActivity.this);
+            internetErrorDialog(TrendingDevelopersListActivity.this);
         }
     }
     //endregion
@@ -235,7 +222,7 @@ public class TrendingDevelopersActivity extends AppCompatActivity {
     //region activity components
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(TrendingDevelopersActivity.this, HomeActivity.class));
+        startActivity(new Intent(TrendingDevelopersListActivity.this, HomeActivity.class));
     }
     //endregion
 }

@@ -58,4 +58,5 @@
     <string name="no_internet_message">Please Enable Internet Connection</string>
     <string name="search_by_username">Search by username</string>
     <string name="user_type">User Type</string>
+    <string name="enter_username">Enter Username</string>
 </resources>

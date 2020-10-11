@@ -150,33 +150,34 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:layout_width="384dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="24dp"
-                android:orientation="horizontal"
-                android:weightSum="1">
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_weight=".9"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:text="@string/learn_new_facts_in_it_with_us"
                     android:textColor="@color/md_green_800"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_weight=".1"
-                    android:layout_gravity="center"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="8dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/a_roundbg"
                     android:elevation="6dp"
-                    android:gravity="center"
+                    android:gravity="center|right"
+                    android:layout_gravity="center|right"
                     android:orientation="vertical"
                     android:translationZ="3dp">
 
