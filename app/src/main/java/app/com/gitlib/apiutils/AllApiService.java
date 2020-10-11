@@ -8,7 +8,7 @@ import app.com.gitlib.models.details.FollowersAndFollowing;
 import app.com.gitlib.models.languages.TrendingLanguage;
 import app.com.gitlib.models.questionbank.QuestionBank;
 import app.com.gitlib.models.repositories.TrendingRepositories;
-import app.com.gitlib.models.users.TrendingDevelopers;
+import app.com.gitlib.models.users.UserBase;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -25,7 +25,7 @@ public interface AllApiService {
 
     //Call for trending developers
     @GET
-    Call<List<TrendingDevelopers>> getTrendingDevelopers(@Url String url);
+    Call<UserBase> getTrendingDevelopers(@Url String url, @Query("q") String q);
 
     //Call for topics android
     @GET
@@ -35,7 +35,7 @@ public interface AllApiService {
     @GET
     Call<ArrayList<FollowersAndFollowing>> getFollowersAndFollowing(@Url String url);
 
-    //Call for followers and following list
+    //Call for question bank
     @GET
     Call<QuestionBank> getAllQuestionAndAnswer(@Url String url);
 }

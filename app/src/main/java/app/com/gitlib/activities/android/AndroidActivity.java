@@ -101,7 +101,6 @@ public class AndroidActivity extends AppCompatActivity {
                 if (hasConnection(AndroidActivity.this)) {
                     performServerOperation("android");
                 }
-
                 else{
                     noDataVisibility(true);
                     internetErrorDialog(AndroidActivity.this);

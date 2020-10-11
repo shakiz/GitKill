@@ -6,11 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import java.util.List;
-import app.com.gitlib.models.users.TrendingDevelopers;
+import app.com.gitlib.models.users.TrendingDevelopersNew;
 import app.com.gitlib.repositories.TrendingDevelopersRepository;
 
 public class TrendingDevelopersViewModel extends AndroidViewModel {
-    private MutableLiveData<List<TrendingDevelopers>> developersList;
+    private MutableLiveData<List<TrendingDevelopersNew>> developersList;
     private TrendingDevelopersRepository developersRepository;
 
     public TrendingDevelopersViewModel(@NonNull Application application) {
@@ -22,7 +22,7 @@ public class TrendingDevelopersViewModel extends AndroidViewModel {
         developersList = developersRepository.getTrendingRepos(context, url);
     }
 
-    public MutableLiveData<List<TrendingDevelopers>> getDevelopersList() {
+    public MutableLiveData<List<TrendingDevelopersNew>> getDevelopersList() {
         return developersList;
     }
 }

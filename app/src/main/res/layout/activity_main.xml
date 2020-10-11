@@ -31,6 +31,7 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_menu_new"
+                app:tint="@color/md_green_800"
                 android:padding="8dp" />
 
         </LinearLayout>
@@ -84,7 +85,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/WelcomeText"
-                    android:layout_marginLeft="25dp"
+                    android:layout_marginLeft="24dp"
                     android:layout_marginTop="4dp"
                     android:layout_gravity="center"
                     android:textStyle="bold"
@@ -149,30 +150,46 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="384dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
                 android:orientation="horizontal"
-                android:weightSum="1"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp">
+                android:weightSum="1">
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight=".9"
                     android:text="@string/learn_new_facts_in_it_with_us"
                     android:textColor="@color/md_green_800"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="8dp"/>
+                    android:textStyle="bold" />
 
-                <ImageView
-                    android:id="@+id/RefreshList"
-                    android:layout_width="40dp"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_gravity="center|right"
-                    app:tint="@color/md_green_800"
-                    android:src="@drawable/ic_refresh"/>
+                    android:layout_weight=".1"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/a_roundbg"
+                    android:elevation="6dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:translationZ="3dp">
+
+                    <ImageView
+                        android:id="@+id/RefreshList"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="center"
+                        android:padding="2dp"
+                        android:src="@drawable/ic_refresh"
+                        app:tint="@color/md_green_800" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -192,8 +209,8 @@
 
             <pl.droidsonroids.gif.GifImageView
                 android:id="@+id/NoDataIV"
-                android:layout_width="112dp"
-                android:layout_height="112dp"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
                 android:layout_gravity="center"
                 android:visibility="gone"
                 android:padding="8dp"
@@ -216,7 +233,7 @@
                 android:id="@+id/mRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="12dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="8dp"
                 tools:listitem="@layout/adapter_layout_it_question_answer_list"/>

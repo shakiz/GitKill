@@ -35,7 +35,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_left_arrow_new"
-                app:tint="@color/md_grey_800"
+                app:tint="@color/md_green_800"
                 android:padding="8dp" />
 
             <TextView
@@ -70,7 +70,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="2"
+                    android:weightSum="1"
                     android:paddingBottom="8dp"
                     android:orientation="horizontal">
 
@@ -79,52 +79,25 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
+                        android:layout_marginTop="4dp"
                         android:orientation="vertical"
                         android:layout_weight="1">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/select_language"
+                            android:text="@string/search_by_username"
                             android:textColor="@color/md_grey_800"
                             android:padding="4dp"
                             android:textSize="16sp"/>
 
-                        <Spinner
-                            style="@style/Base.TextAppearance.AppCompat.Medium"
+                        <EditText
+                            android:id="@+id/editTextSearch"
                             android:layout_width="match_parent"
                             android:layout_height="38dp"
                             android:layout_marginTop="5dp"
                             android:background="@drawable/edittext_back"
-                            android:id="@+id/LanguageSpinner"
-                            android:padding="4dp"></Spinner>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/md_grey_800"
-                            android:text="@string/since"
-                            android:padding="4dp"
-                            android:textSize="16sp"/>
-
-                        <Spinner
-                            style="@style/Base.TextAppearance.AppCompat.Medium"
-                            android:layout_width="match_parent"
-                            android:layout_height="38dp"
-                            android:layout_marginTop="5dp"
-                            android:background="@drawable/edittext_back"
-                            android:id="@+id/SinceSpinner"
-                            android:padding="4dp"></Spinner>
+                            android:padding="4dp"/>
 
                     </LinearLayout>
 
@@ -160,7 +133,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/md_white_1000"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="4dp"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
@@ -172,22 +145,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingTop="8dp"
                 android:paddingBottom="8dp">
 
                 <RelativeLayout
                     android:id="@+id/header_Layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="8dp">
+                    android:layout_height="wrap_content">
 
                     <View
-                        android:id="@+id/labe1"
+                        android:id="@+id/label1"
                         android:layout_width="8dp"
-                        android:layout_height="36dp"
-                        android:layout_centerVertical="true"
-                        android:background="@color/md_grey_800" />
+                        android:layout_height="42dp"
+                        android:layout_marginLeft="-2dp"
+                        android:background="@drawable/rectangle_back_green" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -217,6 +187,7 @@
                     android:layout_below="@id/header_Layout"
                     android:layout_height="match_parent"
                     android:layout_width="match_parent"
+                    android:layout_marginTop="8dp"
                     layout="@layout/generic_recycler_view_layout"/>
 
             </RelativeLayout>
