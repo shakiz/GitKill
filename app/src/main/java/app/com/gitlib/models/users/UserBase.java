@@ -23,7 +23,7 @@ public class UserBase {
     @JsonProperty("incomplete_results")
     private Boolean incomplete_results;
     @JsonProperty("items")
-    private List<TrendingDevelopersNew> items = null;
+    private List<TrendingDevelopers> items = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -48,12 +48,12 @@ public class UserBase {
     }
 
     @JsonProperty("items")
-    public List<TrendingDevelopersNew> getItems() {
+    public List<TrendingDevelopers> getItems() {
         return items;
     }
 
     @JsonProperty("items")
-    public void setItems(List<TrendingDevelopersNew> items) {
+    public void setItems(List<TrendingDevelopers> items) {
         this.items = items;
     }
 

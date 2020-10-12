@@ -59,4 +59,18 @@
     <string name="search_by_username">Search by username</string>
     <string name="user_type">User Type</string>
     <string name="enter_username">Enter Username</string>
+    <string name="developer_details">Developer Details</string>
+    <string name="i_am">I am</string>
+    <string name="sakhawat_hossain">Sakhawat Hossain</string>
+    <string name="dummy_number">100</string>
+    <string name="repos">Repos</string>
+    <string name="gists">Gists</string>
+    <string name="_username">\@Username</string>
+    <string name="hireable">Hireable</string>
+    <string name="blog_site">Blog site</string>
+    <string name="organization">Organization</string>
+    <string name="save_the_children">Save The Children</string>
+    <string name="location">Location</string>
+    <string name="dhaka_bangladesh">Dhaka, Bangladesh</string>
+    <string name="test_dot_com">test.com</string>
 </resources>

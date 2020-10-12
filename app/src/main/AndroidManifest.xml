@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppThemeNoActionBar">
+        <activity android:name=".activities.developers.DevelopersDetailsActivity"></activity>
         <activity
             android:name=".activities.onboard.SplashActivity"
             android:theme="@style/SplashAppTheme">

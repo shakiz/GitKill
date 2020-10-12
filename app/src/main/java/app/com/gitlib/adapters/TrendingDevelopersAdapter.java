@@ -11,15 +11,15 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import app.com.gitlib.R;
-import app.com.gitlib.models.users.TrendingDevelopersNew;
+import app.com.gitlib.models.users.TrendingDevelopers;
 
 public class TrendingDevelopersAdapter extends RecyclerView.Adapter<TrendingDevelopersAdapter.ViewHolder>{
 
-    private ArrayList<TrendingDevelopersNew> trendingDevelopersList;
+    private ArrayList<TrendingDevelopers> trendingDevelopersList;
     private Context context;
     private onItemClickListener onItemClickListener;
 
-    public TrendingDevelopersAdapter(ArrayList<TrendingDevelopersNew> trendingDevelopersList, Context context) {
+    public TrendingDevelopersAdapter(ArrayList<TrendingDevelopers> trendingDevelopersList, Context context) {
         this.trendingDevelopersList = trendingDevelopersList;
         this.context = context;
     }
@@ -37,14 +37,14 @@ public class TrendingDevelopersAdapter extends RecyclerView.Adapter<TrendingDeve
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        final TrendingDevelopersNew trendingDevelopers = trendingDevelopersList.get(position);
+        final TrendingDevelopers trendingDevelopers = trendingDevelopersList.get(position);
         viewHolder.UserName.setText("@"+trendingDevelopers.getLogin());
         if (!TextUtils.isEmpty(trendingDevelopers.getType())) {
             viewHolder.Type.setText(trendingDevelopers.getType());
         } else {
             viewHolder.Type.setText("No user type found");
         }
-        viewHolder.ProfileLink.setText(trendingDevelopers.getHtml_url());
+        viewHolder.ProfileLink.setText(trendingDevelopers.getHtmlUrl());
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,6 +73,6 @@ public class TrendingDevelopersAdapter extends RecyclerView.Adapter<TrendingDeve
     }
 
     public interface onItemClickListener {
-        void respond(TrendingDevelopersNew trendingDevelopers);
+        void respond(TrendingDevelopers trendingDevelopers);
     }
 }

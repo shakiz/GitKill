@@ -8,6 +8,7 @@ import app.com.gitlib.models.details.FollowersAndFollowing;
 import app.com.gitlib.models.languages.TrendingLanguage;
 import app.com.gitlib.models.questionbank.QuestionBank;
 import app.com.gitlib.models.repositories.TrendingRepositories;
+import app.com.gitlib.models.users.Developer;
 import app.com.gitlib.models.users.UserBase;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -38,4 +39,8 @@ public interface AllApiService {
     //Call for question bank
     @GET
     Call<QuestionBank> getAllQuestionAndAnswer(@Url String url);
+
+    //Get user details
+    @GET
+    Call<Developer> getSingleUser(@Url String url);
 }

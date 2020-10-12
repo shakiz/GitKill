@@ -26,7 +26,7 @@ import java.util.List;
 import app.com.gitlib.R;
 import app.com.gitlib.activities.onboard.HomeActivity;
 import app.com.gitlib.adapters.TrendingDevelopersAdapter;
-import app.com.gitlib.models.users.TrendingDevelopersNew;
+import app.com.gitlib.models.users.TrendingDevelopers;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.viewmodels.TrendingDevelopersViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -36,7 +36,7 @@ import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class TrendingDevelopersListActivity extends AppCompatActivity {
     private RecyclerView recyclerViewDevelopers;
-    private ArrayList<TrendingDevelopersNew> trendingDevelopersList;
+    private ArrayList<TrendingDevelopers> trendingDevelopersList;
     private EditText userNameSearch;
     private String TAG = "Shakil::TrendingDevelopersListActivity" , languageStr = "" , sinceStr = "";
     private UX ux;
@@ -168,7 +168,8 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
         trendingDevelopersAdapter= new TrendingDevelopersAdapter(trendingDevelopersList, this);
         trendingDevelopersAdapter.setOnItemClickListener(new TrendingDevelopersAdapter.onItemClickListener() {
             @Override
-            public void respond(TrendingDevelopersNew trendingDevelopers) {
+            public void respond(TrendingDevelopers trendingDevelopers) {
+                startActivity(new Intent(TrendingDevelopersListActivity.this,DevelopersDetailsActivity.class).putExtra("user",trendingDevelopers.getLogin()));
             }
         });
         recyclerViewDevelopers.setLayoutManager(new LinearLayoutManager(this));
@@ -182,9 +183,9 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
         if (hasConnection(TrendingDevelopersListActivity.this)) {
             ux.getLoadingView();
             trendingDevelopersViewModel.getData(this,url);
-            trendingDevelopersViewModel.getDevelopersList().observe(this, new Observer<List<TrendingDevelopersNew>>() {
+            trendingDevelopersViewModel.getDevelopersList().observe(this, new Observer<List<TrendingDevelopers>>() {
                 @Override
-                public void onChanged(List<TrendingDevelopersNew> items) {
+                public void onChanged(List<TrendingDevelopers> items) {
                     if (items != null) {
                         trendingDevelopersList = new ArrayList<>(items);
                         if (trendingDevelopersList.size() <= 0){

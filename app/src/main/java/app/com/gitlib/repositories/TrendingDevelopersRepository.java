@@ -4,7 +4,7 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 import app.com.gitlib.apiutils.AllApiService;
-import app.com.gitlib.models.users.TrendingDevelopersNew;
+import app.com.gitlib.models.users.TrendingDevelopers;
 import app.com.gitlib.models.users.UserBase;
 import app.com.gitlib.utils.UtilsManager;
 import retrofit2.Call;
@@ -24,8 +24,8 @@ public class TrendingDevelopersRepository {
         return instance;
     }
 
-    public MutableLiveData<List<TrendingDevelopersNew>> getTrendingRepos(Context context, String url){
-        final MutableLiveData<List<TrendingDevelopersNew>> trendingDevelopers = new MutableLiveData<>();
+    public MutableLiveData<List<TrendingDevelopers>> getTrendingRepos(Context context, String url){
+        final MutableLiveData<List<TrendingDevelopers>> trendingDevelopers = new MutableLiveData<>();
         utilsManager = new UtilsManager(context);
         apiService = utilsManager.getClient(ALL_TOPICS_BASE_URL).create(AllApiService.class);
         final Call<UserBase> trendingDevelopersCall = apiService.getTrendingDevelopers("users?",url);
