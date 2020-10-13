@@ -5,13 +5,18 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -19,11 +24,15 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-
+import java.util.ArrayList;
+import java.util.List;
 import app.com.gitlib.R;
+import app.com.gitlib.adapters.UserRepositoriesAdapter;
+import app.com.gitlib.models.repositories.Repo;
 import app.com.gitlib.models.users.Developer;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.viewmodels.SingleDeveloperViewModel;
+import app.com.gitlib.viewmodels.UserRepoDetailsViewModel;
 import static app.com.gitlib.utils.UtilsManager.hasConnection;
 import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
@@ -31,8 +40,14 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
     private AdView adView;
     private String userName = "";
     private SingleDeveloperViewModel viewModel;
+    private UserRepoDetailsViewModel userRepoDetailsViewModel;
     private UX ux;
     private TextView userNameTxt, name, followers, following, publicRepos, gists, bio, blog, company, location, hireable;
+    private ImageView userAvatar;
+    private List<Repo> mRepositoryList;
+    private UserRepositoriesAdapter userRepositoriesAdapter;
+    private RecyclerView allRepositoryRecycler;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +86,11 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
         company = findViewById(R.id.company);
         location = findViewById(R.id.location);
         hireable = findViewById(R.id.hireable);
+        userAvatar = findViewById(R.id.userAvatar);
+        allRepositoryRecycler = findViewById(R.id.allRepositoryRecycler);
+        progressBar = findViewById(R.id.progress);
         viewModel = ViewModelProviders.of(this).get(SingleDeveloperViewModel.class);
+        userRepoDetailsViewModel = ViewModelProviders.of(this).get(UserRepoDetailsViewModel.class);
         ux = new UX(this);
     }
     //endregion
@@ -87,7 +106,7 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
         });
         //endregion
 
-        performServerOperation(userName);
+        fetchDataForUserDetails(userName);
 
         //region adMob
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -142,8 +161,8 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
     }
     //endregion
 
-    //region perform mvvm server fetch
-    private void performServerOperation(String url){
+    //region perform mvvm server fetch for user basic details
+    private void fetchDataForUserDetails(String url){
         if (hasConnection(DevelopersDetailsActivity.this)) {
             ux.getLoadingView();
             viewModel.getData(this,url);
@@ -156,6 +175,9 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
                         Toast.makeText(DevelopersDetailsActivity.this,R.string.no_data_message,Toast.LENGTH_SHORT).show();
                     }
                     ux.removeLoadingView();
+                    //region after user basic details loaded , this method will load the repositories
+                    fetchDataForUserRepositoryDetails(userName+"/repos");
+                    //endregion
                 }
             });
         }
@@ -227,6 +249,44 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
         }else {
             hireable.setText("No hireable information found");
         }
+
+        if (developer.getAvatarUrl() != null){
+            Glide.with(this).load(developer.getAvatarUrl()).into(userAvatar);
+        }
+    }
+    //endregion
+
+    //region perform mvvm server fetch for user all repositories
+    private void fetchDataForUserRepositoryDetails(String url){
+        progressBar.setVisibility(View.VISIBLE);
+        if (hasConnection(DevelopersDetailsActivity.this)) {
+            userRepoDetailsViewModel.getData(this,url);
+            userRepoDetailsViewModel.getRepositories().observe(this, new Observer<List<Repo>>() {
+                @Override
+                public void onChanged(List<Repo> repos) {
+                    mRepositoryList = new ArrayList<>(repos);
+                    if (mRepositoryList.size() <= 0){
+                        Toast.makeText(DevelopersDetailsActivity.this,R.string.no_data_message,Toast.LENGTH_SHORT).show();
+                    }
+                    loadListView();
+                    userRepositoriesAdapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
+        }
+        else{
+            internetErrorDialog(DevelopersDetailsActivity.this);
+        }
+    }
+    //endregion
+
+    //region load list with recycler and adapter
+    private void loadListView(){
+        userRepositoriesAdapter = new UserRepositoriesAdapter(mRepositoryList, this);
+        allRepositoryRecycler.setLayoutManager(new GridLayoutManager(this,1,LinearLayoutManager.HORIZONTAL,false));
+        allRepositoryRecycler.setItemAnimator(new DefaultItemAnimator());
+        allRepositoryRecycler.setAdapter(userRepositoriesAdapter);
+        userRepositoriesAdapter.notifyDataSetChanged();
     }
     //endregion
 

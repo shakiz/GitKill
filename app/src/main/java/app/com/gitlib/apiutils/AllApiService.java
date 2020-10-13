@@ -7,6 +7,7 @@ import app.com.gitlib.models.alltopic.TopicBase;
 import app.com.gitlib.models.details.FollowersAndFollowing;
 import app.com.gitlib.models.languages.TrendingLanguage;
 import app.com.gitlib.models.questionbank.QuestionBank;
+import app.com.gitlib.models.repositories.Repo;
 import app.com.gitlib.models.repositories.TrendingRepositories;
 import app.com.gitlib.models.users.Developer;
 import app.com.gitlib.models.users.UserBase;
@@ -43,4 +44,8 @@ public interface AllApiService {
     //Get user details
     @GET
     Call<Developer> getSingleUser(@Url String url);
+
+    //Get user repositories
+    @GET
+    Call<List<Repo>> getAllRepositories(@Url String url);
 }

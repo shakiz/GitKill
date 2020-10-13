@@ -8,7 +8,7 @@ import app.com.gitlib.utils.UtilsManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import static app.com.gitlib.apiutils.AllUrlClass.SINGLE_USER_URL;
+import static app.com.gitlib.apiutils.AllUrlClass.SINGLE_USER_PROFILE_AND_REPOSITORIES_URL;
 
 public class SingleDeveloperRepository {
     private static SingleDeveloperRepository instance = null;
@@ -25,7 +25,7 @@ public class SingleDeveloperRepository {
     public MutableLiveData<Developer> getDeveloper(Context context, String url){
         final MutableLiveData<Developer> developer = new MutableLiveData<>();
         utilsManager = new UtilsManager(context);
-        apiService = utilsManager.getClient(SINGLE_USER_URL).create(AllApiService.class);
+        apiService = utilsManager.getClient(SINGLE_USER_PROFILE_AND_REPOSITORIES_URL).create(AllApiService.class);
         final Call<Developer> trendingDevelopersCall = apiService.getSingleUser(url);
         trendingDevelopersCall.enqueue(new Callback<Developer>() {
             @Override

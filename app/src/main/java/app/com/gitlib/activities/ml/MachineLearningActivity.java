@@ -179,6 +179,7 @@ public class MachineLearningActivity extends AppCompatActivity {
         //endregion
     }
 
+    //region load list with recycler and adapter
     private void loadListView(){
         allTopicAdapter = new AllTopicAdapter(mlItemList, this, R.layout.adapter_layout_android_topics);
         mlRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -195,6 +196,7 @@ public class MachineLearningActivity extends AppCompatActivity {
             }
         });
     }
+    //endregion
 
     //region perform mvvm server fetch
     private void performServerOperation(String queryString){
