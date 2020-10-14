@@ -74,4 +74,11 @@
     <string name="dhaka_bangladesh">Dhaka, Bangladesh</string>
     <string name="test_dot_com">test.com</string>
     <string name="repo_full_name">Repo full name</string>
+    <string name="dummy_mail">test@gmail.com</string>
+    <string name="date_hint">DD-MM-YYYY</string>
+    <string name="all_repositories">All repositories</string>
+    <string name="tap_to_view_the_answer">Tap to view the answer</string>
+    <string name="rate_us">Rate Us!</string>
+    <string name="rate_this_app_on_play_store">Would you take a moment to rate this app in Play Store?</string>
+    <string name="rate_now">Rate Now</string>
 </resources>

@@ -369,6 +369,88 @@
                                 android:layout_width="16dp"
                                 android:layout_height="16dp"
                                 android:layout_gravity="center"
+                                android:src="@drawable/ic_date"
+                                android:gravity="center"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:textColor="@color/md_grey_800"
+                                android:textSize="16sp"
+                                android:text=":"/>
+
+                            <TextView
+                                android:id="@+id/created_at"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:layout_marginLeft="4dp"
+                                android:textColor="@color/md_green_800"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:text="@string/date_hint"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"
+                            android:layout_gravity="center|left"
+                            android:gravity="center|left"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_mail"
+                                android:gravity="center"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:textColor="@color/md_grey_800"
+                                android:textSize="16sp"
+                                android:text=":"/>
+
+                            <TextView
+                                android:id="@+id/email"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:layout_marginLeft="4dp"
+                                android:textColor="@color/md_green_800"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:text="@string/dummy_mail"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"
+                            android:layout_gravity="center|left"
+                            android:gravity="center|left"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_gravity="center"
                                 android:src="@drawable/ic_link_new_1"
                                 android:gravity="center"/>
 
@@ -486,18 +568,30 @@
 
                 </androidx.cardview.widget.CardView>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|left"
+                    android:gravity="center|left"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/md_green_800"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="@string/all_repositories"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
                     android:orientation="vertical">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/allRepositoryRecycler"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/adapter_layout_user_repositories"
                         android:orientation="horizontal"
-                        tools:listitem="@layout/adapter_layout_user_repositories"/>
+                        app:spanCount="1"/>
 
                     <ProgressBar
                         android:id="@+id/progress"
@@ -506,6 +600,51 @@
                         android:layout_gravity="center"
                         android:visibility="gone"
                         android:indeterminateDrawable="@drawable/progress"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="@color/md_green_800"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="@string/rate_us"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:textColor="@color/md_grey_800"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:text="@string/rate_this_app_on_play_store"/>
+
+                    <Button
+                        android:id="@+id/rateNowBtn"
+                        android:layout_width="112dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/rate_now"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="@color/md_white_1000"
+                        android:clickable="true"
+                        android:textAllCaps="true"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
+                        android:background="@drawable/rectangle_back_green"/>
 
                 </LinearLayout>
 

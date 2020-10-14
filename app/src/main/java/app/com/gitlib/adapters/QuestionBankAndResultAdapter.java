@@ -30,9 +30,23 @@ public class QuestionBankAndResultAdapter extends RecyclerView.Adapter<QuestionB
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+        final ViewHolder holder = viewHolder;
+        final int pos = position;
         final Result result = results.get(position);
-        viewHolder.Question.setText((position+1)+".Question : "+result.getQuestion());
-        viewHolder.Answer.setText((position+1)+".Answer : "+result.getCorrectAnswer());
+        holder.Question.setText((position+1)+".Question : "+result.getQuestion());
+        holder.Answer.setText(context.getString(R.string.tap_to_view_the_answer));
+
+        viewHolder.Answer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.Answer.getText().equals(context.getString(R.string.tap_to_view_the_answer))){
+                    holder.Answer.setText((pos+1)+".Answer : "+result.getCorrectAnswer());
+                }
+                else{
+                    holder.Answer.setText(context.getString(R.string.tap_to_view_the_answer));
+                }
+            }
+        });
     }
 
     @Override

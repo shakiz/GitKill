@@ -1,10 +1,14 @@
 package app.com.gitlib.utils;
 
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -51,5 +55,16 @@ public class UX {
         recyclerView.setAdapter(allTopicAdapter);
         allTopicAdapter.notifyDataSetChanged();
         return allTopicAdapter;
+    }
+
+    public static void launchMarket(Context context) {
+        Uri uri = Uri.parse("market://details?id=" + context.getPackageName());
+        Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        try {
+            context.startActivity(myAppLinkToMarket);
+            Toast.makeText(context, "Redirecting to play store...", Toast.LENGTH_LONG).show();
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, "Unable to find market app", Toast.LENGTH_LONG).show();
+        }
     }
 }

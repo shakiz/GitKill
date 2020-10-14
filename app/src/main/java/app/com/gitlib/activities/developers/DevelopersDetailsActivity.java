@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,6 +34,8 @@ import app.com.gitlib.models.users.Developer;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.viewmodels.SingleDeveloperViewModel;
 import app.com.gitlib.viewmodels.UserRepoDetailsViewModel;
+
+import static app.com.gitlib.utils.UX.launchMarket;
 import static app.com.gitlib.utils.UtilsManager.hasConnection;
 import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
@@ -42,7 +45,8 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
     private SingleDeveloperViewModel viewModel;
     private UserRepoDetailsViewModel userRepoDetailsViewModel;
     private UX ux;
-    private TextView userNameTxt, name, followers, following, publicRepos, gists, bio, blog, company, location, hireable;
+    private TextView userNameTxt, name, followers, following, publicRepos, gists, bio, blog, company, location, hireable, email, created_at;
+    private Button rateNowBtn;
     private ImageView userAvatar;
     private List<Repo> mRepositoryList;
     private UserRepositoriesAdapter userRepositoriesAdapter;
@@ -87,6 +91,9 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
         location = findViewById(R.id.location);
         hireable = findViewById(R.id.hireable);
         userAvatar = findViewById(R.id.userAvatar);
+        email = findViewById(R.id.email);
+        created_at = findViewById(R.id.created_at);
+        rateNowBtn = findViewById(R.id.rateNowBtn);
         allRepositoryRecycler = findViewById(R.id.allRepositoryRecycler);
         progressBar = findViewById(R.id.progress);
         viewModel = ViewModelProviders.of(this).get(SingleDeveloperViewModel.class);
@@ -106,7 +113,18 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
         });
         //endregion
 
+        //region fetch user basic details
         fetchDataForUserDetails(userName);
+        //endregion
+
+        //region rate now button click
+        rateNowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchMarket(DevelopersDetailsActivity.this);
+            }
+        });
+        //endregion
 
         //region adMob
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -222,6 +240,18 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
             bio.setText("No bio found");
         }
 
+        if (!TextUtils.isEmpty(developer.getCreatedAt())) {
+            created_at.setText("Joined on "+developer.getCreatedAt().split("T")[0]);
+        } else {
+            created_at.setText("No joining date found");
+        }
+
+        if (developer.getEmail() != null) {
+            email.setText(developer.getEmail().toString());
+        } else {
+            email.setText("No email found");
+        }
+
         if (!TextUtils.isEmpty(developer.getBlog())) {
             blog.setText(developer.getBlog());
         } else {
@@ -247,7 +277,7 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
                 hireable.setText("Not Hireable");
             }
         }else {
-            hireable.setText("No hireable information found");
+            hireable.setText("Not Hireable");
         }
 
         if (developer.getAvatarUrl() != null){

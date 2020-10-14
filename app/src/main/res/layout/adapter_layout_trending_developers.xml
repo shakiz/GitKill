@@ -13,172 +13,186 @@
     android:foreground="?attr/selectableItemBackgroundBorderless"
     android:elevation="12dp"
     app:cardBackgroundColor="@color/md_white_1000"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <!--Post heading section-->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:orientation="vertical"
-        android:baselineAligned="false">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <!--Post heading section-->
+
+
         <LinearLayout
+            android:id="@+id/userNameLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:paddingTop="0dp">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center"
+            android:gravity="center|left"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center|left"
+                android:text="@string/username"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@color/md_grey_800"
+                android:textStyle="normal"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:text=":"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@color/md_grey_800"
+                android:textStyle="normal"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/UserName"
+                android:layout_marginLeft="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card_item_back_light_green"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/username"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textColor="@color/md_grey_800"
-                    android:textStyle="normal"
-                    android:textSize="14sp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:text=":"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textColor="@color/md_grey_800"
-                    android:textStyle="normal"
-                    android:textSize="14sp"/>
-
-                <TextView
-                    android:id="@+id/UserName"
-                    android:layout_marginLeft="8dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="shakiz"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textColor="@color/md_grey_800"
-                    android:textStyle="normal"
-                    android:textSize="14sp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center|left"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/user_type"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textColor="@color/md_grey_800"
-                    android:textStyle="normal"
-                    android:textSize="14sp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:text=":"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textColor="@color/md_grey_800"
-                    android:textStyle="normal"
-                    android:textSize="14sp"/>
-
-                <TextView
-                    android:id="@+id/Type"
-                    android:layout_marginLeft="8dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="User"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textColor="@color/md_grey_800"
-                    android:textStyle="normal"
-                    android:textSize="14sp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center|left"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:layout_marginBottom="4dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/profile_link"
-                    android:autoLink="web"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textColor="@color/md_grey_800"
-                    android:textStyle="normal"
-                    android:textSize="14sp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:text=":"
-                    android:autoLink="web"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textColor="@color/md_grey_800"
-                    android:textStyle="normal"
-                    android:textSize="14sp"/>
-
-                <TextView
-                    android:id="@+id/ProfileLink"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:text="test.com"
-                    android:autoLink="web"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textColor="@color/md_grey_800"
-                    android:textStyle="normal"
-                    android:textSize="14sp"/>
-
-            </LinearLayout>
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="shakiz"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@color/md_grey_800"
+                android:textStyle="bold"
+                android:textSize="14sp"/>
 
         </LinearLayout>
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/userTypeLayout"
+            android:layout_below="@id/userNameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_gravity="center"
+            android:gravity="center|left"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/user_type"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@color/md_grey_800"
+                android:textStyle="normal"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:text=":"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@color/md_grey_800"
+                android:textStyle="normal"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/Type"
+                android:layout_marginLeft="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card_item_back_light_cyan"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="User"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@color/md_grey_800"
+                android:textStyle="normal"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/profileLinkLayout"
+            android:layout_below="@id/userTypeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_gravity="center"
+            android:gravity="center|left"
+            android:layout_marginBottom="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_link"
+                android:autoLink="web"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@color/md_grey_800"
+                android:textStyle="normal"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:text=":"
+                android:autoLink="web"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@color/md_grey_800"
+                android:textStyle="normal"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/ProfileLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="test.com"
+                android:background="@drawable/card_item_back_light_red"
+                android:autoLink="web"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@color/md_grey_800"
+                android:textStyle="normal"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_arrow_forward"
+            android:layout_marginRight="8dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
