@@ -8,6 +8,8 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -27,13 +29,12 @@ import app.com.gitlib.R;
 import app.com.gitlib.activities.details.DetailsActivity;
 import app.com.gitlib.activities.onboard.HomeActivity;
 import app.com.gitlib.adapters.AllTopicAdapter;
-import app.com.gitlib.apiutils.AllUrlClass;
 import app.com.gitlib.models.alltopic.Item;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.viewmodels.AndroidRepoViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
-import es.dmoral.toasty.Toasty;
 
+import static app.com.gitlib.apiutils.AllUrlClass.ALL_TOPICS_BASE_URL;
 import static app.com.gitlib.utils.UtilsManager.hasConnection;
 import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
@@ -42,7 +43,6 @@ public class AndroidActivity extends AppCompatActivity {
     private RecyclerView androidTopicRecyclerView;
     private UX ux;
     private ArrayList<Item> androidTopicList;
-    private AllUrlClass allUrlClass;
     private CircleImageView refreshListButton;
     private Spinner androidFilterSpinner;
     private TextView NoData;
@@ -73,7 +73,6 @@ public class AndroidActivity extends AppCompatActivity {
         NoDataIV = findViewById(R.id.NoDataIV);
         adView = findViewById(R.id.adView);
         androidTopicList = new ArrayList<>();
-        allUrlClass = new AllUrlClass();
         ux = new UX(this);
         androidRepoViewModel = ViewModelProviders.of(this).get(AndroidRepoViewModel.class);
     }
@@ -115,7 +114,6 @@ public class AndroidActivity extends AppCompatActivity {
                 if (hasConnection(AndroidActivity.this)) {
                     performServerOperation("android"+queryString);
                 }
-
                 else{
                     noDataVisibility(true);
                     internetErrorDialog(AndroidActivity.this);
@@ -215,17 +213,23 @@ public class AndroidActivity extends AppCompatActivity {
     //region perform mvvm server fetch
     private void performServerOperation(String queryString){
         ux.getLoadingView();
-        androidRepoViewModel.getData(this,allUrlClass.ALL_TOPICS_BASE_URL , queryString);
+        androidRepoViewModel.getData(this,ALL_TOPICS_BASE_URL , queryString);
         androidRepoViewModel.getAndroidRepos().observe(this, new Observer<List<Item>>() {
             @Override
             public void onChanged(List<Item> items) {
-                androidTopicList = new ArrayList<>(items);
-                if (androidTopicList.size() <= 0){
-                    noDataVisibility(true);
-                    Toasty.error(AndroidActivity.this,R.string.no_data_message).show();
+                if (items != null) {
+                    androidTopicList = new ArrayList<>(items);
+                    if (androidTopicList.size() <= 0){
+                        noDataVisibility(true);
+                        Toast.makeText(AndroidActivity.this,R.string.no_data_message,Toast.LENGTH_SHORT).show();
+                    }
+                    loadListView();
+                    allTopicAdapter.notifyDataSetChanged();
                 }
-                loadListView();
-                allTopicAdapter.notifyDataSetChanged();
+                else {
+                    Toast.makeText(AndroidActivity.this, "No data found", Toast.LENGTH_SHORT).show();
+                    noDataVisibility(true);
+                }
                 ux.removeLoadingView();
             }
         });

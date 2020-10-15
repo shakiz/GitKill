@@ -27,7 +27,7 @@
             android:layout_marginLeft="10dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_left_arrow_new"
-            app:tint="@color/md_grey_800"
+            app:tint="@color/md_green_800"
             android:padding="8dp" />
 
         <TextView
@@ -57,7 +57,6 @@
             android:id="@+id/mainLayout"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="4dp"
             android:orientation="vertical">
 
@@ -72,16 +71,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/welcome_"
-                    android:textSize="16sp"
-                    android:padding="4dp"
+                    android:textSize="14sp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
                     android:textColor="@color/md_grey_800"/>
+
                 <TextView
                     android:id="@+id/UserName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/username"
                     android:textSize="16sp"
-                    android:padding="4dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
                     android:textStyle="bold"
                     android:textColor="@color/md_grey_800"/>
 
@@ -91,10 +93,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardUseCompatPadding="true"
-                app:cardCornerRadius="12dp"
+                app:cardCornerRadius="8dp"
                 android:paddingBottom="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 app:cardBackgroundColor="@color/md_white_1000"
-                android:translationZ="4dp">
+                android:elevation="4dp"
+                android:translationZ="2dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -141,6 +146,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
                         android:weightSum="3.8">
 
                         <View
@@ -170,7 +177,7 @@
                                 <de.hdodenhof.circleimageview.CircleImageView
                                     android:layout_width="28dp"
                                     android:layout_height="28dp"
-                                    android:src="@drawable/ic_git_fork_new"/>
+                                    android:src="@drawable/ic_code_fork_symbol"/>
                                 <TextView
                                     android:id="@+id/NumberOfForks"
                                     android:textColor="@color/md_grey_800"
@@ -211,7 +218,7 @@
                                 <de.hdodenhof.circleimageview.CircleImageView
                                     android:layout_width="28dp"
                                     android:layout_height="28dp"
-                                    android:src="@drawable/ic_watching_icon"/>
+                                    android:src="@drawable/ic_watching"/>
                                 <TextView
                                     android:id="@+id/NumberOfWatch"
                                     android:textColor="@color/md_grey_800"
@@ -252,7 +259,7 @@
                                 <de.hdodenhof.circleimageview.CircleImageView
                                     android:layout_width="28dp"
                                     android:layout_height="28dp"
-                                    android:src="@drawable/ic_star_latest"/>
+                                    android:src="@drawable/ic_star_new"/>
                                 <TextView
                                     android:id="@+id/NumberOfStars"
                                     android:textColor="@color/md_grey_800"
@@ -392,10 +399,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:cardUseCompatPadding="true"
-                app:cardCornerRadius="12dp"
+                app:cardCornerRadius="8dp"
                 android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 app:cardBackgroundColor="@color/md_white_1000"
-                android:translationZ="4dp">
+                android:elevation="4dp"
+                android:translationZ="2dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"

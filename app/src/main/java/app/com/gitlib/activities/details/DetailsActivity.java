@@ -12,6 +12,7 @@ import com.google.android.material.tabs.TabLayout;
 import app.com.gitlib.R;
 import app.com.gitlib.activities.android.AndroidActivity;
 import app.com.gitlib.activities.ml.MachineLearningActivity;
+import app.com.gitlib.activities.repositories.TrendingRepositoriesActivity;
 import app.com.gitlib.activities.web.WebActivity;
 import app.com.gitlib.adapters.DetailsFragmentPagerAdapter;
 import app.com.gitlib.models.alltopic.Item;
@@ -55,15 +56,7 @@ public class DetailsActivity extends AppCompatActivity {
         findViewById(R.id.BackButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getIntent().getStringExtra("from").equals("android")){
-                    startActivity(new Intent(DetailsActivity.this, AndroidActivity.class));
-                }
-                else if (getIntent().getStringExtra("from").equals("ml")){
-                    startActivity(new Intent(DetailsActivity.this, MachineLearningActivity.class));
-                }
-                else if (getIntent().getStringExtra("from").equals("web")){
-                    startActivity(new Intent(DetailsActivity.this, WebActivity.class));
-                }
+                onBackPressed();
             }
         });
         //endregion
@@ -119,9 +112,6 @@ public class DetailsActivity extends AppCompatActivity {
 
         if (item.getUpdated_at() == null) UpdatedAt.setText("No data found");
         else UpdatedAt.setText(item.getUpdated_at());
-
-
-        //Picasso.get().load(item.getAvatar_url()).into(UserIcon);
     }
     //endregion
 
@@ -146,6 +136,9 @@ public class DetailsActivity extends AppCompatActivity {
         }
         else if (getIntent().getStringExtra("from").equals("web")){
             startActivity(new Intent(DetailsActivity.this, WebActivity.class));
+        }
+        else if (getIntent().getStringExtra("from").equals("trendingRepositories")){
+            startActivity(new Intent(DetailsActivity.this, TrendingRepositoriesActivity.class));
         }
     }
     //endregion

@@ -176,7 +176,6 @@
                 android:paddingRight="8dp"
                 android:text="test.com"
                 android:background="@drawable/card_item_back_light_red"
-                android:autoLink="web"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textColor="@color/md_grey_800"
@@ -186,8 +185,8 @@
         </LinearLayout>
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:src="@drawable/ic_arrow_forward"
             android:layout_marginRight="8dp"
             android:layout_centerVertical="true"

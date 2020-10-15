@@ -196,6 +196,7 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
                         trendingDevelopersAdapter.notifyDataSetChanged();
                     } else {
                         Toast.makeText(TrendingDevelopersListActivity.this, "No data found", Toast.LENGTH_SHORT).show();
+                        noDataVisibility(true);
                     }
                     ux.removeLoadingView();
                 }

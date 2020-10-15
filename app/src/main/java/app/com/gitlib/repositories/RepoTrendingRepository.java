@@ -4,12 +4,13 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 import app.com.gitlib.apiutils.AllApiService;
-import app.com.gitlib.models.repositories.TrendingRepositories;
+import app.com.gitlib.models.alltopic.Item;
+import app.com.gitlib.models.alltopic.TopicBase;
 import app.com.gitlib.utils.UtilsManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import static app.com.gitlib.apiutils.AllUrlClass.TRENDING_REPOS_URL;
+import static app.com.gitlib.apiutils.AllUrlClass.ALL_TOPICS_BASE_URL;
 
 public class RepoTrendingRepository {
     private AllApiService apiService;
@@ -25,25 +26,25 @@ public class RepoTrendingRepository {
     }
     //endregion
 
-    public MutableLiveData<List<TrendingRepositories>> getTrendingRepos(Context context, String url){
-        final MutableLiveData<List<TrendingRepositories>> trendingRepos = new MutableLiveData<>();
+    public MutableLiveData<List<Item>> getTrendingRepos(Context context, String url, String queryString){
+        final MutableLiveData<List<Item>> trendingRepos = new MutableLiveData<>();
         utilsManager = new UtilsManager(context);
-        apiService = utilsManager.getClient(TRENDING_REPOS_URL).create(AllApiService.class);
-        final Call<List<TrendingRepositories>> trendingRepositoriesCall=apiService.getTrendingRepos(url);
-        trendingRepositoriesCall.enqueue(new Callback<List<TrendingRepositories>>() {
+        apiService = utilsManager.getClient(ALL_TOPICS_BASE_URL).create(AllApiService.class);
+        final Call<TopicBase> trendingRepositoriesCall=apiService.getAllTopics(url+"repositories",queryString);
+        trendingRepositoriesCall.enqueue(new Callback<TopicBase>() {
             @Override
-            public void onResponse(Call<List<TrendingRepositories>> call, Response<List<TrendingRepositories>> response) {
+            public void onResponse(Call<TopicBase> call, Response<TopicBase> response) {
                 if (response.isSuccessful()){
-                    if (response.body() != null){
-                        if (response.body().size() > 0){
-                            trendingRepos.setValue(response.body());
+                    if (response.body().getItems() != null){
+                        if (response.body().getItems().size() > 0){
+                            trendingRepos.setValue(response.body().getItems());
                         }
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<List<TrendingRepositories>> call, Throwable t) {
+            public void onFailure(Call<TopicBase> call, Throwable t) {
                 trendingRepos.setValue(null);
             }
         });

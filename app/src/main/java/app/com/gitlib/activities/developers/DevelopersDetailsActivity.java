@@ -45,7 +45,7 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
     private SingleDeveloperViewModel viewModel;
     private UserRepoDetailsViewModel userRepoDetailsViewModel;
     private UX ux;
-    private TextView userNameTxt, name, followers, following, publicRepos, gists, bio, blog, company, location, hireable, email, created_at;
+    private TextView userNameTxt, name, followers, following, publicRepos, gists, bio, blog, company, location, hireable, email, created_at, html_url;
     private Button rateNowBtn;
     private ImageView userAvatar;
     private List<Repo> mRepositoryList;
@@ -94,6 +94,7 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
         created_at = findViewById(R.id.created_at);
         rateNowBtn = findViewById(R.id.rateNowBtn);
+        html_url = findViewById(R.id.html_url);
         allRepositoryRecycler = findViewById(R.id.allRepositoryRecycler);
         progressBar = findViewById(R.id.progress);
         viewModel = ViewModelProviders.of(this).get(SingleDeveloperViewModel.class);
@@ -214,6 +215,12 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
             followers.setText(String.valueOf(developer.getFollowers()));
         } else {
             followers.setText("0");
+        }
+
+        if (developer.getHtml_url() != null) {
+            html_url.setText(developer.getHtml_url());
+        } else {
+            html_url.setText("No profile url found");
         }
 
         if (developer.getFollowing() != 0) {

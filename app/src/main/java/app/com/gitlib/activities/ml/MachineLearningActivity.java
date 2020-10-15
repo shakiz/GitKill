@@ -8,6 +8,8 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -31,7 +33,6 @@ import app.com.gitlib.models.alltopic.Item;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.viewmodels.MachineLearningViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
-import es.dmoral.toasty.Toasty;
 import static app.com.gitlib.apiutils.AllUrlClass.ALL_TOPICS_BASE_URL;
 import static app.com.gitlib.utils.UtilsManager.hasConnection;
 import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
@@ -205,13 +206,19 @@ public class MachineLearningActivity extends AppCompatActivity {
         machineLearningViewModel.getMLRepos().observe(this, new Observer<List<Item>>() {
             @Override
             public void onChanged(List<Item> items) {
-                mlItemList = new ArrayList<>(items);
-                if (mlItemList.size() <= 0){
-                    noDataVisibility(true);
-                    Toasty.error(MachineLearningActivity.this,R.string.no_data_message).show();
+                if (items != null) {
+                    mlItemList = new ArrayList<>(items);
+                    if (mlItemList.size() <= 0){
+                        noDataVisibility(true);
+                        Toast.makeText(MachineLearningActivity.this,R.string.no_data_message,Toast.LENGTH_SHORT).show();
+                    }
+                    loadListView();
+                    allTopicAdapter.notifyDataSetChanged();
                 }
-                loadListView();
-                allTopicAdapter.notifyDataSetChanged();
+                else {
+                    Toast.makeText(MachineLearningActivity.this, "No data found", Toast.LENGTH_SHORT).show();
+                    noDataVisibility(true);
+                }
                 ux.removeLoadingView();
             }
         });

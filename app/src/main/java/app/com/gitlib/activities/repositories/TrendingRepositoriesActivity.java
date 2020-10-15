@@ -1,23 +1,22 @@
 package app.com.gitlib.activities.repositories;
 
-import android.app.Dialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -25,36 +24,36 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import app.com.gitlib.R;
+import app.com.gitlib.activities.details.DetailsActivity;
 import app.com.gitlib.activities.onboard.HomeActivity;
-import app.com.gitlib.adapters.TrendingRepositoriesAdapter;
-import app.com.gitlib.models.repositories.TrendingRepositories;
+import app.com.gitlib.activities.web.WebActivity;
+import app.com.gitlib.adapters.AllTopicAdapter;
+import app.com.gitlib.models.alltopic.Item;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.viewmodels.TrendingRepositoriesViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
-import es.dmoral.toasty.Toasty;
-import static app.com.gitlib.apiutils.AllUrlClass.BASE_URL;
+
+import static app.com.gitlib.apiutils.AllUrlClass.ALL_TOPICS_BASE_URL;
 import static app.com.gitlib.utils.UtilsManager.hasConnection;
 import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class TrendingRepositoriesActivity extends AppCompatActivity {
-    private Spinner languageSpinner,sinceSpinner;
-    private ArrayList<String> languageList, timeList;
+    private Spinner languageSpinner;
+    private ArrayList<String> languageList;
     private RecyclerView recyclerViewRepo;
-    private TrendingRepositoriesAdapter trendingRepositoriesAdapter;
-    private ArrayList<TrendingRepositories> trendingRepoList;
-    private String TAG = "TrendingRepositoriesActivity" , languageStr = "" , sinceStr = "";
-    private ImageView search;
+    private AllTopicAdapter allTopicAdapter;
+    private ArrayList<Item> trendingRepoList;
+    private String TAG = "TrendingRepositoriesActivity";
     private CircleImageView refreshListButton;
-    private Dialog itemDialog ;
-    private RelativeLayout dialogLayout;
     private UX ux;
     private TextView NoData;
     private ImageView NoDataIV;
     //Dialog components
-    private TextView RepoName , RepoLink , UserName , Language , NumberOfStars , NumberOfForks , Description;
     private AdView adView;
     private TrendingRepositoriesViewModel repositoriesViewModel;
 
@@ -73,14 +72,11 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
     private void init() {
         recyclerViewRepo = findViewById(R.id.mRecyclerView);
         languageSpinner = findViewById(R.id.LanguageSpinner);
-        sinceSpinner = findViewById(R.id.SinceSpinner);
         refreshListButton = findViewById(R.id.RefreshList);
         NoData = findViewById(R.id.NoDataMessage);
         NoDataIV = findViewById(R.id.NoDataIV);
-        search = findViewById(R.id.Search);
         adView = findViewById(R.id.adView);
         languageList = new ArrayList<>();
-        timeList = new ArrayList<>();
         ux = new UX(this);
         trendingRepoList = new ArrayList<>();
         repositoriesViewModel = ViewModelProviders.of(this).get(TrendingRepositoriesViewModel.class);
@@ -101,50 +97,47 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
         setData();
 
         //region load first time data
-        performServerOperation("");
+        if (hasConnection(TrendingRepositoriesActivity.this)) {
+            performServerOperation("all");
+        }
+        else{
+            noDataVisibility(true);
+            internetErrorDialog(TrendingRepositoriesActivity.this);
+        }
         //endregion
 
         loadListView();
         ux.setSpinnerAdapter(languageSpinner,languageList);
-        ux.setSpinnerAdapter(sinceSpinner,timeList);
 
         languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                languageStr = adapterView.getItemAtPosition(position).toString().toLowerCase();
+                String queryString = adapterView.getItemAtPosition(position).toString();
+                if (hasConnection(TrendingRepositoriesActivity.this)) {
+                    performServerOperation("all"+queryString);
+                }
+                else{
+                    noDataVisibility(true);
+                    internetErrorDialog(TrendingRepositoriesActivity.this);
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
-        });
-
-        sinceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                sinceStr = adapterView.getItemAtPosition(position).toString().toLowerCase();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String newUrl = BASE_URL+"repositories?"+"language="+languageStr+"&since="+sinceStr;
-                Log.v("SpinnerURL",newUrl);
-                performServerOperation(newUrl);
             }
         });
 
         refreshListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                performServerOperation("");
+                if (hasConnection(TrendingRepositoriesActivity.this)) {
+                    performServerOperation("all");
+                }
+                else{
+                    noDataVisibility(true);
+                    internetErrorDialog(TrendingRepositoriesActivity.this);
+                }
             }
         });
 
@@ -203,80 +196,36 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
 
     private void setData() {
         //Adding the language list
+        languageList.add("Select Language");
         languageList.add("Java");
         languageList.add("Python");
         languageList.add("C");
         languageList.add("C++");
         languageList.add("C#");
         languageList.add("PHP");
-        //Adding data to time list
-        timeList.add("Daily");
-        timeList.add("Weekly");
-        timeList.add("Monthly");
-        timeList.add("Yearly");
-    }
-
-    private void showDialog(TrendingRepositories trendingRepositories) {
-        itemDialog = new Dialog(TrendingRepositoriesActivity.this);
-        itemDialog.setContentView(R.layout.popup_trending_repo_items_details);
-        customViewInit(itemDialog);
-        itemDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        Animation a = AnimationUtils.loadAnimation(itemDialog.getContext(), R.anim.push_up_in);
-        dialogLayout.startAnimation(a);
-        setCustomDialogData(trendingRepositories);
-        itemDialog.show();
-    }
-
-    private void setCustomDialogData(final TrendingRepositories trendingRepositories) {
-        UserName.setText(trendingRepositories.getAuthor());
-        RepoName.setText(trendingRepositories.getName());
-
-        if (trendingRepositories.getDescription() == null) Description.setText("No description available for this repository");
-        else Description.setText(trendingRepositories.getDescription());
-
-        if (trendingRepositories.getLanguage() == null) Language.setText("No language selected for this repository");
-        else Language.setText(trendingRepositories.getLanguage());
-
-        RepoLink.setText(trendingRepositories.getUrl());
-        NumberOfStars.setText("Stars : "+trendingRepositories.getStars());
-        NumberOfForks.setText("Forks : "+trendingRepositories.getForks());
-
-        RepoLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setData(Uri.parse(trendingRepositories.getUrl()));
-                startActivity(browserIntent);
-            }
-        });
-    }
-
-    private void customViewInit(Dialog itemDialog) {
-        UserName = itemDialog.findViewById(R.id.UserName);
-        RepoName = itemDialog.findViewById(R.id.RepoName);
-        RepoLink = itemDialog.findViewById(R.id.RepoLink);
-        Description = itemDialog.findViewById(R.id.Description);
-        Language = itemDialog.findViewById(R.id.Language);
-        NumberOfStars = itemDialog.findViewById(R.id.NumberOfStars);
-        NumberOfForks = itemDialog.findViewById(R.id.NumberOfForks);
-        dialogLayout = itemDialog.findViewById(R.id.dialogLayout);
     }
 
     //region perform mvvm server fetch
-    private void performServerOperation(String url){
+    private void performServerOperation(String queryString){
         if (hasConnection(TrendingRepositoriesActivity.this)) {
             ux.getLoadingView();
-            repositoriesViewModel.getData(this,url);
-            repositoriesViewModel.getAndroidRepos().observe(this, new Observer<List<TrendingRepositories>>() {
+            repositoriesViewModel.getData(this,ALL_TOPICS_BASE_URL , queryString);
+            repositoriesViewModel.getAndroidRepos().observe(this, new Observer<List<Item>>() {
                 @Override
-                public void onChanged(List<TrendingRepositories> items) {
-                    trendingRepoList = new ArrayList<>(items);
-                    if (trendingRepoList.size() <= 0){
-                        noDataVisibility(true);
-                        Toasty.error(TrendingRepositoriesActivity.this,R.string.no_data_message).show();
+                public void onChanged(List<Item> items) {
+                    if (items != null) {
+                        trendingRepoList = new ArrayList<>(items);
+                        if (trendingRepoList.size() <= 0){
+                            noDataVisibility(true);
+                            Toast.makeText(TrendingRepositoriesActivity.this,R.string.no_data_message,Toast.LENGTH_SHORT).show();
+                        }
+                        loadListView();
+                        allTopicAdapter.notifyDataSetChanged();
                     }
-                    loadListView();
-                    trendingRepositoriesAdapter.notifyDataSetChanged();
+                    else {
+                        Toast.makeText(TrendingRepositoriesActivity.this, "No data found", Toast.LENGTH_SHORT).show();
+                        noDataVisibility(true);
+                    }
                     ux.removeLoadingView();
                 }
             });
@@ -290,15 +239,20 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
 
     //region load list data with adapter
     private void loadListView(){
-        trendingRepositoriesAdapter = new TrendingRepositoriesAdapter(trendingRepoList, this, new TrendingRepositoriesAdapter.onItemClickListener() {
+        allTopicAdapter = new AllTopicAdapter(trendingRepoList, this, R.layout.adapter_layout_android_topics);
+        recyclerViewRepo.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewRepo.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewRepo.setAdapter(allTopicAdapter);
+        allTopicAdapter.notifyDataSetChanged();
+        allTopicAdapter.setOnItemClickListener(new AllTopicAdapter.onItemClickListener() {
             @Override
-            public void respond(TrendingRepositories trendingRepositories) {
-                showDialog(trendingRepositories);
+            public void respond(Item item) {
+                Intent intent = new Intent(TrendingRepositoriesActivity.this , DetailsActivity.class);
+                intent.putExtra("from","trendingRepositories");
+                intent.putExtra("item", item);
+                startActivity(intent);
             }
         });
-        recyclerViewRepo.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewRepo.setAdapter(trendingRepositoriesAdapter);
-        trendingRepositoriesAdapter.notifyDataSetChanged();
     }
     //endregion
 

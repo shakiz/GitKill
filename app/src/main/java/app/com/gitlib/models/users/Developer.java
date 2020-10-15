@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "id",
         "node_id",
         "avatar_url",
+        "html_url",
         "type",
         "site_admin",
         "name",
@@ -37,6 +38,8 @@ public class Developer {
     private String nodeId;
     @JsonProperty("avatar_url")
     private String avatarUrl;
+    @JsonProperty("html_url")
+    private String html_url;
     @JsonProperty("type")
     private String type;
     @JsonProperty("site_admin")
@@ -108,6 +111,16 @@ public class Developer {
     @JsonProperty("avatar_url")
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    @JsonProperty("html_url")
+    public String getHtml_url() {
+        return html_url;
+    }
+
+    @JsonProperty("html_url")
+    public void setHtml_url(String html_url) {
+        this.html_url = html_url;
     }
 
     @JsonProperty("type")

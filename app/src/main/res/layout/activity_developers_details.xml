@@ -384,6 +384,48 @@
                                 android:text=":"/>
 
                             <TextView
+                                android:id="@+id/html_url"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:layout_marginLeft="4dp"
+                                android:textColor="@color/md_green_800"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:autoLink="web"
+                                android:text="@string/profile_link"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"
+                            android:layout_gravity="center|left"
+                            android:gravity="center|left"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_date"
+                                android:gravity="center"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:textColor="@color/md_grey_800"
+                                android:textSize="16sp"
+                                android:text=":"/>
+
+                            <TextView
                                 android:id="@+id/created_at"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
