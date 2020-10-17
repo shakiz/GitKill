@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GitHub Lib</string>
+    <string name="app_name">Git Kill</string>
 
     <string name="select_language">Select Language</string>
     <string name="trending_developers_heading">List of Trending Developers</string>
@@ -51,7 +51,7 @@
     <string name="question_one">Question 1</string>
     <string name="asnwer_one">Answer 1</string>
     <string name="learn_new_facts_in_it_with_us">Learn new facts about IT with us</string>
-    <string name="try_again">Try Again</string>
+    <string name="try_again">Click Here To Try Again</string>
     <string name="name">Name</string>
     <string name="sponsor_link">Sponsor Link</string>
     <string name="no_internet_title">Network Error!</string>
@@ -61,7 +61,6 @@
     <string name="enter_username">Enter Username</string>
     <string name="developer_details">Developer Details</string>
     <string name="i_am">I am</string>
-    <string name="sakhawat_hossain">Sakhawat Hossain</string>
     <string name="dummy_number">100</string>
     <string name="repos">Repos</string>
     <string name="gists">Gists</string>
@@ -81,4 +80,6 @@
     <string name="rate_us">Rate Us!</string>
     <string name="rate_this_app_on_play_store">Would you take a moment to rate this app in Play Store?</string>
     <string name="rate_now">Rate Now</string>
+    <string name="developed_by">Developed By</string>
+    <string name="sakhawat_hossain">Sakhawat Hossain</string>
 </resources>
