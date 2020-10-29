@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="24dp"
-                    android:text="Welcome to GitHub Lib"
+                    android:text="Welcome to Git Lib"
                     android:textColor="@color/md_grey_800"
                     android:textSize="16sp"
                     android:textStyle="bold"

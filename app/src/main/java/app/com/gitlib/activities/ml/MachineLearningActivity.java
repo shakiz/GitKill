@@ -41,7 +41,7 @@ public class MachineLearningActivity extends AppCompatActivity {
     private RecyclerView mlRecyclerView;
     private AllTopicAdapter allTopicAdapter;
     private UX ux;
-    private ArrayList<Item> mlItemList;
+    private ArrayList<Item> machineLearningList;
     private Spinner mlFilterSpinner;
     private CircleImageView refreshListButton;
     private TextView NoData;
@@ -69,7 +69,7 @@ public class MachineLearningActivity extends AppCompatActivity {
         NoDataIV = findViewById(R.id.NoDataIV);
         mlFilterSpinner = findViewById(R.id.FilterSpinner);
         adView = findViewById(R.id.adView);
-        mlItemList = new ArrayList<>();
+        machineLearningList = new ArrayList<>();
         ux = new UX(this);
         machineLearningViewModel = ViewModelProviders.of(this).get(MachineLearningViewModel.class);
     }
@@ -182,7 +182,7 @@ public class MachineLearningActivity extends AppCompatActivity {
 
     //region load list with recycler and adapter
     private void loadListView(){
-        allTopicAdapter = new AllTopicAdapter(mlItemList, this, R.layout.adapter_layout_android_topics);
+        allTopicAdapter = new AllTopicAdapter(machineLearningList, this, R.layout.adapter_layout_android_topics);
         mlRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mlRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mlRecyclerView.setAdapter(allTopicAdapter);
@@ -207,13 +207,16 @@ public class MachineLearningActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Item> items) {
                 if (items != null) {
-                    mlItemList = new ArrayList<>(items);
-                    if (mlItemList.size() <= 0){
+                    if (items.size() > 0){
+                        machineLearningList = new ArrayList<>(items);
+                        loadListView();
+                        allTopicAdapter.notifyDataSetChanged();
+                        noDataVisibility(false);
+                    }
+                    else{
                         noDataVisibility(true);
                         Toast.makeText(MachineLearningActivity.this,R.string.no_data_message,Toast.LENGTH_SHORT).show();
                     }
-                    loadListView();
-                    allTopicAdapter.notifyDataSetChanged();
                 }
                 else {
                     Toast.makeText(MachineLearningActivity.this, "No data found", Toast.LENGTH_SHORT).show();

@@ -212,13 +212,16 @@ public class WebActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Item> items) {
                 if (items != null) {
-                    webTopicList = new ArrayList<>(items);
-                    if (webTopicList.size() <= 0){
-                        noDataVisibility(true);
-                        Toast.makeText(WebActivity.this,R.string.no_data_message,Toast.LENGTH_SHORT).show();
+                    if (items.size() > 0){
+                        webTopicList = new ArrayList<>(items);
+                        loadListView();
+                        allTopicAdapter.notifyDataSetChanged();
+                        noDataVisibility(false);
                     }
-                    loadListView();
-                    allTopicAdapter.notifyDataSetChanged();
+                    else {
+                        noDataVisibility(true);
+                        Toast.makeText(WebActivity.this, R.string.no_data_message, Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else {
                     Toast.makeText(WebActivity.this, "No data found", Toast.LENGTH_SHORT).show();

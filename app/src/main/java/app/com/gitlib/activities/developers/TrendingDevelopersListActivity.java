@@ -187,13 +187,16 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
                 @Override
                 public void onChanged(List<TrendingDevelopers> items) {
                     if (items != null) {
-                        trendingDevelopersList = new ArrayList<>(items);
-                        if (trendingDevelopersList.size() <= 0){
+                        if (items.size() > 0){
+                            trendingDevelopersList = new ArrayList<>(items);
+                            loadListView();
+                            trendingDevelopersAdapter.notifyDataSetChanged();
+                            noDataVisibility(false);
+                        }
+                        else{
                             noDataVisibility(true);
                             Toasty.error(TrendingDevelopersListActivity.this,R.string.no_data_message).show();
                         }
-                        loadListView();
-                        trendingDevelopersAdapter.notifyDataSetChanged();
                     } else {
                         Toast.makeText(TrendingDevelopersListActivity.this, "No data found", Toast.LENGTH_SHORT).show();
                         noDataVisibility(true);
