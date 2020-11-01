@@ -207,19 +207,13 @@ public class MachineLearningActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Item> items) {
                 if (items != null) {
-                    if (items.size() > 0){
-                        machineLearningList = new ArrayList<>(items);
-                        loadListView();
-                        allTopicAdapter.notifyDataSetChanged();
-                        noDataVisibility(false);
-                    }
-                    else{
-                        noDataVisibility(true);
-                        Toast.makeText(MachineLearningActivity.this,R.string.no_data_message,Toast.LENGTH_SHORT).show();
-                    }
+                    machineLearningList = new ArrayList<>(items);
+                    loadListView();
+                    allTopicAdapter.notifyDataSetChanged();
+                    noDataVisibility(false);
                 }
                 else {
-                    Toast.makeText(MachineLearningActivity.this, "No data found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MachineLearningActivity.this,R.string.no_data_message,Toast.LENGTH_SHORT).show();
                     noDataVisibility(true);
                 }
                 ux.removeLoadingView();

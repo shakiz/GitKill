@@ -218,19 +218,13 @@ public class AndroidActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Item> items) {
                 if (items != null) {
-                    if (items.size() > 0){
-                        androidTopicList = new ArrayList<>(items);
-                        loadListView();
-                        allTopicAdapter.notifyDataSetChanged();
-                        noDataVisibility(false);
-                    }
-                    else {
-                        noDataVisibility(true);
-                        Toast.makeText(AndroidActivity.this, R.string.no_data_message, Toast.LENGTH_SHORT).show();
-                    }
+                    androidTopicList = new ArrayList<>(items);
+                    loadListView();
+                    allTopicAdapter.notifyDataSetChanged();
+                    noDataVisibility(false);
                 }
                 else {
-                    Toast.makeText(AndroidActivity.this, "No data found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AndroidActivity.this, R.string.no_data_message, Toast.LENGTH_SHORT).show();
                     noDataVisibility(true);
                 }
                 ux.removeLoadingView();
