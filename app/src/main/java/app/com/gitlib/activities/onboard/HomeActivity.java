@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.multidex.MultiDex;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +35,7 @@ import app.com.gitlib.adapters.drawerextra.DrawerAdapter;
 import app.com.gitlib.adapters.drawerextra.DrawerItem;
 import app.com.gitlib.adapters.drawerextra.SimpleItem;
 import app.com.gitlib.apiutils.AllApiService;
+import app.com.gitlib.databinding.ActivityMainBinding;
 import app.com.gitlib.models.questionbank.QuestionBank;
 import app.com.gitlib.models.questionbank.Result;
 import app.com.gitlib.utils.UX;
@@ -47,24 +49,23 @@ import static app.com.gitlib.utils.UtilsManager.hasConnection;
 import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class HomeActivity extends AppCompatActivity {
+    private ActivityMainBinding activityMainBinding;
     private static String TAG = "Shakil::HomeActivity";
     private SlidingRootNav slidingRootNav;
     private DrawerAdapter adapter;
     private String[] screenTitles;
     private Drawable[] screenIcons;
-    private RecyclerView drawerRecycler, questionBankRecycler;
+    private RecyclerView drawerRecycler;
     private static final int POS_TRENDING_REPO = 0,POS_TRENDING_DEVELOPERS = 1,POS_TRENDING_ON_ANDROID = 2,POS_TRENDING_ON_WEB = 3,POS_TRENDING_ML_LIBRARIES = 4;
-    private TextView greetingsText, dateTimeText, NoData, tryAgain;
     private UX ux;
     private AllApiService apiService;
     private UtilsManager utilsManager;
-    private ImageView drawerButton, NoDataIV;
     private ArrayList<Result> resultList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         MultiDex.install(this);
 
         //region init and bind UI components
@@ -85,13 +86,6 @@ public class HomeActivity extends AppCompatActivity {
 
         screenIcons = loadScreenIcons();
         screenTitles = loadScreenTitles();
-        drawerButton = findViewById(R.id.DrawerButton);
-        greetingsText = findViewById(R.id.GreetingsText);
-        dateTimeText = findViewById(R.id.DateTimeText);
-        questionBankRecycler = findViewById(R.id.mRecyclerView);
-        NoData = findViewById(R.id.NoDataMessage);
-        tryAgain = findViewById(R.id.TryAgain);
-        NoDataIV = findViewById(R.id.NoDataIV);
         resultList = new ArrayList<>();
         ux = new UX(this);
         utilsManager = new UtilsManager(this);
@@ -125,7 +119,7 @@ public class HomeActivity extends AppCompatActivity {
     //region bind UI components
     private void bindUIWithComponents() {
         //region refresh button click
-        findViewById(R.id.RefreshList).setOnClickListener(new View.OnClickListener() {
+        activityMainBinding.RefreshList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (hasConnection(HomeActivity.this)) {
@@ -149,7 +143,7 @@ public class HomeActivity extends AppCompatActivity {
         //endregion
 
         //region load question bank data on async task while click on try again textView
-        tryAgain.setOnClickListener(new View.OnClickListener() {
+        activityMainBinding.TryAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (hasConnection(HomeActivity.this)) {
@@ -165,7 +159,7 @@ public class HomeActivity extends AppCompatActivity {
 
         //region set greetings, name, nav drawer texts and dateTime text
         setGreetings();
-        dateTimeText.setText(getDateTimeText());
+        activityMainBinding.DateTimeText.setText(getDateTimeText());
         //endregion
 
         //region set question bank and result adapter
@@ -173,16 +167,16 @@ public class HomeActivity extends AppCompatActivity {
         //endregion
 
         //region drawer hum-burger icon
-        drawerButton.setOnClickListener(new View.OnClickListener() {
+        activityMainBinding.DrawerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(slidingRootNav.isMenuClosed()) {
                     slidingRootNav.openMenu();
-                    drawerButton.setImageResource(R.drawable.ic_left_arrow);
+                    activityMainBinding.DrawerButton.setImageResource(R.drawable.ic_left_arrow);
                 }
                 else {
                     slidingRootNav.closeMenu();
-                    drawerButton.setImageResource(R.drawable.ic_menu_new);
+                    activityMainBinding.DrawerButton.setImageResource(R.drawable.ic_menu_new);
                 }
             }
         });
@@ -228,8 +222,8 @@ public class HomeActivity extends AppCompatActivity {
     //region set question bank and result adapter
     private void setQuestionBankAdapter(){
         QuestionBankAndResultAdapter resultAdapter = new QuestionBankAndResultAdapter(resultList, this);
-        questionBankRecycler.setLayoutManager(new LinearLayoutManager(this));
-        questionBankRecycler.setAdapter(resultAdapter);
+        activityMainBinding.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        activityMainBinding.mRecyclerView.setAdapter(resultAdapter);
         resultAdapter.notifyDataSetChanged();
     }
     //endregion
@@ -239,15 +233,15 @@ public class HomeActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         int timeOfTheDay = calendar.get(Calendar.HOUR_OF_DAY);
         if (timeOfTheDay >= 0 && timeOfTheDay < 12) {
-            greetingsText.setText("Good Morning");
+            activityMainBinding.GreetingsText.setText("Good Morning");
         } else if (timeOfTheDay >= 12 && timeOfTheDay < 16) {
-            greetingsText.setText("Good Noon");
+            activityMainBinding.GreetingsText.setText("Good Noon");
         } else if (timeOfTheDay >= 16 && timeOfTheDay < 18) {
-            greetingsText.setText("Good Afternoon");
+            activityMainBinding.GreetingsText.setText("Good Afternoon");
         } else if (timeOfTheDay >= 18 && timeOfTheDay < 20) {
-            greetingsText.setText("Good Evening");
+            activityMainBinding.GreetingsText.setText("Good Evening");
         } else {
-            greetingsText.setText("Good Night");
+            activityMainBinding.GreetingsText.setText("Good Night");
         }
     }
     //endregion
@@ -286,12 +280,13 @@ public class HomeActivity extends AppCompatActivity {
 
     //region load data from server
     private void loadRecord() {
-        ux.getLoadingView();
+        //region start the shimmer layout
+        activityMainBinding.shimmerFrameLayout.setVisibility(View.VISIBLE);
+        activityMainBinding.shimmerFrameLayout.startShimmerAnimation();
+        ///endregion
         resultList.clear();
-        //Creating the instance for api service from AllApiService interface
         apiService=utilsManager.getClient(QUESTION_BANK).create(AllApiService.class);
         final Call<QuestionBank> androidTopicCall=apiService.getAllQuestionAndAnswer(QUESTION_BANK+"api.php?amount=10&type=multiple");
-        //handling user requests and their interactions with the application.
         androidTopicCall.enqueue(new Callback<QuestionBank>() {
             @Override
             public void onResponse(Call<QuestionBank> call, Response<QuestionBank> response) {
@@ -305,6 +300,7 @@ public class HomeActivity extends AppCompatActivity {
                                     resultList.add(new Result(response.body().getResults().get(start).getQuestion(),response.body().getResults().get(start).getCorrectAnswer()));
                                 }
                                 if (resultList.size()>0){
+                                    activityMainBinding.mRecyclerView.setVisibility(View.VISIBLE);
                                     setQuestionBankAdapter();
                                     noDataVisibility(false);
                                 }
@@ -312,6 +308,8 @@ public class HomeActivity extends AppCompatActivity {
                                     noDataVisibility(true);
                                     Toasty.error(HomeActivity.this,R.string.no_data_message).show();
                                 }
+                                activityMainBinding.shimmerFrameLayout.stopShimmerAnimation();
+                                activityMainBinding.shimmerFrameLayout.setVisibility(View.GONE);
                                 ux.removeLoadingView();
                             }
                         }
@@ -331,13 +329,13 @@ public class HomeActivity extends AppCompatActivity {
     //region set no data related components visible
     private void noDataVisibility(boolean shouldVisible){
         if (shouldVisible) {
-            NoData.setVisibility(View.VISIBLE);
-            NoDataIV.setVisibility(View.VISIBLE);
-            tryAgain.setVisibility(View.VISIBLE);
+            activityMainBinding.NoDataMessage.setVisibility(View.VISIBLE);
+            activityMainBinding.NoDataIV.setVisibility(View.VISIBLE);
+            activityMainBinding.TryAgain.setVisibility(View.VISIBLE);
         } else {
-            NoData.setVisibility(View.GONE);
-            NoDataIV.setVisibility(View.GONE);
-            tryAgain.setVisibility(View.GONE);
+            activityMainBinding.NoDataMessage.setVisibility(View.GONE);
+            activityMainBinding.NoDataIV.setVisibility(View.GONE);
+            activityMainBinding.TryAgain.setVisibility(View.GONE);
         }
     }
     //endregion

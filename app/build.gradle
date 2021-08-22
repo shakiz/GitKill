@@ -48,6 +48,11 @@ android {
         checkReleaseBuilds false
         abortOnError false
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    dataBinding.enabled = true
 }
 
 dependencies {
@@ -102,6 +107,9 @@ dependencies {
 
     // material progress dialog
     implementation 'com.github.thomper:sweet-alert-dialog:v1.4.0'
+
+    //shimmer layout
+    implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
