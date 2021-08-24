@@ -79,9 +79,6 @@ dependencies {
     // android custom menu
     implementation 'com.yarolegovich:sliding-root-nav:1.1.0'
 
-    //Android gif loader
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.9'
-
     //Firebase
     implementation 'com.google.firebase:firebase-analytics:17.2.0'
 

@@ -211,14 +211,14 @@
                     android:layout_margin="4dp"
                     android:text="@string/nodata"/>
 
-                <pl.droidsonroids.gif.GifImageView
+                <ImageView
                     android:id="@+id/NoDataIV"
-                    android:layout_width="96dp"
-                    android:layout_height="96dp"
+                    android:layout_width="112dp"
+                    android:layout_height="112dp"
                     android:layout_gravity="center"
                     android:visibility="gone"
                     android:padding="8dp"
-                    android:src="@drawable/no_data_found_gif_new"/>
+                    android:src="@drawable/no_data_found"/>
 
                 <TextView
                     android:id="@+id/TryAgain"
