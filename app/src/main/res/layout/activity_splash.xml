@@ -1,87 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusable="true"
-    android:background="@color/md_white_1000"
-    android:focusableInTouchMode="true"
-    tools:context=".activities.onboard.SplashActivity"
-    android:orientation="vertical">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/mainLayout"
-        android:weightSum="2"
-        android:gravity="center"
+        android:focusable="true"
+        android:background="@color/md_white_1000"
+        android:focusableInTouchMode="true"
+        tools:context=".activities.onboard.SplashActivity"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="304dp"
-            android:layout_height="304dp"
-            android:src="@drawable/banner"
-            android:layout_gravity="center"
-            android:translationZ="8dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/mainLayout"
+            android:weightSum="2"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/welcome"
-            android:textSize="24sp"
-            android:layout_marginTop="8dp"
-            android:textStyle="bold"
-            android:textColor="@color/md_grey_800"
-            android:layout_gravity="center"
-            android:gravity="center"/>
+            <ImageView
+                android:id="@+id/appIcon"
+                android:layout_width="224dp"
+                android:layout_height="224dp"
+                android:src="@drawable/ic_app_icon"
+                android:layout_gravity="center" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/splash_screen_moto"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginTop="8dp"
-            android:layout_gravity="center"
-            android:gravity="center"/>
+            <LinearLayout
+                android:id="@+id/bottomDetails"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/welcome"
+                    android:textSize="24sp"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginTop="8dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/md_grey_800"
+                    android:layout_gravity="center"
+                    android:gravity="center"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="32dp"
-        android:padding="8dp"
-        android:orientation="horizontal"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:layout_alignParentBottom="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/splash_screen_moto"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"/>
 
-        <TextView
-            android:id="@+id/DevelopedBy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/developed_by"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/md_grey_800"
-            android:layout_gravity="center"
-            android:gravity="center"/>
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/DeveloperName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="@string/sakhawat_hossain"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/md_green_400"
-            android:layout_gravity="center"
-            android:gravity="center"/>
+        </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
-</RelativeLayout>
+</layout>

@@ -7,26 +7,31 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+
 import app.com.gitlib.R;
+import app.com.gitlib.databinding.ActivitySplashBinding;
 
 public class SplashActivity extends AppCompatActivity {
-    private LinearLayout linearLayout;
+    private ActivitySplashBinding activitySplashBinding;
+    private Animation topAnim, bottomAnim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        activitySplashBinding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
         init();
-        Animation a = AnimationUtils.loadAnimation(this, R.anim.fadein);
-        linearLayout.startAnimation(a);
         bindUIWithComponents();
     }
 
     private void init() {
-        linearLayout = findViewById(R.id.mainLayout);
+        topAnim = AnimationUtils.loadAnimation(this, R.anim.top_anim);
+        bottomAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_anim);
     }
 
     private void bindUIWithComponents() {
+        activitySplashBinding.appIcon.setAnimation(topAnim);
+        activitySplashBinding.bottomDetails.setAnimation(bottomAnim);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
