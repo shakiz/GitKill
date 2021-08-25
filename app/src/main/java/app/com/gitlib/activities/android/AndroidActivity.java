@@ -260,5 +260,11 @@ public class AndroidActivity extends AppCompatActivity {
     public void onBackPressed() {
         startActivity(new Intent(AndroidActivity.this, HomeActivity.class));
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
     //endregion
 }

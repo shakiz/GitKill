@@ -10,17 +10,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
+
 import app.com.gitlib.R;
 import app.com.gitlib.adapters.FollowersAndFollowingAdapter;
 import app.com.gitlib.apiutils.AllApiService;
 import app.com.gitlib.apiutils.AllUrlClass;
 import app.com.gitlib.models.details.FollowersAndFollowing;
-import app.com.gitlib.utils.UX;
 import app.com.gitlib.utils.UtilsManager;
 import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
@@ -28,17 +31,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FollowersFragment extends Fragment {
-
     private static final FollowersFragment FOLLOWERS_FRAGMENT = null;
     private static String UserName = "";
     private ArrayList<FollowersAndFollowing> followersList;
     private RecyclerView followersRecyclerView;
     private AllUrlClass allUrlClass;
     private AllApiService apiService;
-    private UX ux;
     private UtilsManager utilsManager;
     private TextView NoData;
     private ImageView NoDataIV;
+    private ProgressBar progressBar;
 
     public FollowersFragment() {
         // Required empty public constructor
@@ -54,7 +56,6 @@ public class FollowersFragment extends Fragment {
         UserName = userName.split("/")[0];
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -65,12 +66,12 @@ public class FollowersFragment extends Fragment {
     }
 
     private void init(View view) {
+        progressBar = view.findViewById(R.id.progress);
         NoData = view.findViewById(R.id.NoDataMessage);
         followersRecyclerView = view.findViewById(R.id.mRecyclerView);
         NoDataIV = view.findViewById(R.id.NoDataIV);
         followersList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
-        ux = new UX(getContext());
         utilsManager = new UtilsManager(getContext());
     }
 
@@ -101,7 +102,7 @@ public class FollowersFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            ux.getLoadingView();
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -127,14 +128,13 @@ public class FollowersFragment extends Fragment {
                             NoDataIV.setVisibility(View.VISIBLE);
                             Toasty.error(getContext(),R.string.no_followers_found).show();
                         }
-                        ux.removeLoadingView();
+                        progressBar.setVisibility(View.GONE);
                     }
-                }, 6000);
+                }, 3000);
             }
         }
 
     }
-
 
     private void loadRecord(String url) {
         followersList.clear();
@@ -158,7 +158,6 @@ public class FollowersFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ArrayList<FollowersAndFollowing>> call, Throwable t) {
-
             }
         });
 

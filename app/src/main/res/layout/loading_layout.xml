@@ -6,9 +6,11 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <pl.droidsonroids.gif.GifImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/loading"/>
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:indeterminateDrawable="@drawable/progress"/>
 
 </LinearLayout>

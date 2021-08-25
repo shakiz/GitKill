@@ -4,29 +4,31 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.ViewPager;
+
 import com.google.android.material.tabs.TabLayout;
+
 import app.com.gitlib.R;
 import app.com.gitlib.activities.android.AndroidActivity;
 import app.com.gitlib.activities.ml.MachineLearningActivity;
 import app.com.gitlib.activities.repositories.TrendingRepositoriesActivity;
 import app.com.gitlib.activities.web.WebActivity;
 import app.com.gitlib.adapters.DetailsFragmentPagerAdapter;
+import app.com.gitlib.databinding.ActivityDetailsBinding;
 import app.com.gitlib.models.alltopic.Item;
 import es.dmoral.toasty.Toasty;
 
 public class DetailsActivity extends AppCompatActivity {
-    private TextView UserName , RepoLink ,Description , NumberOfForks , NumberOfStars , NumberOfWatch , NumberOfIssues , Language , CreatedAt , UpdatedAt;
-    private LinearLayout noDataLayout;
+    private ActivityDetailsBinding activityDetailsBinding;
     private static Item item = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
+        activityDetailsBinding = DataBindingUtil.setContentView(this, R.layout.activity_details);
 
         //region init UI and bind those UI to perform UI interactions
         init();
@@ -36,17 +38,6 @@ public class DetailsActivity extends AppCompatActivity {
 
     //region init UI
     private void init() {
-        UserName = findViewById(R.id.UserName);
-        RepoLink = findViewById(R.id.RepoLink);
-        Description = findViewById(R.id.Description);
-        NumberOfForks = findViewById(R.id.NumberOfForks);
-        NumberOfStars = findViewById(R.id.NumberOfStars);
-        NumberOfWatch = findViewById(R.id.NumberOfWatch);
-        NumberOfIssues = findViewById(R.id.NumberOfIssues);
-        Language = findViewById(R.id.Language);
-        CreatedAt = findViewById(R.id.Created_At);
-        UpdatedAt = findViewById(R.id.Updated_At);
-        noDataLayout = findViewById(R.id.noDataLayout);
     }
     //endregion
 
@@ -66,14 +57,14 @@ public class DetailsActivity extends AppCompatActivity {
         if (item != null){
             setViewPager();
             setData();
-            if (noDataLayout.getVisibility() == View.VISIBLE) {
-                noDataLayout.setVisibility(View.GONE);
+            if (activityDetailsBinding.noDataLayout.getVisibility() == View.VISIBLE) {
+                activityDetailsBinding.noDataLayout.setVisibility(View.GONE);
             }
         }
         else{
             Toasty.info(DetailsActivity.this,"No Item Found");
-            if (noDataLayout.getVisibility() == View.GONE) {
-                noDataLayout.setVisibility(View.VISIBLE);
+            if (activityDetailsBinding.noDataLayout.getVisibility() == View.GONE) {
+                activityDetailsBinding.noDataLayout.setVisibility(View.VISIBLE);
             }
         }
         //endregion
@@ -91,27 +82,27 @@ public class DetailsActivity extends AppCompatActivity {
 
     //region set data after getting intent data
     private void setData(){
-        UserName.setText(item.getFull_name());
-        RepoLink.setText(item.getHtml_url());
+        activityDetailsBinding.UserName.setText(item.getFull_name());
+        activityDetailsBinding.RepoLink.setText(item.getHtml_url());
 
-        if (item.getDescription() == null) Description.setText("No description for this repository.");
-        else Description.setText(item.getDescription());
+        if (item.getDescription() == null) activityDetailsBinding.Description.setText("No description for this repository.");
+        else activityDetailsBinding.Description.setText(item.getDescription());
 
-        NumberOfForks.setText(""+item.getForks_count());
-        NumberOfStars.setText(""+item.getStargazers_count());
-        NumberOfWatch.setText(""+item.getWatchers_count());
+        activityDetailsBinding.NumberOfForks.setText(""+item.getForks_count());
+        activityDetailsBinding.NumberOfStars.setText(""+item.getStargazers_count());
+        activityDetailsBinding.NumberOfWatch.setText(""+item.getWatchers_count());
 
-        if (item.getOpen_issues() == null || item.getOpen_issues() == 0) NumberOfIssues.setText("0");
-        else NumberOfIssues.setText(""+item.getOpen_issues());
+        if (item.getOpen_issues() == null || item.getOpen_issues() == 0) activityDetailsBinding.NumberOfIssues.setText("0");
+        else activityDetailsBinding.NumberOfIssues.setText(""+item.getOpen_issues());
 
-        if (item.getLanguage() == null) Language.setText("No language");
-        else Language.setText(item.getLanguage());
+        if (item.getLanguage() == null) activityDetailsBinding.Language.setText("No language");
+        else activityDetailsBinding.Language.setText(item.getLanguage());
 
-        if (item.getCreated_at() == null) CreatedAt.setText("No data found");
-        else CreatedAt.setText(item.getCreated_at());
+        if (item.getCreated_at() == null) activityDetailsBinding.CreatedAt.setText("No data found");
+        else activityDetailsBinding.CreatedAt.setText(item.getCreated_at());
 
-        if (item.getUpdated_at() == null) UpdatedAt.setText("No data found");
-        else UpdatedAt.setText(item.getUpdated_at());
+        if (item.getUpdated_at() == null) activityDetailsBinding.UpdatedAt.setText("No data found");
+        else activityDetailsBinding.UpdatedAt.setText(item.getUpdated_at());
     }
     //endregion
 
