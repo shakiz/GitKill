@@ -14,8 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 import java.text.DateFormat;
@@ -35,7 +34,7 @@ import app.com.gitlib.adapters.drawerextra.DrawerAdapter;
 import app.com.gitlib.adapters.drawerextra.DrawerItem;
 import app.com.gitlib.adapters.drawerextra.SimpleItem;
 import app.com.gitlib.apiutils.AllApiService;
-import app.com.gitlib.databinding.ActivityMainBinding;
+import app.com.gitlib.databinding.ActivityHomeBinding;
 import app.com.gitlib.models.questionbank.QuestionBank;
 import app.com.gitlib.models.questionbank.Result;
 import app.com.gitlib.utils.UX;
@@ -49,7 +48,7 @@ import static app.com.gitlib.utils.UtilsManager.hasConnection;
 import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class HomeActivity extends AppCompatActivity {
-    private ActivityMainBinding activityMainBinding;
+    private ActivityHomeBinding activityHomeBinding;
     private static String TAG = "Shakil::HomeActivity";
     private SlidingRootNav slidingRootNav;
     private DrawerAdapter adapter;
@@ -65,7 +64,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        activityHomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_home);
         MultiDex.install(this);
 
         //region init and bind UI components
@@ -119,7 +118,7 @@ public class HomeActivity extends AppCompatActivity {
     //region bind UI components
     private void bindUIWithComponents() {
         //region refresh button click
-        activityMainBinding.RefreshList.setOnClickListener(new View.OnClickListener() {
+        activityHomeBinding.RefreshList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (hasConnection(HomeActivity.this)) {
@@ -143,7 +142,7 @@ public class HomeActivity extends AppCompatActivity {
         //endregion
 
         //region load question bank data on async task while click on try again textView
-        activityMainBinding.TryAgain.setOnClickListener(new View.OnClickListener() {
+        activityHomeBinding.TryAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (hasConnection(HomeActivity.this)) {
@@ -159,7 +158,7 @@ public class HomeActivity extends AppCompatActivity {
 
         //region set greetings, name, nav drawer texts and dateTime text
         setGreetings();
-        activityMainBinding.DateTimeText.setText(getDateTimeText());
+        activityHomeBinding.DateTimeText.setText(getDateTimeText());
         //endregion
 
         //region set question bank and result adapter
@@ -167,16 +166,16 @@ public class HomeActivity extends AppCompatActivity {
         //endregion
 
         //region drawer hum-burger icon
-        activityMainBinding.DrawerButton.setOnClickListener(new View.OnClickListener() {
+        activityHomeBinding.DrawerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(slidingRootNav.isMenuClosed()) {
                     slidingRootNav.openMenu();
-                    activityMainBinding.DrawerButton.setImageResource(R.drawable.ic_left_arrow);
+                    activityHomeBinding.DrawerButton.setImageResource(R.drawable.ic_left_arrow);
                 }
                 else {
                     slidingRootNav.closeMenu();
-                    activityMainBinding.DrawerButton.setImageResource(R.drawable.ic_menu_new);
+                    activityHomeBinding.DrawerButton.setImageResource(R.drawable.ic_menu_new);
                 }
             }
         });
@@ -222,8 +221,8 @@ public class HomeActivity extends AppCompatActivity {
     //region set question bank and result adapter
     private void setQuestionBankAdapter(){
         QuestionBankAndResultAdapter resultAdapter = new QuestionBankAndResultAdapter(resultList, this);
-        activityMainBinding.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        activityMainBinding.mRecyclerView.setAdapter(resultAdapter);
+        activityHomeBinding.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        activityHomeBinding.mRecyclerView.setAdapter(resultAdapter);
         resultAdapter.notifyDataSetChanged();
     }
     //endregion
@@ -233,15 +232,15 @@ public class HomeActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         int timeOfTheDay = calendar.get(Calendar.HOUR_OF_DAY);
         if (timeOfTheDay >= 0 && timeOfTheDay < 12) {
-            activityMainBinding.GreetingsText.setText("Good Morning");
+            activityHomeBinding.GreetingsText.setText("Good Morning");
         } else if (timeOfTheDay >= 12 && timeOfTheDay < 16) {
-            activityMainBinding.GreetingsText.setText("Good Noon");
+            activityHomeBinding.GreetingsText.setText("Good Noon");
         } else if (timeOfTheDay >= 16 && timeOfTheDay < 18) {
-            activityMainBinding.GreetingsText.setText("Good Afternoon");
+            activityHomeBinding.GreetingsText.setText("Good Afternoon");
         } else if (timeOfTheDay >= 18 && timeOfTheDay < 20) {
-            activityMainBinding.GreetingsText.setText("Good Evening");
+            activityHomeBinding.GreetingsText.setText("Good Evening");
         } else {
-            activityMainBinding.GreetingsText.setText("Good Night");
+            activityHomeBinding.GreetingsText.setText("Good Night");
         }
     }
     //endregion
@@ -281,8 +280,8 @@ public class HomeActivity extends AppCompatActivity {
     //region load data from server
     private void loadRecord() {
         //region start the shimmer layout
-        activityMainBinding.shimmerFrameLayout.setVisibility(View.VISIBLE);
-        activityMainBinding.shimmerFrameLayout.startShimmerAnimation();
+        activityHomeBinding.shimmerFrameLayout.setVisibility(View.VISIBLE);
+        activityHomeBinding.shimmerFrameLayout.startShimmerAnimation();
         ///endregion
         resultList.clear();
         apiService=utilsManager.getClient(QUESTION_BANK).create(AllApiService.class);
@@ -300,7 +299,7 @@ public class HomeActivity extends AppCompatActivity {
                                     resultList.add(new Result(response.body().getResults().get(start).getQuestion(),response.body().getResults().get(start).getCorrectAnswer()));
                                 }
                                 if (resultList.size()>0){
-                                    activityMainBinding.mRecyclerView.setVisibility(View.VISIBLE);
+                                    activityHomeBinding.mRecyclerView.setVisibility(View.VISIBLE);
                                     setQuestionBankAdapter();
                                     noDataVisibility(false);
                                 }
@@ -308,8 +307,9 @@ public class HomeActivity extends AppCompatActivity {
                                     noDataVisibility(true);
                                     Toasty.error(HomeActivity.this,R.string.no_data_message).show();
                                 }
-                                activityMainBinding.shimmerFrameLayout.stopShimmerAnimation();
-                                activityMainBinding.shimmerFrameLayout.setVisibility(View.GONE);
+                                activityHomeBinding.shimmerFrameLayout.stopShimmerAnimation();
+                                activityHomeBinding.shimmerFrameLayout.setVisibility(View.GONE);
+                                ux.removeLoadingView();
                             }
                         }
                     }
@@ -328,13 +328,13 @@ public class HomeActivity extends AppCompatActivity {
     //region set no data related components visible
     private void noDataVisibility(boolean shouldVisible){
         if (shouldVisible) {
-            activityMainBinding.NoDataMessage.setVisibility(View.VISIBLE);
-            activityMainBinding.NoDataIV.setVisibility(View.VISIBLE);
-            activityMainBinding.TryAgain.setVisibility(View.VISIBLE);
+            activityHomeBinding.NoDataMessage.setVisibility(View.VISIBLE);
+            activityHomeBinding.NoDataIV.setVisibility(View.VISIBLE);
+            activityHomeBinding.TryAgain.setVisibility(View.VISIBLE);
         } else {
-            activityMainBinding.NoDataMessage.setVisibility(View.GONE);
-            activityMainBinding.NoDataIV.setVisibility(View.GONE);
-            activityMainBinding.TryAgain.setVisibility(View.GONE);
+            activityHomeBinding.NoDataMessage.setVisibility(View.GONE);
+            activityHomeBinding.NoDataIV.setVisibility(View.GONE);
+            activityHomeBinding.TryAgain.setVisibility(View.GONE);
         }
     }
     //endregion
