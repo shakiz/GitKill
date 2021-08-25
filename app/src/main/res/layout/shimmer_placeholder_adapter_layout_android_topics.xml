@@ -126,7 +126,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:layout_gravity="center"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
@@ -135,33 +135,13 @@
                 android:background="@drawable/rectangle_back_cyan"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center"
-                    android:tint="@color/md_white_1000"
-                    android:src="@drawable/ic_star_new"/>
-
-                <TextView
-                    android:id="@+id/NumberOfStars"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textSize="14sp"
-                    android:text="@string/number_of_stars"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textColor="@color/md_white_1000" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
@@ -172,33 +152,12 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center"
-                    android:tint="@color/md_white_1000"
-                    android:src="@drawable/ic_code_fork_symbol"/>
-
-                <TextView
-                    android:id="@+id/NumberOfForks"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:maxLines="1"
-                    android:textSize="14sp"
-                    android:ellipsize="end"
-                    android:text="@string/number_of_forks"
-                    android:textColor="@color/md_white_1000" />
-
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:layout_gravity="center"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
@@ -207,26 +166,6 @@
                 android:background="@drawable/rectangle_back_green"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center"
-                    android:tint="@color/md_white_1000"
-                    android:src="@drawable/ic_watching"/>
-
-                <TextView
-                    android:id="@+id/NumberOfWatch"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textSize="14sp"
-                    android:layout_width="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:layout_height="wrap_content"
-                    android:text="@string/number_of_watch"
-                    android:textColor="@color/md_white_1000" />
 
             </LinearLayout>
 

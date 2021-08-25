@@ -134,11 +134,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|left"
                     android:gravity="center|left"
-                    android:text="@string/number_of_stars"
                     android:layout_marginLeft="8dp"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textColor="@color/md_grey_800" />
+                    android:background="@color/md_grey_200" />
 
             </LinearLayout>
 
@@ -158,15 +155,12 @@
 
                 <TextView
                     android:id="@+id/NumberOfForks"
-                    android:layout_gravity="center|left"
-                    android:gravity="center|left"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center|left"
+                    android:gravity="center|left"
                     android:layout_marginLeft="8dp"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:text="@string/number_of_forks"
-                    android:textColor="@color/md_grey_800" />
+                    android:background="@color/md_grey_200" />
 
             </LinearLayout>
 
@@ -187,15 +181,12 @@
 
                 <TextView
                     android:id="@+id/NumberOfWatch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center|left"
                     android:gravity="center|left"
-                    android:layout_width="match_parent"
                     android:layout_marginLeft="8dp"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:layout_height="wrap_content"
-                    android:text="@string/number_of_watch"
-                    android:textColor="@color/md_grey_800" />
+                    android:background="@color/md_grey_200" />
 
             </LinearLayout>
 

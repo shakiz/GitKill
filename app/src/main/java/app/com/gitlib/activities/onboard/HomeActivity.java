@@ -310,7 +310,6 @@ public class HomeActivity extends AppCompatActivity {
                                 }
                                 activityMainBinding.shimmerFrameLayout.stopShimmerAnimation();
                                 activityMainBinding.shimmerFrameLayout.setVisibility(View.GONE);
-                                ux.removeLoadingView();
                             }
                         }
                     }

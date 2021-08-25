@@ -11,11 +11,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -23,40 +25,42 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import app.com.gitlib.R;
 import app.com.gitlib.activities.details.DetailsActivity;
 import app.com.gitlib.activities.onboard.HomeActivity;
 import app.com.gitlib.adapters.AllTopicAdapter;
+import app.com.gitlib.databinding.ActivityAndroidBinding;
 import app.com.gitlib.models.alltopic.Item;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.viewmodels.AndroidRepoViewModel;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import static app.com.gitlib.apiutils.AllUrlClass.ALL_TOPICS_BASE_URL;
 import static app.com.gitlib.utils.UtilsManager.hasConnection;
 import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class AndroidActivity extends AppCompatActivity {
+    private ActivityAndroidBinding activityAndroidBinding;
     private static final String TAG = "Shakil::AndroidActivity";
-    private RecyclerView androidTopicRecyclerView;
     private UX ux;
     private ArrayList<Item> androidTopicList;
-    private CircleImageView refreshListButton;
-    private Spinner androidFilterSpinner;
-    private TextView NoData;
-    private ImageView NoDataIV;
     private String[] androidFilterList = new String[]{"Select Query","Layouts","Drawing",
             "Navigation","Scanning","RecyclerView","ListView","Image Processing","Binding","Debugging"};
     private AdView adView;
     private AndroidRepoViewModel androidRepoViewModel;
     private AllTopicAdapter allTopicAdapter;
+    private Spinner FilterSpinner;
+    private RecyclerView androidTopicRecyclerView;
+    private TextView NoData;
+    private ImageView NoDataIV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_android);
+        activityAndroidBinding = DataBindingUtil.setContentView(this, R.layout.activity_android);
 
         //region init and bin UI components
         init();
@@ -66,14 +70,13 @@ public class AndroidActivity extends AppCompatActivity {
 
     //region init UI components
     private void init() {
-        androidTopicRecyclerView = findViewById(R.id.mRecyclerView);
-        refreshListButton = findViewById(R.id.RefreshList);
-        androidFilterSpinner = findViewById(R.id.FilterSpinner);
-        NoData = findViewById(R.id.NoDataMessage);
-        NoDataIV = findViewById(R.id.NoDataIV);
         adView = findViewById(R.id.adView);
         androidTopicList = new ArrayList<>();
         ux = new UX(this);
+        FilterSpinner = findViewById(R.id.FilterSpinner);
+        androidTopicRecyclerView = findViewById(R.id.mRecyclerView);
+        NoData = findViewById(R.id.NoDataMessage);
+        NoDataIV = findViewById(R.id.NoDataIV);
         androidRepoViewModel = ViewModelProviders.of(this).get(AndroidRepoViewModel.class);
     }
     //endregion
@@ -94,10 +97,11 @@ public class AndroidActivity extends AppCompatActivity {
         loadListView();
 
         //region refresh and spinner filter
-        refreshListButton.setOnClickListener(new View.OnClickListener() {
+        activityAndroidBinding.RefreshList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (hasConnection(AndroidActivity.this)) {
+                    androidTopicRecyclerView.setVisibility(View.GONE);
                     performServerOperation("android");
                 }
                 else{
@@ -107,11 +111,12 @@ public class AndroidActivity extends AppCompatActivity {
             }
         });
 
-        androidFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        FilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String queryString = adapterView.getItemAtPosition(position).toString();
                 if (hasConnection(AndroidActivity.this)) {
+                    androidTopicRecyclerView.setVisibility(View.GONE);
                     performServerOperation("android"+queryString);
                 }
                 else{
@@ -128,7 +133,7 @@ public class AndroidActivity extends AppCompatActivity {
         //endregion
 
         //region toolbar on back click listener
-        findViewById(R.id.BackButton).setOnClickListener(new View.OnClickListener() {
+        activityAndroidBinding.BackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AndroidActivity.this,HomeActivity.class));
@@ -136,7 +141,7 @@ public class AndroidActivity extends AppCompatActivity {
         });
         //endregion
 
-        ux.setSpinnerAdapter(androidFilterSpinner,androidFilterList);
+        ux.setSpinnerAdapter(FilterSpinner,androidFilterList);
 
         //region adMob
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -212,13 +217,19 @@ public class AndroidActivity extends AppCompatActivity {
 
     //region perform mvvm server fetch
     private void performServerOperation(String queryString){
-        ux.getLoadingView();
+        //region start the shimmer layout
+        activityAndroidBinding.shimmerFrameLayout.setVisibility(View.VISIBLE);
+        activityAndroidBinding.shimmerFrameLayout.startShimmerAnimation();
+        ///endregion
         androidRepoViewModel.getData(this,ALL_TOPICS_BASE_URL , queryString);
         androidRepoViewModel.getAndroidRepos().observe(this, new Observer<List<Item>>() {
             @Override
             public void onChanged(List<Item> items) {
+                activityAndroidBinding.shimmerFrameLayout.stopShimmerAnimation();
+                activityAndroidBinding.shimmerFrameLayout.setVisibility(View.GONE);
                 if (items != null) {
                     androidTopicList = new ArrayList<>(items);
+                    androidTopicRecyclerView.setVisibility(View.VISIBLE);
                     loadListView();
                     allTopicAdapter.notifyDataSetChanged();
                     noDataVisibility(false);
@@ -227,7 +238,6 @@ public class AndroidActivity extends AppCompatActivity {
                     Toast.makeText(AndroidActivity.this, R.string.no_data_message, Toast.LENGTH_SHORT).show();
                     noDataVisibility(true);
                 }
-                ux.removeLoadingView();
             }
         });
     }

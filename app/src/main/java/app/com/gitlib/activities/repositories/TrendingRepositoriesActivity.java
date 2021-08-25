@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -31,25 +32,24 @@ import java.util.List;
 import app.com.gitlib.R;
 import app.com.gitlib.activities.details.DetailsActivity;
 import app.com.gitlib.activities.onboard.HomeActivity;
-import app.com.gitlib.activities.web.WebActivity;
 import app.com.gitlib.adapters.AllTopicAdapter;
+import app.com.gitlib.databinding.ActivityTrendingRepositoriesBinding;
 import app.com.gitlib.models.alltopic.Item;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.viewmodels.TrendingRepositoriesViewModel;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import static app.com.gitlib.apiutils.AllUrlClass.ALL_TOPICS_BASE_URL;
 import static app.com.gitlib.utils.UtilsManager.hasConnection;
 import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class TrendingRepositoriesActivity extends AppCompatActivity {
+    private ActivityTrendingRepositoriesBinding activityBinding;
     private Spinner languageSpinner;
     private ArrayList<String> languageList;
     private RecyclerView recyclerViewRepo;
     private AllTopicAdapter allTopicAdapter;
     private ArrayList<Item> trendingRepoList;
     private String TAG = "TrendingRepositoriesActivity";
-    private CircleImageView refreshListButton;
     private UX ux;
     private TextView NoData;
     private ImageView NoDataIV;
@@ -60,7 +60,7 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trending_repositories);
+        activityBinding = DataBindingUtil.setContentView(this, R.layout.activity_trending_repositories);
 
         //region init and bin UI components
         init();
@@ -72,7 +72,6 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
     private void init() {
         recyclerViewRepo = findViewById(R.id.mRecyclerView);
         languageSpinner = findViewById(R.id.LanguageSpinner);
-        refreshListButton = findViewById(R.id.RefreshList);
         NoData = findViewById(R.id.NoDataMessage);
         NoDataIV = findViewById(R.id.NoDataIV);
         adView = findViewById(R.id.adView);
@@ -114,6 +113,7 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String queryString = adapterView.getItemAtPosition(position).toString();
                 if (hasConnection(TrendingRepositoriesActivity.this)) {
+                    recyclerViewRepo.setVisibility(View.GONE);
                     performServerOperation("all"+queryString);
                 }
                 else{
@@ -128,10 +128,11 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
             }
         });
 
-        refreshListButton.setOnClickListener(new View.OnClickListener() {
+        activityBinding.RefreshList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (hasConnection(TrendingRepositoriesActivity.this)) {
+                    recyclerViewRepo.setVisibility(View.GONE);
                     performServerOperation("all");
                 }
                 else{
@@ -208,13 +209,19 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
     //region perform mvvm server fetch
     private void performServerOperation(String queryString){
         if (hasConnection(TrendingRepositoriesActivity.this)) {
-            ux.getLoadingView();
+            //region start the shimmer layout
+            activityBinding.shimmerFrameLayout.setVisibility(View.VISIBLE);
+            activityBinding.shimmerFrameLayout.startShimmerAnimation();
+            ///endregion
             repositoriesViewModel.getData(this,ALL_TOPICS_BASE_URL , queryString);
             repositoriesViewModel.getAndroidRepos().observe(this, new Observer<List<Item>>() {
                 @Override
                 public void onChanged(List<Item> items) {
+                    activityBinding.shimmerFrameLayout.stopShimmerAnimation();
+                    activityBinding.shimmerFrameLayout.setVisibility(View.GONE);
                     if (items != null) {
                         trendingRepoList = new ArrayList<>(items);
+                        recyclerViewRepo.setVisibility(View.VISIBLE);
                         loadListView();
                         allTopicAdapter.notifyDataSetChanged();
                         noDataVisibility(false);
@@ -223,7 +230,6 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
                         Toast.makeText(TrendingRepositoriesActivity.this,R.string.no_data_message,Toast.LENGTH_SHORT).show();
                         noDataVisibility(true);
                     }
-                    ux.removeLoadingView();
                 }
             });
         }

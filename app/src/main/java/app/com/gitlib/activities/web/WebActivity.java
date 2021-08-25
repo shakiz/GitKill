@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -30,6 +31,7 @@ import app.com.gitlib.activities.details.DetailsActivity;
 import app.com.gitlib.activities.onboard.HomeActivity;
 import app.com.gitlib.adapters.AllTopicAdapter;
 import app.com.gitlib.apiutils.AllUrlClass;
+import app.com.gitlib.databinding.ActivityWebBinding;
 import app.com.gitlib.models.alltopic.Item;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.viewmodels.WebViewModel;
@@ -39,6 +41,7 @@ import static app.com.gitlib.utils.UtilsManager.hasConnection;
 import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class WebActivity extends AppCompatActivity {
+    private ActivityWebBinding activityWebBinding;
     private RecyclerView webTopicRecyclerView;
     private AllTopicAdapter allTopicAdapter;
     private UX ux;
@@ -46,7 +49,6 @@ public class WebActivity extends AppCompatActivity {
     private AllUrlClass allUrlClass;
     private TextView NoData;
     private ImageView NoDataIV;
-    private CircleImageView refreshListButton;
     private Spinner webFilterSpinner;
     private String[] webFilterList = new String[]{"Select Query","Javascript","Typescript",
             "Bootstrap","Laravel","Django","Vue Js","Angular"};
@@ -56,7 +58,7 @@ public class WebActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web);
+        activityWebBinding = DataBindingUtil.setContentView(this, R.layout.activity_web);
 
         //region init and bin UI components
         init();
@@ -67,7 +69,6 @@ public class WebActivity extends AppCompatActivity {
     //region init UI components
     private void init() {
         webTopicRecyclerView = findViewById(R.id.mRecyclerView);
-        refreshListButton = findViewById(R.id.RefreshList);
         NoData = findViewById(R.id.NoDataMessage);
         NoDataIV = findViewById(R.id.NoDataIV);
         adView = findViewById(R.id.adView);
@@ -103,10 +104,11 @@ public class WebActivity extends AppCompatActivity {
 
         performServerOperation("web");
 
-        refreshListButton.setOnClickListener(new View.OnClickListener() {
+        activityWebBinding.RefreshList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (hasConnection(WebActivity.this)) {
+                    webTopicRecyclerView.setVisibility(View.GONE);
                     performServerOperation("web");
                 }
                 else{
@@ -121,6 +123,7 @@ public class WebActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String queryString = adapterView.getItemAtPosition(position).toString();
                 if (hasConnection(WebActivity.this)) {
+                    webTopicRecyclerView.setVisibility(View.GONE);
                     performServerOperation("web"+queryString);
                 }
                 else{
@@ -206,13 +209,17 @@ public class WebActivity extends AppCompatActivity {
 
     //region perform mvvm server fetch
     private void performServerOperation(String queryString){
-        ux.getLoadingView();
+        //region start the shimmer layout
+        activityWebBinding.shimmerFrameLayout.setVisibility(View.VISIBLE);
+        activityWebBinding.shimmerFrameLayout.startShimmerAnimation();
+        ///endregion
         webViewModel.getData(this,allUrlClass.ALL_TOPICS_BASE_URL , queryString);
         webViewModel.getWebRepos().observe(this, new Observer<List<Item>>() {
             @Override
             public void onChanged(List<Item> items) {
                 if (items != null) {
                     webTopicList = new ArrayList<>(items);
+                    webTopicRecyclerView.setVisibility(View.VISIBLE);
                     loadListView();
                     allTopicAdapter.notifyDataSetChanged();
                     noDataVisibility(false);

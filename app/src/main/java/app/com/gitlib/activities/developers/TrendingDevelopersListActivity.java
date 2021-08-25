@@ -5,15 +5,17 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -21,27 +23,26 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import app.com.gitlib.R;
 import app.com.gitlib.activities.onboard.HomeActivity;
 import app.com.gitlib.adapters.TrendingDevelopersAdapter;
+import app.com.gitlib.databinding.ActivityTrendingDevelopersBinding;
 import app.com.gitlib.models.users.TrendingDevelopers;
-import app.com.gitlib.utils.UX;
 import app.com.gitlib.viewmodels.TrendingDevelopersViewModel;
-import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
+
 import static app.com.gitlib.utils.UtilsManager.hasConnection;
 import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class TrendingDevelopersListActivity extends AppCompatActivity {
+    private ActivityTrendingDevelopersBinding activityBinding;
     private RecyclerView recyclerViewDevelopers;
     private ArrayList<TrendingDevelopers> trendingDevelopersList;
-    private EditText userNameSearch;
     private String TAG = "Shakil::TrendingDevelopersListActivity" , languageStr = "" , sinceStr = "";
-    private UX ux;
-    private ImageView search;
-    private CircleImageView refreshListButton;
     private TextView NoData;
     private ImageView NoDataIV;
     //Dialog components
@@ -52,7 +53,7 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trending_developers);
+        activityBinding = DataBindingUtil.setContentView(this, R.layout.activity_trending_developers);
 
         //region init and bind UI components
         init();
@@ -63,12 +64,8 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
     //region init UI components
     private void init() {
         recyclerViewDevelopers = findViewById(R.id.mRecyclerView);
-        refreshListButton = findViewById(R.id.RefreshList);
-        userNameSearch = findViewById(R.id.editTextSearch);
-        search = findViewById(R.id.Search);
         adView = findViewById(R.id.adView);
         trendingDevelopersList = new ArrayList<>();
-        ux = new UX(this);
         NoData = findViewById(R.id.NoDataMessage);
         NoDataIV = findViewById(R.id.NoDataIV);
         trendingDevelopersViewModel = ViewModelProviders.of(this).get(TrendingDevelopersViewModel.class);
@@ -88,11 +85,12 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
 
         performServerOperation("tom");
 
-        search.setOnClickListener(new View.OnClickListener() {
+        activityBinding.Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!TextUtils.isEmpty(userNameSearch.getText().toString())){
-                    String newUrl = userNameSearch.getText().toString();
+                if (!TextUtils.isEmpty(activityBinding.editTextSearch.getText().toString())){
+                    recyclerViewDevelopers.setVisibility(View.GONE);
+                    String newUrl = activityBinding.editTextSearch.getText().toString();
                     Log.v("newUrl",newUrl);
                     performServerOperation(newUrl);
                 }
@@ -102,10 +100,11 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
             }
         });
 
-        refreshListButton.setOnClickListener(new View.OnClickListener() {
+        activityBinding.RefreshList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                userNameSearch.setText("");
+                recyclerViewDevelopers.setVisibility(View.GONE);
+                activityBinding.editTextSearch.setText("");
                 performServerOperation("tom");
             }
         });
@@ -180,14 +179,20 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
 
     //region perform mvvm server fetch
     private void performServerOperation(String url){
+        //region start the shimmer layout
+        activityBinding.shimmerFrameLayout.setVisibility(View.VISIBLE);
+        activityBinding.shimmerFrameLayout.startShimmerAnimation();
+        ///endregion
         if (hasConnection(TrendingDevelopersListActivity.this)) {
-            ux.getLoadingView();
             trendingDevelopersViewModel.getData(this,url);
             trendingDevelopersViewModel.getDevelopersList().observe(this, new Observer<List<TrendingDevelopers>>() {
                 @Override
                 public void onChanged(List<TrendingDevelopers> items) {
+                    activityBinding.shimmerFrameLayout.stopShimmerAnimation();
+                    activityBinding.shimmerFrameLayout.setVisibility(View.GONE);
                     if (items != null) {
                         trendingDevelopersList = new ArrayList<>(items);
+                        recyclerViewDevelopers.setVisibility(View.VISIBLE);
                         loadListView();
                         trendingDevelopersAdapter.notifyDataSetChanged();
                         noDataVisibility(false);
@@ -195,7 +200,6 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
                         Toasty.error(TrendingDevelopersListActivity.this,R.string.no_data_message).show();
                         noDataVisibility(true);
                     }
-                    ux.removeLoadingView();
                 }
             });
         }

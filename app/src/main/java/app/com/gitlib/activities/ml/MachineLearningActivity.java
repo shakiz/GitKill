@@ -11,11 +11,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -23,27 +25,30 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import app.com.gitlib.R;
 import app.com.gitlib.activities.details.DetailsActivity;
 import app.com.gitlib.activities.onboard.HomeActivity;
 import app.com.gitlib.adapters.AllTopicAdapter;
+import app.com.gitlib.databinding.ActivityMachineLearningBinding;
 import app.com.gitlib.models.alltopic.Item;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.viewmodels.MachineLearningViewModel;
-import de.hdodenhof.circleimageview.CircleImageView;
+
 import static app.com.gitlib.apiutils.AllUrlClass.ALL_TOPICS_BASE_URL;
 import static app.com.gitlib.utils.UtilsManager.hasConnection;
 import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class MachineLearningActivity extends AppCompatActivity {
+    private ActivityMachineLearningBinding activityBinding;
     private RecyclerView mlRecyclerView;
     private AllTopicAdapter allTopicAdapter;
     private UX ux;
     private ArrayList<Item> machineLearningList;
     private Spinner mlFilterSpinner;
-    private CircleImageView refreshListButton;
     private TextView NoData;
     private ImageView NoDataIV;
     private String[] mlFilterList = new String[]{"Select Query","Big Data","Data Science",
@@ -54,7 +59,7 @@ public class MachineLearningActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_machine_learning);
+        activityBinding = DataBindingUtil.setContentView(this, R.layout.activity_machine_learning);
 
         //region init and bin UI components
         init();
@@ -64,7 +69,6 @@ public class MachineLearningActivity extends AppCompatActivity {
 
     private void init() {
         mlRecyclerView = findViewById(R.id.mRecyclerView);
-        refreshListButton = findViewById(R.id.RefreshList);
         NoData = findViewById(R.id.NoDataMessage);
         NoDataIV = findViewById(R.id.NoDataIV);
         mlFilterSpinner = findViewById(R.id.FilterSpinner);
@@ -96,10 +100,11 @@ public class MachineLearningActivity extends AppCompatActivity {
         }
         //endregion
 
-        refreshListButton.setOnClickListener(new View.OnClickListener() {
+        activityBinding.RefreshList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (hasConnection(MachineLearningActivity.this)) {
+                    mlRecyclerView.setVisibility(View.GONE);
                     performServerOperation("ml");
                 }
                 else{
@@ -114,6 +119,7 @@ public class MachineLearningActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String queryString = adapterView.getItemAtPosition(position).toString();
                 if (hasConnection(MachineLearningActivity.this)) {
+                    mlRecyclerView.setVisibility(View.GONE);
                     performServerOperation(""+queryString);
                 }
                 else{
@@ -201,13 +207,19 @@ public class MachineLearningActivity extends AppCompatActivity {
 
     //region perform mvvm server fetch
     private void performServerOperation(String queryString){
-        ux.getLoadingView();
+        //region start the shimmer layout
+        activityBinding.shimmerFrameLayout.setVisibility(View.VISIBLE);
+        activityBinding.shimmerFrameLayout.startShimmerAnimation();
+        ///endregion
         machineLearningViewModel.getData(this,ALL_TOPICS_BASE_URL , queryString);
         machineLearningViewModel.getMLRepos().observe(this, new Observer<List<Item>>() {
             @Override
             public void onChanged(List<Item> items) {
+                activityBinding.shimmerFrameLayout.stopShimmerAnimation();
+                activityBinding.shimmerFrameLayout.setVisibility(View.GONE);
                 if (items != null) {
                     machineLearningList = new ArrayList<>(items);
+                    mlRecyclerView.setVisibility(View.VISIBLE);
                     loadListView();
                     allTopicAdapter.notifyDataSetChanged();
                     noDataVisibility(false);
