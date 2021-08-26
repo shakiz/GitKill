@@ -14,26 +14,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp">
 
-        <LinearLayout
+        <Spinner
+            style="@style/Base.TextAppearance.AppCompat.Medium"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:orientation="vertical"
-            android:layout_weight="1">
-
-            <Spinner
-                style="@style/Base.TextAppearance.AppCompat.Medium"
-                android:layout_width="match_parent"
-                android:layout_height="38dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/edittext_back"
-                android:id="@+id/FilterSpinner"
-                android:padding="4dp"></Spinner>
-        </LinearLayout>
+            android:layout_height="38dp"
+            android:background="@drawable/edittext_back"
+            android:id="@+id/FilterSpinner"
+            android:padding="4dp"></Spinner>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
