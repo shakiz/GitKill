@@ -285,7 +285,7 @@ public class HomeActivity extends AppCompatActivity {
         ///endregion
         resultList.clear();
         apiService=utilsManager.getClient(QUESTION_BANK).create(AllApiService.class);
-        final Call<QuestionBank> androidTopicCall=apiService.getAllQuestionAndAnswer(QUESTION_BANK+"api.php?amount=10&type=multiple");
+        final Call<QuestionBank> androidTopicCall=apiService.getAllQuestionAndAnswer(QUESTION_BANK+"api.php?amount=10&category=17&type=multiple");
         androidTopicCall.enqueue(new Callback<QuestionBank>() {
             @Override
             public void onResponse(Call<QuestionBank> call, Response<QuestionBank> response) {
