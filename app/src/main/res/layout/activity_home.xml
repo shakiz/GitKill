@@ -262,6 +262,7 @@
                         <include layout="@layout/shimmer_placeholder_adapter_layout_it_question_answer_list" />
 
                     </LinearLayout>
+
                 </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <androidx.recyclerview.widget.RecyclerView

@@ -5,18 +5,16 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -25,10 +23,13 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import app.com.gitlib.R;
 import app.com.gitlib.adapters.UserRepositoriesAdapter;
+import app.com.gitlib.databinding.ActivityDevelopersDetailsBinding;
 import app.com.gitlib.models.repositories.Repo;
 import app.com.gitlib.models.users.Developer;
 import app.com.gitlib.utils.UX;
@@ -40,23 +41,19 @@ import static app.com.gitlib.utils.UtilsManager.hasConnection;
 import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class DevelopersDetailsActivity extends AppCompatActivity {
+    private ActivityDevelopersDetailsBinding activityBinding;
     private AdView adView;
     private String userName = "";
     private SingleDeveloperViewModel viewModel;
     private UserRepoDetailsViewModel userRepoDetailsViewModel;
     private UX ux;
-    private TextView userNameTxt, name, followers, following, publicRepos, gists, bio, blog, company, location, hireable, email, created_at, html_url;
-    private Button rateNowBtn;
-    private ImageView userAvatar;
     private List<Repo> mRepositoryList;
     private UserRepositoriesAdapter userRepositoriesAdapter;
-    private RecyclerView allRepositoryRecycler;
-    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_developers_details);
+        activityBinding = DataBindingUtil.setContentView(this, R.layout.activity_developers_details);
 
         //region get intent data
         getIntentData();
@@ -79,24 +76,6 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
     //region init UI components
     private void init() {
         adView = findViewById(R.id.adView);
-        userNameTxt = findViewById(R.id.userNameTxt);
-        name = findViewById(R.id.name);
-        followers = findViewById(R.id.followers);
-        following = findViewById(R.id.following);
-        publicRepos = findViewById(R.id.publicRepos);
-        gists = findViewById(R.id.gists);
-        bio = findViewById(R.id.bio);
-        blog = findViewById(R.id.blog);
-        company = findViewById(R.id.company);
-        location = findViewById(R.id.location);
-        hireable = findViewById(R.id.hireable);
-        userAvatar = findViewById(R.id.userAvatar);
-        email = findViewById(R.id.email);
-        created_at = findViewById(R.id.created_at);
-        rateNowBtn = findViewById(R.id.rateNowBtn);
-        html_url = findViewById(R.id.html_url);
-        allRepositoryRecycler = findViewById(R.id.allRepositoryRecycler);
-        progressBar = findViewById(R.id.progress);
         viewModel = ViewModelProviders.of(this).get(SingleDeveloperViewModel.class);
         userRepoDetailsViewModel = ViewModelProviders.of(this).get(UserRepoDetailsViewModel.class);
         ux = new UX(this);
@@ -119,7 +98,7 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
         //endregion
 
         //region rate now button click
-        rateNowBtn.setOnClickListener(new View.OnClickListener() {
+        activityBinding.rateNowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 launchMarket(DevelopersDetailsActivity.this);
@@ -208,94 +187,94 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
 
     //region set UI data
     private void setData(Developer developer){
-        userNameTxt.setText("@"+developer.getLogin());
-        name.setText(developer.getName());
+        activityBinding.userNameTxt.setText("@"+developer.getLogin());
+        activityBinding.name.setText(developer.getName());
 
         if (developer.getFollowers() != 0) {
-            followers.setText(String.valueOf(developer.getFollowers()));
+            activityBinding.followers.setText(String.valueOf(developer.getFollowers()));
         } else {
-            followers.setText("0");
+            activityBinding.followers.setText("0");
         }
 
         if (developer.getHtml_url() != null) {
-            html_url.setText(developer.getHtml_url());
+            activityBinding.htmlUrl.setText(developer.getHtml_url());
         } else {
-            html_url.setText("No profile url found");
+            activityBinding.htmlUrl.setText("No profile url found");
         }
 
         if (developer.getFollowing() != 0) {
-            following.setText(String.valueOf(developer.getFollowing()));
+            activityBinding.following.setText(String.valueOf(developer.getFollowing()));
         } else {
-            following.setText("0");
+            activityBinding.following.setText("0");
         }
 
         if (developer.getPublicRepos() != 0) {
-            publicRepos.setText(String.valueOf(developer.getPublicRepos()));
+            activityBinding.publicRepos.setText(String.valueOf(developer.getPublicRepos()));
         } else {
-            publicRepos.setText("0");
+            activityBinding.publicRepos.setText("0");
         }
 
         if (developer.getPublicGists() != 0) {
-            gists.setText(String.valueOf(developer.getPublicGists()));
+            activityBinding.gists.setText(String.valueOf(developer.getPublicGists()));
         } else {
-            gists.setText("0");
+            activityBinding.gists.setText("0");
         }
 
         if (developer.getBio() != null) {
-            bio.setText(developer.getBio().toString());
+            activityBinding.bio.setText(developer.getBio().toString());
         } else {
-            bio.setText("No bio found");
+            activityBinding.bio.setText("No bio found");
         }
 
         if (!TextUtils.isEmpty(developer.getCreatedAt())) {
-            created_at.setText("Joined on "+developer.getCreatedAt().split("T")[0]);
+            activityBinding.createdAt.setText("Joined on "+developer.getCreatedAt().split("T")[0]);
         } else {
-            created_at.setText("No joining date found");
+            activityBinding.createdAt.setText("No joining date found");
         }
 
         if (developer.getEmail() != null) {
-            email.setText(developer.getEmail().toString());
+            activityBinding.email.setText(developer.getEmail().toString());
         } else {
-            email.setText("No email found");
+            activityBinding.email.setText("No email found");
         }
 
         if (!TextUtils.isEmpty(developer.getBlog())) {
-            blog.setText(developer.getBlog());
+            activityBinding.blog.setText(developer.getBlog());
         } else {
-            blog.setText("No blog address found");
+            activityBinding.blog.setText("No blog address found");
         }
 
         if (developer.getCompany() != null) {
-            company.setText(developer.getCompany().toString());
+            activityBinding.company.setText(developer.getCompany().toString());
         } else {
-            company.setText("No company information found");
+            activityBinding.company.setText("No company information found");
         }
 
         if (!TextUtils.isEmpty(developer.getLocation())) {
-            location.setText(developer.getLocation());
+            activityBinding.location.setText(developer.getLocation());
         } else {
-            location .setText("No location information found");
+            activityBinding.location .setText("No location information found");
         }
 
         if (developer.getHireable() != null){
             if (developer.getHireable().toString().equals("true")){
-                hireable.setText("Hireable");
+                activityBinding.hireable.setText("Hireable");
             } else{
-                hireable.setText("Not Hireable");
+                activityBinding.hireable.setText("Not Hireable");
             }
         }else {
-            hireable.setText("Not Hireable");
+            activityBinding.hireable.setText("Not Hireable");
         }
 
         if (developer.getAvatarUrl() != null){
-            Glide.with(this).load(developer.getAvatarUrl()).into(userAvatar);
+            Glide.with(this).load(developer.getAvatarUrl()).into(activityBinding.userAvatar);
         }
     }
     //endregion
 
     //region perform mvvm server fetch for user all repositories
     private void fetchDataForUserRepositoryDetails(String url){
-        progressBar.setVisibility(View.VISIBLE);
+        activityBinding.progress.setVisibility(View.VISIBLE);
         if (hasConnection(DevelopersDetailsActivity.this)) {
             userRepoDetailsViewModel.getData(this,url);
             userRepoDetailsViewModel.getRepositories().observe(this, new Observer<List<Repo>>() {
@@ -307,7 +286,7 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
                     }
                     loadListView();
                     userRepositoriesAdapter.notifyDataSetChanged();
-                    progressBar.setVisibility(View.GONE);
+                    activityBinding.progress.setVisibility(View.GONE);
                 }
             });
         }
@@ -320,9 +299,9 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
     //region load list with recycler and adapter
     private void loadListView(){
         userRepositoriesAdapter = new UserRepositoriesAdapter(mRepositoryList, this);
-        allRepositoryRecycler.setLayoutManager(new GridLayoutManager(this,1,LinearLayoutManager.HORIZONTAL,false));
-        allRepositoryRecycler.setItemAnimator(new DefaultItemAnimator());
-        allRepositoryRecycler.setAdapter(userRepositoriesAdapter);
+        activityBinding.allRepositoryRecycler.setLayoutManager(new GridLayoutManager(this,1,LinearLayoutManager.HORIZONTAL,false));
+        activityBinding.allRepositoryRecycler.setItemAnimator(new DefaultItemAnimator());
+        activityBinding.allRepositoryRecycler.setAdapter(userRepositoriesAdapter);
         userRepositoriesAdapter.notifyDataSetChanged();
     }
     //endregion
