@@ -157,19 +157,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="24dp"
                     android:layout_marginRight="16dp"
-                    android:layout_weight="1"
                     android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_gravity="center"
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="@string/learn_new_facts_in_it_with_us"
                         android:textColor="@color/md_green_800"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -213,11 +212,10 @@
 
                 <ImageView
                     android:id="@+id/NoDataIV"
-                    android:layout_width="112dp"
-                    android:layout_height="112dp"
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
                     android:layout_gravity="center"
                     android:visibility="gone"
-                    android:padding="8dp"
                     android:src="@drawable/no_data_found"/>
 
                 <TextView

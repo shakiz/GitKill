@@ -29,8 +29,8 @@
 
                 <ImageView
                     android:id="@+id/BackButton"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_marginLeft="10dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_left_arrow_new"
@@ -45,7 +45,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_gravity="center"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@color/md_grey_800"/>
 
@@ -95,7 +95,7 @@
                                 android:textColorHint="@color/md_grey_600"
                                 android:textColor="@color/md_grey_800"
                                 android:maxLines="1"
-                                android:background="@drawable/edittext_back"
+                                android:background="@drawable/edit_text_back"
                                 android:padding="4dp"/>
 
                         </LinearLayout>

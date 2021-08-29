@@ -37,10 +37,10 @@ import app.com.gitlib.databinding.ActivityTrendingRepositoriesBinding;
 import app.com.gitlib.models.alltopic.Item;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.viewmodels.TrendingRepositoriesViewModel;
+import es.dmoral.toasty.Toasty;
 
 import static app.com.gitlib.apiutils.AllUrlClass.ALL_TOPICS_BASE_URL;
 import static app.com.gitlib.utils.UtilsManager.hasConnection;
-import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class TrendingRepositoriesActivity extends AppCompatActivity {
     private ActivityTrendingRepositoriesBinding activityBinding;
@@ -97,11 +97,12 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
 
         //region load first time data
         if (hasConnection(TrendingRepositoriesActivity.this)) {
+            noDataVisibility(false);
             performServerOperation("all");
         }
         else{
             noDataVisibility(true);
-            internetErrorDialog(TrendingRepositoriesActivity.this);
+            Toasty.info(getApplicationContext(), getString(R.string.please_Enable_internet_connection), Toasty.LENGTH_LONG).show();
         }
         //endregion
 
@@ -112,13 +113,16 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String queryString = adapterView.getItemAtPosition(position).toString();
-                if (hasConnection(TrendingRepositoriesActivity.this)) {
-                    recyclerViewRepo.setVisibility(View.GONE);
-                    performServerOperation("all"+queryString);
-                }
-                else{
-                    noDataVisibility(true);
-                    internetErrorDialog(TrendingRepositoriesActivity.this);
+                if (!queryString.equals("Select Language")) {
+                    if (hasConnection(TrendingRepositoriesActivity.this)) {
+                        noDataVisibility(false);
+                        recyclerViewRepo.setVisibility(View.GONE);
+                        performServerOperation("all"+queryString);
+                    }
+                    else{
+                        noDataVisibility(true);
+                        Toasty.info(getApplicationContext(), getString(R.string.please_Enable_internet_connection), Toasty.LENGTH_LONG).show();
+                    }
                 }
             }
 
@@ -132,12 +136,12 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (hasConnection(TrendingRepositoriesActivity.this)) {
-                    recyclerViewRepo.setVisibility(View.GONE);
+                    noDataVisibility(false);
                     performServerOperation("all");
                 }
                 else{
                     noDataVisibility(true);
-                    internetErrorDialog(TrendingRepositoriesActivity.this);
+                    Toasty.info(getApplicationContext(), getString(R.string.please_Enable_internet_connection), Toasty.LENGTH_LONG).show();
                 }
             }
         });
@@ -154,40 +158,31 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
         adView.setAdListener(new AdListener(){
             @Override
             public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
                 Log.v("onAdListener","AdlLoaded");
             }
 
             @Override
             public void onAdFailedToLoad(LoadAdError adError) {
-                // Code to be executed when an ad request fails.
-                Log.v("onAdListener","AdFailedToLoad");
                 Log.v("onAdListener","AdFailedToLoad Error "+adError.getMessage());
             }
 
             @Override
             public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
                 Log.v("onAdListener","AdOpened");
             }
 
             @Override
             public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
                 Log.v("onAdListener","AdClicked");
             }
 
             @Override
             public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
                 Log.v("onAdListener","AdLeftApplication");
             }
 
             @Override
             public void onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
                 Log.v("onAdListener","AdClosed");
             }
         });
@@ -227,7 +222,7 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
                         noDataVisibility(false);
                     }
                     else {
-                        Toast.makeText(TrendingRepositoriesActivity.this,R.string.no_data_message,Toast.LENGTH_SHORT).show();
+                        Toasty.info(getApplicationContext(), getString(R.string.no_data_message), Toasty.LENGTH_LONG).show();
                         noDataVisibility(true);
                     }
                 }
@@ -235,7 +230,7 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
         }
         else{
             noDataVisibility(true);
-            internetErrorDialog(TrendingRepositoriesActivity.this);
+            Toasty.info(getApplicationContext(), getString(R.string.please_Enable_internet_connection), Toasty.LENGTH_LONG).show();
         }
     }
     //endregion
@@ -262,9 +257,13 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
     //region set no data related components visible
     private void noDataVisibility(boolean shouldVisible){
         if (shouldVisible) {
+            recyclerViewRepo.setVisibility(View.GONE);
+            activityBinding.shimmerFrameLayout.setVisibility(View.GONE);
+            activityBinding.shimmerFrameLayout.stopShimmerAnimation();
             NoData.setVisibility(View.VISIBLE);
             NoDataIV.setVisibility(View.VISIBLE);
         } else {
+            recyclerViewRepo.setVisibility(View.VISIBLE);
             NoData.setVisibility(View.GONE);
             NoDataIV.setVisibility(View.GONE);
         }

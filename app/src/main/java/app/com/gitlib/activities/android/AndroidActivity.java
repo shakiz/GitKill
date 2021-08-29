@@ -2,6 +2,7 @@ package app.com.gitlib.activities.android;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,10 +38,10 @@ import app.com.gitlib.databinding.ActivityAndroidBinding;
 import app.com.gitlib.models.alltopic.Item;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.viewmodels.AndroidRepoViewModel;
+import es.dmoral.toasty.Toasty;
 
 import static app.com.gitlib.apiutils.AllUrlClass.ALL_TOPICS_BASE_URL;
 import static app.com.gitlib.utils.UtilsManager.hasConnection;
-import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class AndroidActivity extends AppCompatActivity {
     private ActivityAndroidBinding activityAndroidBinding;
@@ -85,12 +86,12 @@ public class AndroidActivity extends AppCompatActivity {
     private void bindUIWithComponents() {
         //region load first time data
         if (hasConnection(AndroidActivity.this)) {
+            noDataVisibility(false);
             performServerOperation("android");
         }
-
         else{
             noDataVisibility(true);
-            internetErrorDialog(AndroidActivity.this);
+            Toasty.info(getApplicationContext(), getString(R.string.please_Enable_internet_connection), Toasty.LENGTH_LONG).show();
         }
         //endregion
 
@@ -101,12 +102,13 @@ public class AndroidActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (hasConnection(AndroidActivity.this)) {
+                    noDataVisibility(false);
                     androidTopicRecyclerView.setVisibility(View.GONE);
                     performServerOperation("android");
                 }
                 else{
                     noDataVisibility(true);
-                    internetErrorDialog(AndroidActivity.this);
+                    Toasty.info(getApplicationContext(), getString(R.string.please_Enable_internet_connection), Toasty.LENGTH_LONG).show();
                 }
             }
         });
@@ -115,13 +117,16 @@ public class AndroidActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String queryString = adapterView.getItemAtPosition(position).toString();
-                if (hasConnection(AndroidActivity.this)) {
-                    androidTopicRecyclerView.setVisibility(View.GONE);
-                    performServerOperation("android"+queryString);
-                }
-                else{
-                    noDataVisibility(true);
-                    internetErrorDialog(AndroidActivity.this);
+                if (!queryString.equals("Select Query")) {
+                    if (hasConnection(AndroidActivity.this)) {
+                        noDataVisibility(false);
+                        androidTopicRecyclerView.setVisibility(View.GONE);
+                        performServerOperation("android"+queryString);
+                    }
+                    else{
+                        noDataVisibility(true);
+                        Toasty.info(getApplicationContext(), getString(R.string.please_Enable_internet_connection), Toasty.LENGTH_LONG).show();
+                    }
                 }
             }
 
@@ -155,40 +160,31 @@ public class AndroidActivity extends AppCompatActivity {
         adView.setAdListener(new AdListener(){
             @Override
             public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
                 Log.v("onAdListener","AdlLoaded");
             }
 
             @Override
             public void onAdFailedToLoad(LoadAdError adError) {
-                // Code to be executed when an ad request fails.
-                Log.v("onAdListener","AdFailedToLoad");
                 Log.v("onAdListener","AdFailedToLoad Error "+adError.getMessage());
             }
 
             @Override
             public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
                 Log.v("onAdListener","AdOpened");
             }
 
             @Override
             public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
                 Log.v("onAdListener","AdClicked");
             }
 
             @Override
             public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
                 Log.v("onAdListener","AdLeftApplication");
             }
 
             @Override
             public void onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
                 Log.v("onAdListener","AdClosed");
             }
         });
@@ -235,7 +231,7 @@ public class AndroidActivity extends AppCompatActivity {
                     noDataVisibility(false);
                 }
                 else {
-                    Toast.makeText(AndroidActivity.this, R.string.no_data_message, Toast.LENGTH_SHORT).show();
+                    Toasty.info(getApplicationContext(), getString(R.string.no_data_message), Toasty.LENGTH_LONG).show();
                     noDataVisibility(true);
                 }
             }
@@ -246,9 +242,13 @@ public class AndroidActivity extends AppCompatActivity {
     //region set no data related components visible
     private void noDataVisibility(boolean shouldVisible){
         if (shouldVisible) {
+            androidTopicRecyclerView.setVisibility(View.GONE);
+            activityAndroidBinding.shimmerFrameLayout.setVisibility(View.GONE);
+            activityAndroidBinding.shimmerFrameLayout.stopShimmerAnimation();
             NoData.setVisibility(View.VISIBLE);
             NoDataIV.setVisibility(View.VISIBLE);
         } else {
+            androidTopicRecyclerView.setVisibility(View.VISIBLE);
             NoData.setVisibility(View.GONE);
             NoDataIV.setVisibility(View.GONE);
         }

@@ -21,11 +21,10 @@
 
     <ImageView
         android:id="@+id/NoDataIV"
-        android:layout_width="112dp"
-        android:layout_height="112dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_gravity="center"
         android:visibility="gone"
-        android:padding="8dp"
         android:layout_margin="8dp"
         android:src="@drawable/no_data_found"/>
 

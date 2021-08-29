@@ -35,10 +35,9 @@ import app.com.gitlib.databinding.ActivityWebBinding;
 import app.com.gitlib.models.alltopic.Item;
 import app.com.gitlib.utils.UX;
 import app.com.gitlib.viewmodels.WebViewModel;
-import de.hdodenhof.circleimageview.CircleImageView;
+import es.dmoral.toasty.Toasty;
 
 import static app.com.gitlib.utils.UtilsManager.hasConnection;
-import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class WebActivity extends AppCompatActivity {
     private ActivityWebBinding activityWebBinding;
@@ -94,26 +93,26 @@ public class WebActivity extends AppCompatActivity {
 
         //region load data and before loading data check internet availability
         if (hasConnection(WebActivity.this)) {
+            noDataVisibility(false);
             performServerOperation("web");
         }
         else{
             noDataVisibility(true);
-            internetErrorDialog(WebActivity.this);
+            Toasty.info(getApplicationContext(), getString(R.string.please_Enable_internet_connection), Toasty.LENGTH_LONG).show();
         }
         //endregion
-
-        performServerOperation("web");
 
         activityWebBinding.RefreshList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (hasConnection(WebActivity.this)) {
+                    noDataVisibility(false);
                     webTopicRecyclerView.setVisibility(View.GONE);
                     performServerOperation("web");
                 }
                 else{
                     noDataVisibility(true);
-                    internetErrorDialog(WebActivity.this);
+                    Toasty.info(getApplicationContext(), getString(R.string.please_Enable_internet_connection), Toasty.LENGTH_LONG).show();
                 }
             }
         });
@@ -122,13 +121,16 @@ public class WebActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String queryString = adapterView.getItemAtPosition(position).toString();
-                if (hasConnection(WebActivity.this)) {
-                    webTopicRecyclerView.setVisibility(View.GONE);
-                    performServerOperation("web"+queryString);
-                }
-                else{
-                    noDataVisibility(true);
-                    internetErrorDialog(WebActivity.this);
+                if (!queryString.equals("Select Query")) {
+                    if (hasConnection(WebActivity.this)) {
+                        noDataVisibility(false);
+                        webTopicRecyclerView.setVisibility(View.GONE);
+                        performServerOperation("web"+queryString);
+                    }
+                    else{
+                        noDataVisibility(true);
+                        Toasty.info(getApplicationContext(), getString(R.string.please_Enable_internet_connection), Toasty.LENGTH_LONG).show();
+                    }
                 }
             }
 
@@ -150,40 +152,31 @@ public class WebActivity extends AppCompatActivity {
         adView.setAdListener(new AdListener(){
             @Override
             public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
                 Log.v("onAdListener","AdlLoaded");
             }
 
             @Override
             public void onAdFailedToLoad(LoadAdError adError) {
-                // Code to be executed when an ad request fails.
-                Log.v("onAdListener","AdFailedToLoad");
                 Log.v("onAdListener","AdFailedToLoad Error "+adError.getMessage());
             }
 
             @Override
             public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
                 Log.v("onAdListener","AdOpened");
             }
 
             @Override
             public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
                 Log.v("onAdListener","AdClicked");
             }
 
             @Override
             public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
                 Log.v("onAdListener","AdLeftApplication");
             }
 
             @Override
             public void onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
                 Log.v("onAdListener","AdClosed");
             }
         });
@@ -225,7 +218,7 @@ public class WebActivity extends AppCompatActivity {
                     noDataVisibility(false);
                 }
                 else {
-                    Toast.makeText(WebActivity.this, R.string.no_data_message, Toast.LENGTH_SHORT).show();
+                    Toasty.info(getApplicationContext(), getString(R.string.no_data_message), Toasty.LENGTH_LONG).show();
                     noDataVisibility(true);
                 }
                 ux.removeLoadingView();
@@ -237,9 +230,13 @@ public class WebActivity extends AppCompatActivity {
     //region set no data related components visible
     private void noDataVisibility(boolean shouldVisible){
         if (shouldVisible) {
+            webTopicRecyclerView.setVisibility(View.GONE);
+            activityWebBinding.shimmerFrameLayout.setVisibility(View.GONE);
+            activityWebBinding.shimmerFrameLayout.stopShimmerAnimation();
             NoData.setVisibility(View.VISIBLE);
             NoDataIV.setVisibility(View.VISIBLE);
         } else {
+            webTopicRecyclerView.setVisibility(View.VISIBLE);
             NoData.setVisibility(View.GONE);
             NoDataIV.setVisibility(View.GONE);
         }

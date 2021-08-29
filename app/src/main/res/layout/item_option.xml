@@ -14,7 +14,6 @@
         android:id="@+id/icon"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        app:tint="@color/md_grey_600"
         app:srcCompat="@drawable/ic_repository" />
 
     <Space

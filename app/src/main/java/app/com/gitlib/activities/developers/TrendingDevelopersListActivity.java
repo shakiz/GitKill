@@ -28,7 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.com.gitlib.R;
+import app.com.gitlib.activities.android.AndroidActivity;
 import app.com.gitlib.activities.onboard.HomeActivity;
+import app.com.gitlib.activities.web.WebActivity;
 import app.com.gitlib.adapters.TrendingDevelopersAdapter;
 import app.com.gitlib.databinding.ActivityTrendingDevelopersBinding;
 import app.com.gitlib.models.users.TrendingDevelopers;
@@ -36,7 +38,6 @@ import app.com.gitlib.viewmodels.TrendingDevelopersViewModel;
 import es.dmoral.toasty.Toasty;
 
 import static app.com.gitlib.utils.UtilsManager.hasConnection;
-import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class TrendingDevelopersListActivity extends AppCompatActivity {
     private ActivityTrendingDevelopersBinding activityBinding;
@@ -83,7 +84,16 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
         });
         //endregion
 
-        performServerOperation("tom");
+        //region load data and before loading data check internet availability
+        if (hasConnection(TrendingDevelopersListActivity.this)) {
+            noDataVisibility(false);
+            performServerOperation("tom");
+        }
+        else{
+            noDataVisibility(true);
+            Toasty.info(getApplicationContext(), getString(R.string.please_Enable_internet_connection), Toasty.LENGTH_LONG).show();
+        }
+        //endregion
 
         activityBinding.Search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,9 +113,16 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
         activityBinding.RefreshList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                recyclerViewDevelopers.setVisibility(View.GONE);
-                activityBinding.editTextSearch.setText("");
-                performServerOperation("tom");
+                if (hasConnection(TrendingDevelopersListActivity.this)) {
+                    noDataVisibility(false);
+                    recyclerViewDevelopers.setVisibility(View.GONE);
+                    activityBinding.editTextSearch.setText("");
+                    performServerOperation("tom");
+                }
+                else{
+                    noDataVisibility(true);
+                    Toasty.info(getApplicationContext(), getString(R.string.please_Enable_internet_connection), Toasty.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -121,40 +138,31 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
         adView.setAdListener(new AdListener(){
             @Override
             public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
                 Log.v("onAdListener","AdlLoaded");
             }
 
             @Override
             public void onAdFailedToLoad(LoadAdError adError) {
-                // Code to be executed when an ad request fails.
-                Log.v("onAdListener","AdFailedToLoad");
                 Log.v("onAdListener","AdFailedToLoad Error "+adError.getMessage());
             }
 
             @Override
             public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
                 Log.v("onAdListener","AdOpened");
             }
 
             @Override
             public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
                 Log.v("onAdListener","AdClicked");
             }
 
             @Override
             public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
                 Log.v("onAdListener","AdLeftApplication");
             }
 
             @Override
             public void onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
                 Log.v("onAdListener","AdClosed");
             }
         });
@@ -205,7 +213,7 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
         }
         else{
             noDataVisibility(true);
-            internetErrorDialog(TrendingDevelopersListActivity.this);
+            Toasty.info(getApplicationContext(), getString(R.string.please_Enable_internet_connection), Toasty.LENGTH_LONG).show();
         }
     }
     //endregion
@@ -213,9 +221,13 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
     //region set no data related components visible
     private void noDataVisibility(boolean shouldVisible){
         if (shouldVisible) {
+            recyclerViewDevelopers.setVisibility(View.GONE);
+            activityBinding.shimmerFrameLayout.setVisibility(View.GONE);
+            activityBinding.shimmerFrameLayout.stopShimmerAnimation();
             NoData.setVisibility(View.VISIBLE);
             NoDataIV.setVisibility(View.VISIBLE);
         } else {
+            recyclerViewDevelopers.setVisibility(View.VISIBLE);
             NoData.setVisibility(View.GONE);
             NoDataIV.setVisibility(View.GONE);
         }

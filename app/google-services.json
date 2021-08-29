@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "874352769518",
-    "firebase_url": "https://github-lib.firebaseio.com",
-    "project_id": "github-lib",
-    "storage_bucket": "github-lib.appspot.com"
+    "project_number": "687045170892",
+    "project_id": "git-lib-233fe",
+    "storage_bucket": "git-lib-233fe.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:874352769518:android:bfbe277d80426978d676ff",
+        "mobilesdk_app_id": "1:687045170892:android:f7876c76ac7f0fe7d29469",
         "android_client_info": {
           "package_name": "app.com.gitlib"
         }
       },
       "oauth_client": [
         {
-          "client_id": "874352769518-josn4ap7jcsfir01c521hut8fc3lkaoo.apps.googleusercontent.com",
+          "client_id": "687045170892-vqslq0pb7hpamd1ptc6gp4oknl0mf5mn.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCMwM8xO7ExAyLgb69p5LaaOsdjFyI_WmI"
+          "current_key": "AIzaSyBJRBFgx5GM-09h2mZfWuRkWQib6rE-jbw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "874352769518-josn4ap7jcsfir01c521hut8fc3lkaoo.apps.googleusercontent.com",
+              "client_id": "687045170892-vqslq0pb7hpamd1ptc6gp4oknl0mf5mn.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

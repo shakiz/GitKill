@@ -122,10 +122,10 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (hasConnection(HomeActivity.this)) {
+                    noDataVisibility(false);
                     loadRecord();
                 }
                 else{
-                    noDataVisibility(true);
                     internetErrorDialog(HomeActivity.this);
                 }
             }
@@ -328,10 +328,14 @@ public class HomeActivity extends AppCompatActivity {
     //region set no data related components visible
     private void noDataVisibility(boolean shouldVisible){
         if (shouldVisible) {
+            activityHomeBinding.mRecyclerView.setVisibility(View.GONE);
+            activityHomeBinding.shimmerFrameLayout.setVisibility(View.GONE);
+            activityHomeBinding.shimmerFrameLayout.stopShimmerAnimation();
             activityHomeBinding.NoDataMessage.setVisibility(View.VISIBLE);
             activityHomeBinding.NoDataIV.setVisibility(View.VISIBLE);
             activityHomeBinding.TryAgain.setVisibility(View.VISIBLE);
         } else {
+            activityHomeBinding.mRecyclerView.setVisibility(View.VISIBLE);
             activityHomeBinding.NoDataMessage.setVisibility(View.GONE);
             activityHomeBinding.NoDataIV.setVisibility(View.GONE);
             activityHomeBinding.TryAgain.setVisibility(View.GONE);

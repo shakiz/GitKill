@@ -7,8 +7,8 @@ android {
         applicationId "app.com.gitlib"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 16
-        versionName "1.1.16"
+        versionCode 17
+        versionName "1.1.17"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
