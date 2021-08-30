@@ -54,7 +54,6 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
     private TextView NoData;
     private ImageView NoDataIV;
     //Dialog components
-    private AdView adView;
     private TrendingRepositoriesViewModel repositoriesViewModel;
 
     @Override
@@ -74,7 +73,6 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
         languageSpinner = findViewById(R.id.LanguageSpinner);
         NoData = findViewById(R.id.NoDataMessage);
         NoDataIV = findViewById(R.id.NoDataIV);
-        adView = findViewById(R.id.adView);
         languageList = new ArrayList<>();
         ux = new UX(this);
         trendingRepoList = new ArrayList<>();
@@ -137,6 +135,7 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (hasConnection(TrendingRepositoriesActivity.this)) {
                     noDataVisibility(false);
+                    recyclerViewRepo.setVisibility(View.GONE);
                     performServerOperation("all");
                 }
                 else{
@@ -154,8 +153,8 @@ public class TrendingRepositoriesActivity extends AppCompatActivity {
             }
         });
         AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-        adView.setAdListener(new AdListener(){
+        activityBinding.adView.loadAd(adRequest);
+        activityBinding.adView.setAdListener(new AdListener(){
             @Override
             public void onAdLoaded() {
                 Log.v("onAdListener","AdlLoaded");

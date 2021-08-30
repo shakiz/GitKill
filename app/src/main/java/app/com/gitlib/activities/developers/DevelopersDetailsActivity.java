@@ -42,7 +42,6 @@ import static app.com.gitlib.utils.UtilsManager.internetErrorDialog;
 
 public class DevelopersDetailsActivity extends AppCompatActivity {
     private ActivityDevelopersDetailsBinding activityBinding;
-    private AdView adView;
     private String userName = "";
     private SingleDeveloperViewModel viewModel;
     private UserRepoDetailsViewModel userRepoDetailsViewModel;
@@ -75,7 +74,6 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
 
     //region init UI components
     private void init() {
-        adView = findViewById(R.id.adView);
         viewModel = ViewModelProviders.of(this).get(SingleDeveloperViewModel.class);
         userRepoDetailsViewModel = ViewModelProviders.of(this).get(UserRepoDetailsViewModel.class);
         ux = new UX(this);
@@ -114,8 +112,8 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
             }
         });
         AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-        adView.setAdListener(new AdListener(){
+        activityBinding.adView.loadAd(adRequest);
+        activityBinding.adView.setAdListener(new AdListener(){
             @Override
             public void onAdLoaded() {
                 // Code to be executed when an ad finishes loading.

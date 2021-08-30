@@ -63,67 +63,54 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:weightSum="1"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:weightSum="1"
-                        android:paddingBottom="8dp"
-                        android:orientation="horizontal">
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="4dp"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="48dp"
+                        <EditText
+                            android:id="@+id/editTextSearch"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:focusable="true"
+                            android:scrollHorizontally="true"
+                            android:hint="@string/enter_username"
+                            android:textColorHint="@color/md_grey_600"
+                            android:textColor="@color/md_grey_800"
+                            android:maxLines="1"
+                            android:background="@drawable/edit_text_back"
+                            android:padding="4dp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_margin="8dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:elevation="4dp"
+                        android:translationZ="2dp"
+                        android:orientation="vertical"
+                        android:background="@drawable/a_roundbg">
+
+                        <ImageView
+                            android:id="@+id/Search"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
                             android:layout_gravity="center"
-                            android:gravity="center"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginRight="8dp"
-                            android:layout_marginTop="4dp"
-                            android:orientation="vertical"
-                            android:layout_weight="1">
-
-
-                            <EditText
-                                android:id="@+id/editTextSearch"
-                                android:layout_width="match_parent"
-                                android:layout_height="40dp"
-                                android:focusable="true"
-                                android:scrollHorizontally="true"
-                                android:hint="@string/enter_username"
-                                android:textColorHint="@color/md_grey_600"
-                                android:textColor="@color/md_grey_800"
-                                android:maxLines="1"
-                                android:background="@drawable/edit_text_back"
-                                android:padding="4dp"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:layout_marginRight="8dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginBottom="4dp"
-                            android:layout_gravity="bottom|right"
-                            android:gravity="bottom|right"
-                            android:elevation="6dp"
-                            android:translationZ="3dp"
-                            android:orientation="vertical"
-                            android:background="@drawable/a_roundbg">
-
-                            <ImageView
-                                android:id="@+id/Search"
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:layout_gravity="center"
-                                android:src="@drawable/ic_search_new"
-                                app:tint="@color/md_grey_800"
-                                android:padding="4dp" />
-
-                        </LinearLayout>
+                            android:src="@drawable/ic_search_new"
+                            app:tint="@color/md_grey_800"
+                            android:padding="4dp" />
 
                     </LinearLayout>
 

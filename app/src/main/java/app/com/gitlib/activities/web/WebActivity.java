@@ -51,7 +51,6 @@ public class WebActivity extends AppCompatActivity {
     private Spinner webFilterSpinner;
     private String[] webFilterList = new String[]{"Select Query","Javascript","Typescript",
             "Bootstrap","Laravel","Django","Vue Js","Angular"};
-    private AdView adView;
     private WebViewModel webViewModel;
 
     @Override
@@ -70,7 +69,6 @@ public class WebActivity extends AppCompatActivity {
         webTopicRecyclerView = findViewById(R.id.mRecyclerView);
         NoData = findViewById(R.id.NoDataMessage);
         NoDataIV = findViewById(R.id.NoDataIV);
-        adView = findViewById(R.id.adView);
         webFilterSpinner = findViewById(R.id.FilterSpinner);
         webTopicList = new ArrayList<>();
         allUrlClass = new AllUrlClass();
@@ -148,8 +146,8 @@ public class WebActivity extends AppCompatActivity {
             }
         });
         AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-        adView.setAdListener(new AdListener(){
+        activityWebBinding.adView.loadAd(adRequest);
+        activityWebBinding.adView.setAdListener(new AdListener(){
             @Override
             public void onAdLoaded() {
                 Log.v("onAdListener","AdlLoaded");
@@ -210,6 +208,8 @@ public class WebActivity extends AppCompatActivity {
         webViewModel.getWebRepos().observe(this, new Observer<List<Item>>() {
             @Override
             public void onChanged(List<Item> items) {
+                activityWebBinding.shimmerFrameLayout.stopShimmerAnimation();
+                activityWebBinding.shimmerFrameLayout.setVisibility(View.GONE);
                 if (items != null) {
                     webTopicList = new ArrayList<>(items);
                     webTopicRecyclerView.setVisibility(View.VISIBLE);
@@ -240,6 +240,22 @@ public class WebActivity extends AppCompatActivity {
             NoData.setVisibility(View.GONE);
             NoDataIV.setVisibility(View.GONE);
         }
+    }
+    //endregion
+
+    //region shimmer show or hide
+    private void shimmerVisibility(boolean shouldVisible){
+        if (shouldVisible) {
+            webTopicRecyclerView.setVisibility(View.GONE);
+            activityWebBinding.shimmerFrameLayout.setVisibility(View.VISIBLE);
+            activityWebBinding.shimmerFrameLayout.startShimmerAnimation();
+        } else {
+            webTopicRecyclerView.setVisibility(View.VISIBLE);
+            activityWebBinding.shimmerFrameLayout.setVisibility(View.GONE);
+            activityWebBinding.shimmerFrameLayout.stopShimmerAnimation();
+        }
+        NoData.setVisibility(View.GONE);
+        NoDataIV.setVisibility(View.GONE);
     }
     //endregion
 

@@ -50,7 +50,6 @@ public class AndroidActivity extends AppCompatActivity {
     private ArrayList<Item> androidTopicList;
     private String[] androidFilterList = new String[]{"Select Query","Layouts","Drawing",
             "Navigation","Scanning","RecyclerView","ListView","Image Processing","Binding","Debugging"};
-    private AdView adView;
     private AndroidRepoViewModel androidRepoViewModel;
     private AllTopicAdapter allTopicAdapter;
     private Spinner FilterSpinner;
@@ -71,7 +70,6 @@ public class AndroidActivity extends AppCompatActivity {
 
     //region init UI components
     private void init() {
-        adView = findViewById(R.id.adView);
         androidTopicList = new ArrayList<>();
         ux = new UX(this);
         FilterSpinner = findViewById(R.id.FilterSpinner);
@@ -156,8 +154,8 @@ public class AndroidActivity extends AppCompatActivity {
             }
         });
         AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-        adView.setAdListener(new AdListener(){
+        activityAndroidBinding.adView.loadAd(adRequest);
+        activityAndroidBinding.adView.setAdListener(new AdListener(){
             @Override
             public void onAdLoaded() {
                 Log.v("onAdListener","AdlLoaded");

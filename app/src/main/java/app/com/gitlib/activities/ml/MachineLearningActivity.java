@@ -53,7 +53,6 @@ public class MachineLearningActivity extends AppCompatActivity {
     private ImageView NoDataIV;
     private String[] mlFilterList = new String[]{"Select Query","Big Data","Data Science",
             "Natural Language Processing","Neural Network","Deep Learning"};
-    private AdView adView;
     private MachineLearningViewModel machineLearningViewModel;
 
     @Override
@@ -72,7 +71,6 @@ public class MachineLearningActivity extends AppCompatActivity {
         NoData = findViewById(R.id.NoDataMessage);
         NoDataIV = findViewById(R.id.NoDataIV);
         mlFilterSpinner = findViewById(R.id.FilterSpinner);
-        adView = findViewById(R.id.adView);
         machineLearningList = new ArrayList<>();
         ux = new UX(this);
         machineLearningViewModel = ViewModelProviders.of(this).get(MachineLearningViewModel.class);
@@ -147,8 +145,8 @@ public class MachineLearningActivity extends AppCompatActivity {
             }
         });
         AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-        adView.setAdListener(new AdListener(){
+        activityBinding.adView.loadAd(adRequest);
+        activityBinding.adView.setAdListener(new AdListener(){
             @Override
             public void onAdLoaded() {
                 Log.v("onAdListener","AdlLoaded");

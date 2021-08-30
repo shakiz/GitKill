@@ -28,9 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.com.gitlib.R;
-import app.com.gitlib.activities.android.AndroidActivity;
 import app.com.gitlib.activities.onboard.HomeActivity;
-import app.com.gitlib.activities.web.WebActivity;
 import app.com.gitlib.adapters.TrendingDevelopersAdapter;
 import app.com.gitlib.databinding.ActivityTrendingDevelopersBinding;
 import app.com.gitlib.models.users.TrendingDevelopers;
@@ -43,11 +41,10 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
     private ActivityTrendingDevelopersBinding activityBinding;
     private RecyclerView recyclerViewDevelopers;
     private ArrayList<TrendingDevelopers> trendingDevelopersList;
-    private String TAG = "Shakil::TrendingDevelopersListActivity" , languageStr = "" , sinceStr = "";
+    private String languageStr = "" , sinceStr = "";
     private TextView NoData;
     private ImageView NoDataIV;
     //Dialog components
-    private AdView adView;
     private TrendingDevelopersAdapter trendingDevelopersAdapter;
     private TrendingDevelopersViewModel trendingDevelopersViewModel;
 
@@ -65,7 +62,6 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
     //region init UI components
     private void init() {
         recyclerViewDevelopers = findViewById(R.id.mRecyclerView);
-        adView = findViewById(R.id.adView);
         trendingDevelopersList = new ArrayList<>();
         NoData = findViewById(R.id.NoDataMessage);
         NoDataIV = findViewById(R.id.NoDataIV);
@@ -134,8 +130,8 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
             }
         });
         AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-        adView.setAdListener(new AdListener(){
+        activityBinding.adView.loadAd(adRequest);
+        activityBinding.adView.setAdListener(new AdListener(){
             @Override
             public void onAdLoaded() {
                 Log.v("onAdListener","AdlLoaded");

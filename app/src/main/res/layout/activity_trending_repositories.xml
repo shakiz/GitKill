@@ -66,36 +66,16 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="4dp"
                     android:orientation="vertical">
 
-                    <LinearLayout
+                    <Spinner
+                        android:id="@+id/LanguageSpinner"
+                        style="@style/Base.TextAppearance.AppCompat.Medium"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingBottom="8dp"
-                        android:weightSum="2">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginRight="8dp"
-                            android:layout_weight="2"
-                            android:orientation="vertical">
-
-                            <Spinner
-                                android:id="@+id/LanguageSpinner"
-                                style="@style/Base.TextAppearance.AppCompat.Medium"
-                                android:layout_width="match_parent"
-                                android:layout_height="38dp"
-                                android:layout_marginTop="5dp"
-                                android:background="@drawable/edit_text_back"
-                                android:padding="4dp"></Spinner>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
+                        android:layout_height="38dp"
+                        android:background="@drawable/edit_text_back"
+                        android:padding="4dp"/>
 
                 </LinearLayout>
 
