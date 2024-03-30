@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="app.com.gitlib">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -12,11 +13,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_round_app_icon"
         android:supportsRtl="true"
-        android:theme="@style/AppThemeNoActionBar">
-        <activity android:name=".activities.developers.DevelopersDetailsActivity"></activity>
+        android:theme="@style/AppThemeNoActionBar"
+        tools:targetApi="m">
+        <activity android:name=".activities.developers.DevelopersDetailsActivity" />
         <activity
             android:name=".activities.onboard.SplashActivity"
-            android:theme="@style/SplashAppTheme">
+            android:theme="@style/SplashAppTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
