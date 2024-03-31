@@ -141,12 +141,6 @@ public class DevelopersDetailsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-                Log.v("onAdListener","AdLeftApplication");
-            }
-
-            @Override
             public void onAdClosed() {
                 // Code to be executed when the user is about to return
                 // to the app after tapping on an ad.

@@ -153,11 +153,6 @@ public class TrendingDevelopersListActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onAdLeftApplication() {
-                Log.v("onAdListener","AdLeftApplication");
-            }
-
-            @Override
             public void onAdClosed() {
                 Log.v("onAdListener","AdClosed");
             }
